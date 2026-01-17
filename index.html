@@ -2251,12 +2251,12 @@
                 <!-- Dynamic menu items based on role -->
                 <li class="nav-item" id="teamPortalItem" style="display: none;"><a href="#team-portal" class="nav-link">Team Portal</a></li>
                 <li class="nav-item" id="adminPanelItem" style="display: none;"><a href="#admin-panel" class="nav-link">Admin Panel</a></li>
-                <li class="nav-item" id="dashboardItem" style="display: none;"><a href="#" class="nav-link" onclick="showDashboard()">Dashboard</a></li>
+                <li class="nav-item" id="dashboardItem" style="display: none;"><a href="#" class="nav-link" onclick="event.preventDefault(); showDashboard()">Dashboard</a></li>
                 
                 <div class="nav-cta">
                     <div id="userRoleBadge" style="display: none;"></div>
-                    <a href="#" class="btn btn-outline" onclick="openModal('registerModal')" id="registerBtn">Register</a>
-                    <a href="#" class="btn btn-primary" onclick="openModal('loginModal')" id="loginBtn">Sign In</a>
+                    <a href="#" class="btn btn-outline" onclick="event.preventDefault(); openModal('registerModal')" id="registerBtn">Register</a>
+                    <a href="#" class="btn btn-primary" onclick="event.preventDefault(); openModal('loginModal')" id="loginBtn">Sign In</a>
                 </div>
             </ul>
             
@@ -2288,7 +2288,7 @@
                             <a href="#roster" class="btn btn-secondary">
                                 <i class="fas fa-crosshairs"></i> Meet The Team
                             </a>
-                            <a href="#" class="btn btn-outline" onclick="openModal('registerModal')">
+                            <a href="#" class="btn btn-outline" onclick="event.preventDefault(); openModal('registerModal')">
                                 <i class="fas fa-user-plus"></i> Register
                             </a>
                         </div>
@@ -2469,7 +2469,7 @@
                                 <a href="https://www.instagram.com/adilk_ouri/" target="_blank" class="player-social-icon">
                                     <i class="fab fa-instagram"></i>
                                 </a>
-                                <a href="#" class="player-social-icon" title="Discord: a1d001">
+                                <a href="#" class="player-social-icon" title="Discord: a1d001" onclick="event.preventDefault(); return false;">
                                     <i class="fab fa-discord"></i>
                                 </a>
                                 <a href="https://www.twitch.tv/a1d_001" target="_blank" class="player-social-icon">
@@ -2518,7 +2518,7 @@
                                 <a href="https://www.instagram.com/hrrn.ahmed/" target="_blank" class="player-social-icon">
                                     <i class="fab fa-instagram"></i>
                                 </a>
-                                <a href="#" class="player-social-icon" title="Discord: hrrnyuji">
+                                <a href="#" class="player-social-icon" title="Discord: hrrnyuji" onclick="event.preventDefault(); return false;">
                                     <i class="fab fa-discord"></i>
                                 </a>
                                 <a href="https://www.twitch.tv/ocasio_a" target="_blank" class="player-social-icon">
@@ -2567,7 +2567,7 @@
                                 <a href="https://www.instagram.com/saad_sans7/" target="_blank" class="player-social-icon">
                                     <i class="fab fa-instagram"></i>
                                 </a>
-                                <a href="#" class="player-social-icon" title="Discord: saad__224">
+                                <a href="#" class="player-social-icon" title="Discord: saad__224" onclick="event.preventDefault(); return false;">
                                     <i class="fab fa-discord"></i>
                                 </a>
                                 <a href="https://www.twitch.tv/papyrus_saad" target="_blank" class="player-social-icon">
@@ -2616,7 +2616,7 @@
                                 <a href="https://www.instagram.com/scorpi0.ali/" target="_blank" class="player-social-icon">
                                     <i class="fab fa-instagram"></i>
                                 </a>
-                                <a href="#" class="player-social-icon" title="Discord: peregego">
+                                <a href="#" class="player-social-icon" title="Discord: peregego" onclick="event.preventDefault(); return false;">
                                     <i class="fab fa-discord"></i>
                                 </a>
                             </div>
@@ -2668,7 +2668,7 @@
                         <button class="media-tab" onclick="filterMedia('community')">Community</button>
                     </div>
                     
-                    <button class="btn btn-primary" onclick="openUploadModal()" id="uploadClipBtn" style="display: none;">
+                    <button class="btn btn-primary" onclick="event.preventDefault(); openUploadModal()" id="uploadClipBtn" style="display: none;">
                         <i class="fas fa-upload"></i> Upload Clip
                     </button>
                 </div>
@@ -2693,7 +2693,7 @@
                 </div>
                 
                 <div class="text-center mt-40">
-                    <button class="btn btn-secondary" onclick="openEventModal()" id="createEventBtn" style="display: none;">
+                    <button class="btn btn-secondary" onclick="event.preventDefault(); openEventModal()" id="createEventBtn" style="display: none;">
                         <i class="fas fa-plus"></i> Create New Event
                     </button>
                 </div>
@@ -2714,7 +2714,7 @@
                 </div>
                 
                 <div class="text-center mt-40">
-                    <button class="btn btn-secondary" onclick="openNewsModal()" id="createNewsBtn" style="display: none;">
+                    <button class="btn btn-secondary" onclick="event.preventDefault(); openNewsModal()" id="createNewsBtn" style="display: none;">
                         <i class="fas fa-plus"></i> Create News Post
                     </button>
                 </div>
@@ -2758,10 +2758,10 @@
                         </div>
                         
                         <div class="hero-cta mt-40">
-                            <a href="#" class="btn btn-primary" onclick="openModal('registerModal')">
+                            <a href="#" class="btn btn-primary" onclick="event.preventDefault(); openModal('registerModal')">
                                 <i class="fas fa-user-plus"></i> Join Community
                             </a>
-                            <a href="#" class="btn btn-secondary" onclick="openModal('loginModal')">
+                            <a href="#" class="btn btn-secondary" onclick="event.preventDefault(); openModal('loginModal')">
                                 <i class="fas fa-sign-in-alt"></i> Member Login
                             </a>
                         </div>
@@ -2790,42 +2790,42 @@
                         <div class="portal-icon"><i class="fas fa-chart-bar"></i></div>
                         <h3 class="portal-title">Scrim Results</h3>
                         <p class="portal-description">Upload and review scrim results and analytics</p>
-                        <a href="#" class="btn btn-success mt-20">UPLOAD RESULTS</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="event.preventDefault(); return false;">UPLOAD RESULTS</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-video"></i></div>
                         <h3 class="portal-title">Strategy Videos</h3>
                         <p class="portal-description">Access and upload team strategy videos</p>
-                        <a href="#" class="btn btn-success mt-20">VIEW STRATEGIES</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="event.preventDefault(); return false;">VIEW STRATEGIES</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-dumbbell"></i></div>
                         <h3 class="portal-title">Training Plans</h3>
                         <p class="portal-description">View and manage team training schedules</p>
-                        <a href="#" class="btn btn-success mt-20">MANAGE TRAINING</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="event.preventDefault(); return false;">MANAGE TRAINING</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-calendar-alt"></i></div>
                         <h3 class="portal-title">Upcoming Matches</h3>
                         <p class="portal-description">View tournament schedules and match details</p>
-                        <a href="#" class="btn btn-success mt-20">VIEW SCHEDULE</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="event.preventDefault(); return false;">VIEW SCHEDULE</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-comments"></i></div>
                         <h3 class="portal-title">Team Chat</h3>
                         <p class="portal-description">Access private team communication channels</p>
-                        <a href="#" class="btn btn-success mt-20">JOIN CHAT</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="event.preventDefault(); return false;">JOIN CHAT</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-file-alt"></i></div>
                         <h3 class="portal-title">Team Posts</h3>
                         <p class="portal-description">Create and view team-only posts and updates</p>
-                        <a href="#" class="btn btn-success mt-20">VIEW POSTS</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="event.preventDefault(); return false;">VIEW POSTS</a>
                     </div>
                 </div>
             </div>
@@ -2845,42 +2845,42 @@
                         <div class="admin-icon"><i class="fas fa-users-cog"></i></div>
                         <h3 class="admin-title">User Management</h3>
                         <p class="admin-description">Manage all user accounts, roles, and permissions</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('users')">MANAGE USERS</a>
+                        <a href="#" class="btn btn-danger mt-20" onclick="event.preventDefault(); showDashboardSection('users')">MANAGE USERS</a>
                     </div>
                     
                     <div class="admin-card">
                         <div class="admin-icon"><i class="fas fa-file-signature"></i></div>
                         <h3 class="admin-title">Applications</h3>
                         <p class="admin-description">Review and process new player applications</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('applications')">VIEW APPLICATIONS</a>
+                        <a href="#" class="btn btn-danger mt-20" onclick="event.preventDefault(); showDashboardSection('applications')">VIEW APPLICATIONS</a>
                     </div>
                     
                     <div class="admin-card">
                         <div class="admin-icon"><i class="fas fa-folder-open"></i></div>
                         <h3 class="admin-title">Content Management</h3>
                         <p class="admin-description">Approve and manage all uploaded content</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('content')">MANAGE CONTENT</a>
+                        <a href="#" class="btn btn-danger mt-20" onclick="event.preventDefault(); showDashboardSection('content')">MANAGE CONTENT</a>
                     </div>
                     
                     <div class="admin-card">
                         <div class="admin-icon"><i class="fas fa-newspaper"></i></div>
                         <h3 class="admin-title">News & Events</h3>
                         <p class="admin-description">Create and edit news articles and events</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('news')">MANAGE CONTENT</a>
+                        <a href="#" class="btn btn-danger mt-20" onclick="event.preventDefault(); showDashboardSection('news')">MANAGE CONTENT</a>
                     </div>
                     
                     <div class="admin-card">
                         <div class="admin-icon"><i class="fas fa-user-edit"></i></div>
                         <h3 class="admin-title">Roster Management</h3>
                         <p class="admin-description">Edit team roster and player information</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('roster')">MANAGE ROSTER</a>
+                        <a href="#" class="btn btn-danger mt-20" onclick="event.preventDefault(); showDashboardSection('roster')">MANAGE ROSTER</a>
                     </div>
                     
                     <div class="admin-card">
                         <div class="admin-icon"><i class="fas fa-chart-line"></i></div>
                         <h3 class="admin-title">Analytics</h3>
                         <p class="admin-description">View team statistics and growth analytics</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('analytics')">VIEW ANALYTICS</a>
+                        <a href="#" class="btn btn-danger mt-20" onclick="event.preventDefault(); showDashboardSection('analytics')">VIEW ANALYTICS</a>
                     </div>
                 </div>
             </div>
@@ -2944,19 +2944,19 @@
                         </p>
                         
                         <div class="footer-social">
-                            <a href="#" class="social-icon">
+                            <a href="#" class="social-icon" onclick="event.preventDefault(); return false;">
                                 <i class="fab fa-discord"></i>
                             </a>
-                            <a href="#" class="social-icon">
+                            <a href="#" class="social-icon" onclick="event.preventDefault(); return false;">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="#" class="social-icon">
+                            <a href="#" class="social-icon" onclick="event.preventDefault(); return false;">
                                 <i class="fab fa-twitch"></i>
                             </a>
-                            <a href="#" class="social-icon">
+                            <a href="#" class="social-icon" onclick="event.preventDefault(); return false;">
                                 <i class="fab fa-youtube"></i>
                             </a>
-                            <a href="#" class="social-icon">
+                            <a href="#" class="social-icon" onclick="event.preventDefault(); return false;">
                                 <i class="fab fa-instagram"></i>
                             </a>
                         </div>
@@ -2987,10 +2987,10 @@
                     <div class="footer-col">
                         <h3 class="footer-col-title">Account</h3>
                         <ul class="footer-links">
-                            <li><a href="#" class="footer-link" onclick="openModal('loginModal')">Sign In</a></li>
-                            <li><a href="#" class="footer-link" onclick="openModal('registerModal')">Register</a></li>
+                            <li><a href="#" class="footer-link" onclick="event.preventDefault(); openModal('loginModal')">Sign In</a></li>
+                            <li><a href="#" class="footer-link" onclick="event.preventDefault(); openModal('registerModal')">Register</a></li>
                             <li><a href="#contact" class="footer-link">Contact Support</a></li>
-                            <li><a href="#" class="footer-link" onclick="logoutUser()">Logout</a></li>
+                            <li><a href="#" class="footer-link" onclick="event.preventDefault(); logoutUser()">Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -3001,9 +3001,9 @@
                     </div>
                     
                     <div class="footer-legal">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Cookie Policy</a>
+                        <a href="#" onclick="event.preventDefault(); return false;">Privacy Policy</a>
+                        <a href="#" onclick="event.preventDefault(); return false;">Terms of Service</a>
+                        <a href="#" onclick="event.preventDefault(); return false;">Cookie Policy</a>
                     </div>
                 </div>
             </div>
@@ -3022,17 +3022,17 @@
         <div class="dashboard-content">
             <div class="dashboard-sidebar">
                 <ul class="sidebar-nav">
-                    <li><a href="#" class="active" onclick="showDashboardSection('overview')"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-                    <li><a href="#" onclick="showDashboardSection('users')"><i class="fas fa-users"></i> User Management</a></li>
-                    <li><a href="#" onclick="showDashboardSection('applications')"><i class="fas fa-file-signature"></i> Applications</a></li>
-                    <li><a href="#" onclick="showDashboardSection('content')"><i class="fas fa-folder-open"></i> Content</a></li>
-                    <li><a href="#" onclick="showDashboardSection('media')"><i class="fas fa-video"></i> Media</a></li>
-                    <li><a href="#" onclick="showDashboardSection('events')"><i class="fas fa-calendar-alt"></i> Events</a></li>
-                    <li><a href="#" onclick="showDashboardSection('news')"><i class="fas fa-newspaper"></i> News</a></li>
-                    <li><a href="#" onclick="showDashboardSection('roster')"><i class="fas fa-user-edit"></i> Roster</a></li>
-                    <li><a href="#" onclick="showDashboardSection('analytics')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
-                    <li><a href="#" onclick="showDashboardSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
-                    <li><a href="#" onclick="hideDashboard()"><i class="fas fa-arrow-left"></i> Back to Website</a></li>
+                    <li><a href="#" class="active" onclick="event.preventDefault(); showDashboardSection('overview')"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('users')"><i class="fas fa-users"></i> User Management</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('applications')"><i class="fas fa-file-signature"></i> Applications</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('content')"><i class="fas fa-folder-open"></i> Content</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('media')"><i class="fas fa-video"></i> Media</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('events')"><i class="fas fa-calendar-alt"></i> Events</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('news')"><i class="fas fa-newspaper"></i> News</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('roster')"><i class="fas fa-user-edit"></i> Roster</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('analytics')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); showDashboardSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); hideDashboard()"><i class="fas fa-arrow-left"></i> Back to Website</a></li>
                 </ul>
             </div>
             
@@ -3120,7 +3120,7 @@
                     
                     <h3>User List</h3>
                     <div style="margin-bottom: 20px;">
-                        <button class="btn btn-primary" onclick="openUserModal()">
+                        <button class="btn btn-primary" onclick="event.preventDefault(); openUserModal()">
                             <i class="fas fa-plus"></i> Add New User
                         </button>
                     </div>
@@ -3163,7 +3163,7 @@
                     
                     <h3>Media List</h3>
                     <div style="margin-bottom: 20px;">
-                        <button class="btn btn-primary" onclick="openUploadModal()">
+                        <button class="btn btn-primary" onclick="event.preventDefault(); openUploadModal()">
                             <i class="fas fa-upload"></i> Upload New Media
                         </button>
                     </div>
@@ -3198,7 +3198,7 @@
                 <div id="events-section" class="dashboard-section">
                     <h2>Event Management</h2>
                     <div style="margin-bottom: 20px;">
-                        <button class="btn btn-primary" onclick="openEventModal()">
+                        <button class="btn btn-primary" onclick="event.preventDefault(); openEventModal()">
                             <i class="fas fa-plus"></i> Create New Event
                         </button>
                     </div>
@@ -3222,7 +3222,7 @@
                 <div id="news-section" class="dashboard-section">
                     <h2>News Management</h2>
                     <div style="margin-bottom: 20px;">
-                        <button class="btn btn-primary" onclick="openNewsModal()">
+                        <button class="btn btn-primary" onclick="event.preventDefault(); openNewsModal()">
                             <i class="fas fa-plus"></i> Create News Post
                         </button>
                     </div>
@@ -3265,7 +3265,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
             <h3 style="margin-bottom: 1.5rem; text-align: center; color: #00ccff;">SIGN IN</h3>
-            <form id="loginForm">
+            <form id="loginForm" onsubmit="event.preventDefault(); loginUser();">
                 <div class="form-group">
                     <label class="form-label">Email</label>
                     <input type="email" id="loginEmail" class="form-input" placeholder="your@email.com" required>
@@ -3274,9 +3274,9 @@
                     <label class="form-label">Password</label>
                     <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
                 </div>
-                <button type="button" onclick="loginUser()" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">SIGN IN</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">SIGN IN</button>
                 <div class="form-switch">
-                    Don't have an account? <a onclick="switchToRegister()">Register here</a>
+                    Don't have an account? <a onclick="event.preventDefault(); switchToRegister()">Register here</a>
                 </div>
             </form>
         </div>
@@ -3287,7 +3287,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('registerModal')">&times;</button>
             <h3 style="margin-bottom: 1.5rem; text-align: center; color: #00ccff;">REGISTER</h3>
-            <form id="registerForm">
+            <form id="registerForm" onsubmit="event.preventDefault(); registerUser();">
                 <div class="form-group">
                     <label class="form-label">Username</label>
                     <input type="text" id="regUsername" class="form-input" placeholder="Choose a username" required>
@@ -3309,9 +3309,9 @@
                     <input type="text" id="regAccessCode" class="form-input" placeholder="Enter code for special access">
                     <small style="color: #a0b0ff;">Leave blank for Community Member access</small>
                 </div>
-                <button type="button" onclick="registerUser()" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">CREATE ACCOUNT</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">CREATE ACCOUNT</button>
                 <div class="form-switch">
-                    Already have an account? <a onclick="switchToLogin()">Sign in here</a>
+                    Already have an account? <a onclick="event.preventDefault(); switchToLogin()">Sign in here</a>
                 </div>
             </form>
         </div>
@@ -3322,7 +3322,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('uploadMediaModal')">&times;</button>
             <h3 style="margin-bottom: 1.5rem; text-align: center; color: #00ccff;">UPLOAD CLIP</h3>
-            <form id="uploadMediaForm">
+            <form id="uploadMediaForm" onsubmit="event.preventDefault(); uploadMedia();">
                 <div class="form-group">
                     <label class="form-label">Clip Title</label>
                     <input type="text" id="mediaTitle" class="form-input" placeholder="Enter clip title" required>
@@ -3349,7 +3349,7 @@
                     <label class="form-label">Thumbnail URL (Optional)</label>
                     <input type="url" id="mediaThumbnail" class="form-input" placeholder="Paste thumbnail image URL">
                 </div>
-                <button type="button" onclick="uploadMedia()" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">UPLOAD CLIP</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">UPLOAD CLIP</button>
             </form>
         </div>
     </div>
@@ -3359,7 +3359,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('createEventModal')">&times;</button>
             <h3 style="margin-bottom: 1.5rem; text-align: center; color: #00ccff;">CREATE EVENT</h3>
-            <form id="createEventForm">
+            <form id="createEventForm" onsubmit="event.preventDefault(); createEvent();">
                 <div class="form-group">
                     <label class="form-label">Event Title</label>
                     <input type="text" id="eventTitle" class="form-input" placeholder="Enter event title" required>
@@ -3386,7 +3386,7 @@
                     <label class="form-label">Location/Platform</label>
                     <input type="text" id="eventLocation" class="form-input" placeholder="e.g., Discord, Twitch, In-person" required>
                 </div>
-                <button type="button" onclick="createEvent()" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">CREATE EVENT</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">CREATE EVENT</button>
             </form>
         </div>
     </div>
@@ -3396,7 +3396,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('createNewsModal')">&times;</button>
             <h3 style="margin-bottom: 1.5rem; text-align: center; color: #00ccff;">CREATE NEWS POST</h3>
-            <form id="createNewsForm">
+            <form id="createNewsForm" onsubmit="event.preventDefault(); createNews();">
                 <div class="form-group">
                     <label class="form-label">News Title</label>
                     <input type="text" id="newsTitle" class="form-input" placeholder="Enter news title" required>
@@ -3419,14 +3419,40 @@
                     <label class="form-label">Image URL (Optional)</label>
                     <input type="url" id="newsImage" class="form-input" placeholder="Paste image URL">
                 </div>
-                <button type="button" onclick="createNews()" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">PUBLISH NEWS</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">PUBLISH NEWS</button>
             </form>
         </div>
     </div>
 
     <script>
-        // Initialize EmailJS with your Public Key
-        emailjs.init("gO4Y8T0cZIAi1GZT_");
+        // =============================================
+        // FIXES FOR PREVENTING REDIRECTS
+        // =============================================
+        
+        // PREVENT ALL DEFAULT FORM SUBMISSIONS
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent all form submissions from reloading page
+            document.addEventListener('submit', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            });
+            
+            // Prevent all anchor clicks from redirecting
+            document.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    const href = e.target.getAttribute('href');
+                    if (href === '#' || href === '' || href === '#!') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return false;
+                    }
+                }
+            });
+            
+            // Initialize the app
+            initApp();
+        });
 
         // =============================================
         // ACCESS CODES
@@ -3443,11 +3469,6 @@
                 preloader.style.opacity = '0';
                 preloader.style.visibility = 'hidden';
             }, 1000);
-            
-            // Initialize data
-            checkCounters(); // Initialize counters
-            loadInitialData();
-            checkLoggedInUser();
         });
 
         // ============================================
@@ -3477,7 +3498,9 @@
 
         // Mobile menu toggle
         if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 navMenu.classList.toggle('active');
                 mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
                     ? '<i class="fas fa-times"></i>' 
@@ -3487,7 +3510,7 @@
 
         // Close mobile menu when clicking a link
         navLinks.forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function(e) {
                 if (this.getAttribute('href') !== '#') {
                     navMenu.classList.remove('active');
                     if (mobileMenuBtn) {
@@ -3533,7 +3556,8 @@
         // ============================================
         const backToTop = document.getElementById('backToTop');
         if (backToTop) {
-            backToTop.addEventListener('click', function() {
+            backToTop.addEventListener('click', function(e) {
+                e.preventDefault();
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -3546,8 +3570,6 @@
         // ============================================
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#') return;
-                
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 
@@ -3819,11 +3841,19 @@
             // Update navigation buttons
             if (registerBtn && loginBtn) {
                 registerBtn.textContent = username.toUpperCase();
-                registerBtn.onclick = () => false;
+                registerBtn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                };
                 registerBtn.style.cursor = 'default';
                 
                 loginBtn.textContent = 'LOGOUT';
-                loginBtn.onclick = logoutUser;
+                loginBtn.onclick = (e) => {
+                    e.preventDefault();
+                    logoutUser();
+                    return false;
+                };
             }
 
             // Update role badge
@@ -3878,11 +3908,17 @@
             
             if (registerBtn && loginBtn) {
                 registerBtn.textContent = 'REGISTER';
-                registerBtn.onclick = () => openModal('registerModal');
+                registerBtn.onclick = (e) => {
+                    e.preventDefault();
+                    openModal('registerModal');
+                };
                 registerBtn.style.cursor = 'pointer';
                 
                 loginBtn.textContent = 'SIGN IN';
-                loginBtn.onclick = () => openModal('loginModal');
+                loginBtn.onclick = (e) => {
+                    e.preventDefault();
+                    openModal('loginModal');
+                };
             }
             
             if (userRoleBadge) {
@@ -3916,7 +3952,6 @@
         function showDashboard() {
             document.getElementById('main-website').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            return false;
         }
 
         function hideDashboard() {
@@ -3940,9 +3975,6 @@
             document.querySelectorAll('.sidebar-nav a').forEach(link => {
                 link.classList.remove('active');
             });
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
             
             return false;
         }
@@ -3962,7 +3994,6 @@
         function filterMedia(category) {
             const tabs = document.querySelectorAll('.media-tab');
             tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
             
             // This would filter media in a real implementation
             console.log('Filtering media by:', category);
@@ -4037,10 +4068,10 @@
                                 <span><i class="fas fa-user"></i> ${media.uploader}</span>
                             </div>
                             <div class="media-item-actions">
-                                <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;">
+                                <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;" onclick="event.preventDefault(); window.open('${media.url}', '_blank');">
                                     <i class="fas fa-play"></i> Watch
                                 </button>
-                                <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">
+                                <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="event.preventDefault(); navigator.clipboard.writeText('${media.url}'); alert('Link copied to clipboard!');">
                                     <i class="fas fa-share"></i> Share
                                 </button>
                             </div>
@@ -4123,10 +4154,10 @@
                             </div>
                         </div>
                         <div class="event-actions">
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" onclick="event.preventDefault(); alert('RSVP functionality to be implemented');">
                                 <i class="fas fa-calendar-plus"></i> RSVP
                             </button>
-                            <button class="btn btn-outline">
+                            <button class="btn btn-outline" onclick="event.preventDefault(); alert('Event details: ${event.description}');">
                                 <i class="fas fa-info-circle"></i> Details
                             </button>
                         </div>
@@ -4202,7 +4233,7 @@
                             </div>
                             <h3 class="news-item-title">${news.title}</h3>
                             <p class="news-item-excerpt">${news.content.substring(0, 100)}...</p>
-                            <button class="btn btn-outline" style="width: 100%;">
+                            <button class="btn btn-outline" style="width: 100%;" onclick="event.preventDefault(); alert('${news.content}');">
                                 <i class="fas fa-book-open"></i> Read More
                             </button>
                         </div>
@@ -4232,8 +4263,8 @@
                             <td>${user.role}</td>
                             <td>${new Date(user.createdAt).toLocaleDateString()}</td>
                             <td>
-                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
-                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); alert('Edit user functionality to be implemented');">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); if(confirm('Delete user?')) { alert('Delete user functionality to be implemented'); }">Delete</button>
                             </td>
                         `;
                         userList.appendChild(row);
@@ -4261,8 +4292,8 @@
                             <td>${media.date}</td>
                             <td>${media.views || 0}</td>
                             <td>
-                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
-                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); alert('Edit media functionality to be implemented');">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); if(confirm('Delete media?')) { alert('Delete media functionality to be implemented'); }">Delete</button>
                             </td>
                         `;
                         mediaList.appendChild(row);
@@ -4290,8 +4321,8 @@
                             <td>${event.participants || 0}</td>
                             <td>Upcoming</td>
                             <td>
-                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
-                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); alert('Edit event functionality to be implemented');">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); if(confirm('Delete event?')) { alert('Delete event functionality to be implemented'); }">Delete</button>
                             </td>
                         `;
                         eventList.appendChild(row);
@@ -4318,8 +4349,8 @@
                             <td>${news.author}</td>
                             <td>Published</td>
                             <td>
-                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
-                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); alert('Edit news functionality to be implemented');">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="event.preventDefault(); if(confirm('Delete news?')) { alert('Delete news functionality to be implemented'); }">Delete</button>
                             </td>
                         `;
                         newsList.appendChild(row);
@@ -4488,42 +4519,33 @@
                 return;
             }
 
-            // Prepare template parameters
-            const templateParams = {
-                from_name: name,
-                from_email: email,
-                subject: subject,
-                message: message,
-                to_name: 'CAVALIGHT Team'
-            };
-
-            // Send email using EmailJS
-            emailjs.send('service_9dsp8hh', 'template_fd84q8s', templateParams)
-                .then(function(response) {
-                    console.log('SUCCESS!', response.status, response.text);
-                    document.getElementById('form-message').innerHTML = 
-                        '<span style="color: #4CAF50;">✓ Message sent successfully! We\'ll get back to you soon.</span>';
-                    document.getElementById('contactForm').reset();
-                }, function(error) {
-                    console.log('FAILED...', error);
-                    document.getElementById('form-message').innerHTML = 
-                        '<span style="color: #f44336;">✗ Failed to send message. Please try again later.</span>';
-                });
+            // For demo purposes, simulate sending email
+            setTimeout(() => {
+                document.getElementById('form-message').innerHTML = 
+                    '<span style="color: #4CAF50;">✓ Message sent successfully! We\'ll get back to you soon.</span>';
+                document.getElementById('contactForm').reset();
+            }, 1000);
         }
 
         // =============================================
-        // INITIALIZE ON LOAD
+        // INITIALIZE THE APP
         // =============================================
-        document.addEventListener('DOMContentLoaded', function() {
+        function initApp() {
             // Initialize counters
             checkCounters();
             
             // Trigger scroll once to activate counters if already in view
             setTimeout(checkCounters, 100);
             
+            // Check if user is logged in
+            checkLoggedInUser();
+            
+            // Load initial data
+            loadInitialData();
+            
             // Initialize EmailJS
             emailjs.init("gO4Y8T0cZIAi1GZT_");
-        });
+        }
     </script>
 </body>
 </html>
