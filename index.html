@@ -5,19 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAVALIGHT | Professional Valorant Esports Team</title>
     
-   <!-- Supabase Script -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Remove Firebase scripts -->
-<!--
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
--->
-
-<!-- Keep EmailJS -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <!-- EmailJS Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
@@ -2230,11 +2217,6 @@
             justify-content: center;
         }
     </style>
-
-    <script type="text/javascript">
-        // Initialize EmailJS with your Public Key
-        emailjs.init("gO4Y8T0cZIAi1GZT_");
-    </script>
 </head>
 <body>
     <!-- Preloader -->
@@ -3443,27 +3425,8 @@
     </div>
 
     <script>
-        // =============================================
-// SUPABASE CONFIGURATION
-// =============================================
-const SUPABASE_URL = 'https://xjktjueuutuyszwfhdro.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhqa3RqdWV1dXR1eXN6d2ZoZHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MDI4NDcsImV4cCI6MjA4NDE3ODg0N30.TYjAV8SMdLJKfx-UqV_jhgfBkexdVHJ6ePBekkhU4uI';
-
-// Initialize Supabase
-let supabase;
-try {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('✅ Supabase initialized successfully!');
-    setupAuthListener();
-} catch (error) {
-    console.error('❌ Supabase initialization error:', error);
-}
-
-// =============================================
-// ACCESS CODES (Keep these same)
-// =============================================
-const TEAM_MEMBER_CODE = "8215";
-const ADMIN_CODE = "CAV-ADMIN-9999";
+        // Initialize EmailJS with your Public Key
+        emailjs.init("gO4Y8T0cZIAi1GZT_");
 
         // =============================================
         // ACCESS CODES
@@ -3484,6 +3447,7 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
             // Initialize data
             checkCounters(); // Initialize counters
             loadInitialData();
+            checkLoggedInUser();
         });
 
         // ============================================
@@ -3682,11 +3646,28 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
         }
 
         // =============================================
-        // AUTHENTICATION FUNCTIONS
+        // CHECK LOGGED IN USER
+        // =============================================
+        function checkLoggedInUser() {
+            const userData = localStorage.getItem('cavalight_currentUser');
+            const userRole = localStorage.getItem('cavalight_userRole');
+            
+            if (userData && userRole) {
+                try {
+                    const user = JSON.parse(userData);
+                    updateUIForRole(userRole, user.username);
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                }
+            }
+        }
+
+        // =============================================
+        // AUTHENTICATION FUNCTIONS (Local Storage Based)
         // =============================================
         
         // User Registration
-        async function registerUser() {
+        function registerUser() {
             const username = document.getElementById('regUsername').value;
             const email = document.getElementById('regEmail').value;
             const password = document.getElementById('regPassword').value;
@@ -3709,76 +3690,58 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
                 return;
             }
 
-            try {
-                // Show loading state
-                const btn = document.querySelector('#registerModal .btn');
-                btn.textContent = 'CREATING ACCOUNT...';
-                btn.disabled = true;
-
-                // Create user with Firebase
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Determine role
-                let role = 'community';
-                if (accessCode === TEAM_MEMBER_CODE) {
-                    role = 'team';
-                } else if (accessCode === ADMIN_CODE) {
-                    role = 'admin';
-                } else if (accessCode && accessCode !== '') {
-                    alert('Invalid access code. Registered as Community Member.');
-                }
-
-                // Save user data to Firebase database
-                const userData = {
-                    uid: user.uid,
-                    username: username,
-                    email: email,
-                    role: role,
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString()
-                };
-                
-                // Save to Firebase
-                if (database) {
-                    await database.ref('users/' + user.uid).set(userData);
-                }
-                
-                // Save to localStorage for quick access
-                localStorage.setItem('currentUser', JSON.stringify(userData));
-                localStorage.setItem('userRole', role);
-
-                // Update UI
-                updateUIForRole(role, username);
-                
-                alert(`🎉 Welcome to CAVALIGHT, ${username}!`);
-                closeModal('registerModal');
-
-            } catch (error) {
-                console.error('Registration error:', error);
-                
-                // User-friendly error messages
-                if (error.code === 'auth/email-already-in-use') {
-                    alert('This email is already registered. Please use a different email or sign in.');
-                } else if (error.code === 'auth/invalid-email') {
-                    alert('Please enter a valid email address.');
-                } else if (error.code === 'auth/weak-password') {
-                    alert('Password is too weak. Please use a stronger password.');
-                } else {
-                    alert('Error creating account: ' + error.message);
-                }
-            } finally {
-                // Reset button state
-                const btn = document.querySelector('#registerModal .btn');
-                if (btn) {
-                    btn.textContent = 'CREATE ACCOUNT';
-                    btn.disabled = false;
-                }
+            // Check if user already exists
+            const existingUsers = JSON.parse(localStorage.getItem('cavalight_users') || '[]');
+            const userExists = existingUsers.some(user => user.email === email);
+            
+            if (userExists) {
+                alert('This email is already registered. Please use a different email or sign in.');
+                return;
             }
+
+            // Determine role
+            let role = 'community';
+            if (accessCode === TEAM_MEMBER_CODE) {
+                role = 'team';
+            } else if (accessCode === ADMIN_CODE) {
+                role = 'admin';
+            } else if (accessCode && accessCode !== '') {
+                alert('Invalid access code. Registered as Community Member.');
+            }
+
+            // Create user object
+            const userData = {
+                id: Date.now().toString(),
+                username: username,
+                email: email,
+                password: btoa(password), // Simple encoding (not secure for production)
+                role: role,
+                createdAt: new Date().toISOString(),
+                lastLogin: new Date().toISOString()
+            };
+
+            // Save user to localStorage
+            existingUsers.push(userData);
+            localStorage.setItem('cavalight_users', JSON.stringify(existingUsers));
+            
+            // Save current user data
+            localStorage.setItem('cavalight_currentUser', JSON.stringify({
+                id: userData.id,
+                username: username,
+                email: email,
+                role: role
+            }));
+            localStorage.setItem('cavalight_userRole', role);
+
+            // Update UI
+            updateUIForRole(role, username);
+            
+            alert(`🎉 Welcome to CAVALIGHT, ${username}!`);
+            closeModal('registerModal');
         }
 
         // User Login
-        async function loginUser() {
+        function loginUser() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
 
@@ -3787,92 +3750,48 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
                 return;
             }
 
-            try {
-                // Show loading state
-                const btn = document.querySelector('#loginModal .btn');
-                btn.textContent = 'SIGNING IN...';
-                btn.disabled = true;
+            // Get users from localStorage
+            const existingUsers = JSON.parse(localStorage.getItem('cavalight_users') || '[]');
+            const user = existingUsers.find(user => user.email === email);
 
-                // Sign in with Firebase
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Get user data from Firebase
-                let userData = null;
-                if (database) {
-                    const snapshot = await database.ref('users/' + user.uid).once('value');
-                    userData = snapshot.val();
-                }
-                
-                if (!userData) {
-                    // Create basic user data if not exists
-                    userData = {
-                        uid: user.uid,
-                        username: email.split('@')[0],
-                        email: email,
-                        role: 'community',
-                        createdAt: new Date().toISOString(),
-                        lastLogin: new Date().toISOString()
-                    };
-                    
-                    // Save to Firebase
-                    if (database) {
-                        await database.ref('users/' + user.uid).set(userData);
-                    }
-                } else {
-                    // Update last login
-                    userData.lastLogin = new Date().toISOString();
-                    if (database) {
-                        await database.ref('users/' + user.uid + '/lastLogin').set(userData.lastLogin);
-                    }
-                }
-
-                // Save to localStorage
-                localStorage.setItem('currentUser', JSON.stringify(userData));
-                localStorage.setItem('userRole', userData.role);
-
-                // Update UI
-                updateUIForRole(userData.role, userData.username);
-                
-                alert(`👋 Welcome back, ${userData.username}!`);
-                closeModal('loginModal');
-
-            } catch (error) {
-                console.error('Login error:', error);
-                
-                // User-friendly error messages
-                if (error.code === 'auth/user-not-found') {
-                    alert('No account found with this email. Please register first.');
-                } else if (error.code === 'auth/wrong-password') {
-                    alert('Incorrect password. Please try again.');
-                } else if (error.code === 'auth/invalid-email') {
-                    alert('Please enter a valid email address.');
-                } else {
-                    alert('Error signing in: ' + error.message);
-                }
-            } finally {
-                // Reset button state
-                const btn = document.querySelector('#loginModal .btn');
-                if (btn) {
-                    btn.textContent = 'SIGN IN';
-                    btn.disabled = false;
-                }
+            if (!user) {
+                alert('No account found with this email. Please register first.');
+                return;
             }
+
+            // Check password (simple base64 encoding for demo)
+            if (btoa(password) !== user.password) {
+                alert('Incorrect password. Please try again.');
+                return;
+            }
+
+            // Update last login
+            user.lastLogin = new Date().toISOString();
+            localStorage.setItem('cavalight_users', JSON.stringify(existingUsers));
+
+            // Save current user data
+            localStorage.setItem('cavalight_currentUser', JSON.stringify({
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }));
+            localStorage.setItem('cavalight_userRole', user.role);
+
+            // Update UI
+            updateUIForRole(user.role, user.username);
+            
+            alert(`👋 Welcome back, ${user.username}!`);
+            closeModal('loginModal');
         }
 
         // Logout User
         function logoutUser() {
             if (confirm('Are you sure you want to log out?')) {
-                auth.signOut().then(() => {
-                    localStorage.removeItem('currentUser');
-                    localStorage.removeItem('userRole');
-                    alert('Logged out successfully!');
-                    location.reload();
-                }).catch((error) => {
-                    console.error('Logout error:', error);
-                    // Force reload anyway
-                    location.reload();
-                });
+                localStorage.removeItem('cavalight_currentUser');
+                localStorage.removeItem('cavalight_userRole');
+                alert('Logged out successfully!');
+                resetUI();
             }
             return false;
         }
@@ -3991,98 +3910,6 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
         }
 
         // =============================================
-        // AUTH STATE LISTENER
-        // =============================================
-        
-        function setupAuthListener() {
-            if (!auth) {
-                console.error('Firebase auth not initialized');
-                return;
-            }
-
-            // Check localStorage first
-            const storedUser = localStorage.getItem('currentUser');
-            const storedRole = localStorage.getItem('userRole');
-            
-            if (storedUser && storedRole) {
-                try {
-                    const userData = JSON.parse(storedUser);
-                    updateUIForRole(storedRole, userData.username);
-                } catch (e) {
-                    console.error('Error parsing stored user data:', e);
-                    resetUI();
-                }
-            }
-
-            // Listen for auth state changes
-            auth.onAuthStateChanged(async (user) => {
-                if (user) {
-                    // User is signed in
-                    console.log('User signed in:', user.email);
-                    
-                    // Get user data from Firebase
-                    let userData = null;
-                    if (database) {
-                        try {
-                            const snapshot = await database.ref('users/' + user.uid).once('value');
-                            userData = snapshot.val();
-                        } catch (error) {
-                            console.error('Error fetching user data:', error);
-                        }
-                    }
-                    
-                    if (!userData) {
-                        // Check localStorage as fallback
-                        userData = JSON.parse(localStorage.getItem('currentUser'));
-                        if (!userData) {
-                            // Create default user data
-                            userData = {
-                                uid: user.uid,
-                                username: user.email.split('@')[0],
-                                email: user.email,
-                                role: 'community',
-                                createdAt: new Date().toISOString(),
-                                lastLogin: new Date().toISOString()
-                            };
-                            
-                            // Save to Firebase if available
-                            if (database) {
-                                try {
-                                    await database.ref('users/' + user.uid).set(userData);
-                                } catch (error) {
-                                    console.error('Error saving user data:', error);
-                                }
-                            }
-                            
-                            // Save to localStorage
-                            localStorage.setItem('currentUser', JSON.stringify(userData));
-                            localStorage.setItem('userRole', userData.role);
-                        }
-                    } else {
-                        // Update last login
-                        userData.lastLogin = new Date().toISOString();
-                        if (database) {
-                            try {
-                                await database.ref('users/' + user.uid + '/lastLogin').set(userData.lastLogin);
-                            } catch (error) {
-                                console.error('Error updating last login:', error);
-                            }
-                        }
-                        localStorage.setItem('currentUser', JSON.stringify(userData));
-                        localStorage.setItem('userRole', userData.role);
-                    }
-                    
-                    updateUIForRole(userData.role, userData.username);
-                    
-                } else {
-                    // User is signed out
-                    console.log('User signed out');
-                    resetUI();
-                }
-            });
-        }
-
-        // =============================================
         // DASHBOARD FUNCTIONS
         // =============================================
         
@@ -4142,48 +3969,59 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
         }
 
         // Load Media
-        async function loadMedia() {
+        function loadMedia() {
             try {
-                // Sample media data
-                const sampleMedia = [
-                    {
-                        title: "A1D's INSANE 1v5 ACE",
-                        description: "Watch A1D clutch a 1v5 situation in tournament finals",
-                        category: "highlights",
-                        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                        thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                        views: 1250,
-                        likes: 89,
-                        date: "2023-11-15"
-                    },
-                    {
-                        title: "Tournament Finals - CAVALIGHT vs RIVALS",
-                        description: "Full match highlights from our latest tournament win",
-                        category: "tournaments",
-                        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                        thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                        views: 3200,
-                        likes: 156,
-                        date: "2023-11-10"
-                    },
-                    {
-                        title: "Community Clip of the Week",
-                        description: "Amazing play submitted by our community member",
-                        category: "community",
-                        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                        thumbnail: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                        views: 850,
-                        likes: 42,
-                        date: "2023-11-05"
-                    }
-                ];
+                // Get media from localStorage or use sample data
+                let mediaItems = JSON.parse(localStorage.getItem('cavalight_media'));
+                
+                if (!mediaItems || mediaItems.length === 0) {
+                    // Sample media data
+                    mediaItems = [
+                        {
+                            id: 1,
+                            title: "A1D's INSANE 1v5 ACE",
+                            description: "Watch A1D clutch a 1v5 situation in tournament finals",
+                            category: "highlights",
+                            url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                            thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+                            views: 1250,
+                            likes: 89,
+                            date: "2023-11-15",
+                            uploader: "Admin"
+                        },
+                        {
+                            id: 2,
+                            title: "Tournament Finals - CAVALIGHT vs RIVALS",
+                            description: "Full match highlights from our latest tournament win",
+                            category: "tournaments",
+                            url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                            thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+                            views: 3200,
+                            likes: 156,
+                            date: "2023-11-10",
+                            uploader: "Admin"
+                        },
+                        {
+                            id: 3,
+                            title: "Community Clip of the Week",
+                            description: "Amazing play submitted by our community member",
+                            category: "community",
+                            url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                            thumbnail: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+                            views: 850,
+                            likes: 42,
+                            date: "2023-11-05",
+                            uploader: "Community"
+                        }
+                    ];
+                }
                 
                 const mediaGrid = document.getElementById('mediaGrid');
                 if (!mediaGrid) return;
                 
                 mediaGrid.innerHTML = '';
                 
-                sampleMedia.forEach(media => {
+                mediaItems.forEach(media => {
                     const mediaItem = document.createElement('div');
                     mediaItem.className = 'media-item';
                     mediaItem.innerHTML = `
@@ -4196,6 +4034,7 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
                                 <span><i class="fas fa-eye"></i> ${media.views} views</span>
                                 <span><i class="fas fa-heart"></i> ${media.likes} likes</span>
                                 <span><i class="fas fa-calendar"></i> ${media.date}</span>
+                                <span><i class="fas fa-user"></i> ${media.uploader}</span>
                             </div>
                             <div class="media-item-actions">
                                 <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;">
@@ -4216,42 +4055,50 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
             }
         }
 
-        async function loadEvents() {
+        function loadEvents() {
             try {
-                // Sample events data
-                const sampleEvents = [
-                    {
-                        title: "Valorant Community Cup #6",
-                        description: "Join our monthly community tournament with prizes for top teams!",
-                        date: "2023-12-15 18:00",
-                        type: "tournament",
-                        location: "Discord & Twitch",
-                        participants: 32
-                    },
-                    {
-                        title: "Pro Scrim Session",
-                        description: "Professional scrim session with other competitive teams",
-                        date: "2023-12-10 20:00",
-                        type: "scrim",
-                        location: "Valorant Custom Game",
-                        participants: 10
-                    },
-                    {
-                        title: "Community Training Day",
-                        description: "Learn from our pro players and improve your skills",
-                        date: "2023-12-05 19:00",
-                        type: "training",
-                        location: "Discord Voice",
-                        participants: 50
-                    }
-                ];
+                // Get events from localStorage or use sample data
+                let events = JSON.parse(localStorage.getItem('cavalight_events'));
+                
+                if (!events || events.length === 0) {
+                    // Sample events data
+                    events = [
+                        {
+                            id: 1,
+                            title: "Valorant Community Cup #6",
+                            description: "Join our monthly community tournament with prizes for top teams!",
+                            date: "2023-12-15 18:00",
+                            type: "tournament",
+                            location: "Discord & Twitch",
+                            participants: 32
+                        },
+                        {
+                            id: 2,
+                            title: "Pro Scrim Session",
+                            description: "Professional scrim session with other competitive teams",
+                            date: "2023-12-10 20:00",
+                            type: "scrim",
+                            location: "Valorant Custom Game",
+                            participants: 10
+                        },
+                        {
+                            id: 3,
+                            title: "Community Training Day",
+                            description: "Learn from our pro players and improve your skills",
+                            date: "2023-12-05 19:00",
+                            type: "training",
+                            location: "Discord Voice",
+                            participants: 50
+                        }
+                    ];
+                }
                 
                 const eventsTimeline = document.getElementById('eventsTimeline');
                 if (!eventsTimeline) return;
                 
                 eventsTimeline.innerHTML = '';
                 
-                sampleEvents.forEach(event => {
+                events.forEach(event => {
                     const eventItem = document.createElement('div');
                     eventItem.className = 'event-item';
                     eventItem.innerHTML = `
@@ -4293,42 +4140,50 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
             }
         }
 
-        async function loadNews() {
+        function loadNews() {
             try {
-                // Sample news data
-                const sampleNews = [
-                    {
-                        title: "CAVALIGHT Wins Regional Championship",
-                        content: "Our team dominated the regional finals, securing first place and qualifying for nationals.",
-                        category: "tournament",
-                        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                        date: "2023-11-20",
-                        author: "Admin"
-                    },
-                    {
-                        title: "New Player Tryouts Announcement",
-                        content: "We're looking for talented players to join our academy team. Tryouts start next week!",
-                        category: "announcement",
-                        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                        date: "2023-11-18",
-                        author: "Team Manager"
-                    },
-                    {
-                        title: "Community Update: Discord Server Milestone",
-                        content: "We've reached 1000+ members in our Discord community! Join us for special events.",
-                        category: "community",
-                        image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                        date: "2023-11-15",
-                        author: "Community Manager"
-                    }
-                ];
+                // Get news from localStorage or use sample data
+                let newsItems = JSON.parse(localStorage.getItem('cavalight_news'));
+                
+                if (!newsItems || newsItems.length === 0) {
+                    // Sample news data
+                    newsItems = [
+                        {
+                            id: 1,
+                            title: "CAVALIGHT Wins Regional Championship",
+                            content: "Our team dominated the regional finals, securing first place and qualifying for nationals.",
+                            category: "tournament",
+                            image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+                            date: "2023-11-20",
+                            author: "Admin"
+                        },
+                        {
+                            id: 2,
+                            title: "New Player Tryouts Announcement",
+                            content: "We're looking for talented players to join our academy team. Tryouts start next week!",
+                            category: "announcement",
+                            image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+                            date: "2023-11-18",
+                            author: "Team Manager"
+                        },
+                        {
+                            id: 3,
+                            title: "Community Update: Discord Server Milestone",
+                            content: "We've reached 1000+ members in our Discord community! Join us for special events.",
+                            category: "community",
+                            image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+                            date: "2023-11-15",
+                            author: "Community Manager"
+                        }
+                    ];
+                }
                 
                 const newsGrid = document.getElementById('newsGrid');
                 if (!newsGrid) return;
                 
                 newsGrid.innerHTML = '';
                 
-                sampleNews.forEach(news => {
+                newsItems.forEach(news => {
                     const newsItem = document.createElement('div');
                     newsItem.className = 'news-item';
                     newsItem.innerHTML = `
@@ -4361,28 +4216,122 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
             }
         }
 
-        async function loadUsers() {
-            console.log('Loading users...');
-            // Implementation for loading users from Firebase
+        function loadUsers() {
+            try {
+                const users = JSON.parse(localStorage.getItem('cavalight_users') || '[]');
+                const userList = document.getElementById('userList');
+                
+                if (userList) {
+                    userList.innerHTML = '';
+                    
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role}</td>
+                            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                            </td>
+                        `;
+                        userList.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
         }
 
-        async function loadDashboardMedia() {
-            console.log('Loading dashboard media...');
-            // Implementation for loading dashboard media
+        function loadDashboardMedia() {
+            try {
+                const mediaItems = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
+                const mediaList = document.getElementById('mediaList');
+                
+                if (mediaList) {
+                    mediaList.innerHTML = '';
+                    
+                    mediaItems.forEach(media => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${media.title}</td>
+                            <td>${media.category}</td>
+                            <td>${media.uploader || 'Unknown'}</td>
+                            <td>${media.date}</td>
+                            <td>${media.views || 0}</td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                            </td>
+                        `;
+                        mediaList.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading dashboard media:', error);
+            }
         }
 
-        async function loadDashboardEvents() {
-            console.log('Loading dashboard events...');
-            // Implementation for loading dashboard events
+        function loadDashboardEvents() {
+            try {
+                const events = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
+                const eventList = document.getElementById('eventList');
+                
+                if (eventList) {
+                    eventList.innerHTML = '';
+                    
+                    events.forEach(event => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${event.title}</td>
+                            <td>${event.date}</td>
+                            <td>${event.type}</td>
+                            <td>${event.participants || 0}</td>
+                            <td>Upcoming</td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                            </td>
+                        `;
+                        eventList.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading dashboard events:', error);
+            }
         }
 
-        async function loadDashboardNews() {
-            console.log('Loading dashboard news...');
-            // Implementation for loading dashboard news
+        function loadDashboardNews() {
+            try {
+                const newsItems = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
+                const newsList = document.getElementById('newsList');
+                
+                if (newsList) {
+                    newsList.innerHTML = '';
+                    
+                    newsItems.forEach(news => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${news.title}</td>
+                            <td>${news.date}</td>
+                            <td>${news.author}</td>
+                            <td>Published</td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Delete</button>
+                            </td>
+                        `;
+                        newsList.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading dashboard news:', error);
+            }
         }
 
         // Upload Media
-        async function uploadMedia() {
+        function uploadMedia() {
             const title = document.getElementById('mediaTitle').value;
             const description = document.getElementById('mediaDescription').value;
             const category = document.getElementById('mediaCategory').value;
@@ -4396,45 +4345,35 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
 
             try {
                 // Get current user
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser'));
                 
-                // Save to Firebase
-                if (database) {
-                    const mediaData = {
-                        title: title,
-                        description: description,
-                        category: category,
-                        url: url,
-                        thumbnail: thumbnail || url,
-                        uploader: currentUser?.username || 'Anonymous',
-                        uploaderId: currentUser?.uid || 'anonymous',
-                        timestamp: new Date().toISOString(),
-                        views: 0,
-                        likes: 0
-                    };
-                    
-                    await database.ref('media').push(mediaData);
-                    alert('Clip uploaded successfully!');
-                    closeModal('uploadMediaModal');
-                    loadMedia(); // Refresh media list
-                } else {
-                    alert('Database not available. Using localStorage instead.');
-                    // Fallback to localStorage
-                    const existingMedia = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
-                    existingMedia.push({
-                        title: title,
-                        description: description,
-                        category: category,
-                        url: url,
-                        thumbnail: thumbnail || url,
-                        uploader: currentUser?.username || 'Anonymous',
-                        timestamp: new Date().toISOString()
-                    });
-                    localStorage.setItem('cavalight_media', JSON.stringify(existingMedia));
-                    alert('Clip saved locally!');
-                    closeModal('uploadMediaModal');
-                    loadMedia(); // Refresh media list
-                }
+                // Create media object
+                const mediaData = {
+                    id: Date.now(),
+                    title: title,
+                    description: description,
+                    category: category,
+                    url: url,
+                    thumbnail: thumbnail || url,
+                    uploader: currentUser?.username || 'Anonymous',
+                    uploaderId: currentUser?.id || 'anonymous',
+                    date: new Date().toISOString().split('T')[0],
+                    views: 0,
+                    likes: 0
+                };
+                
+                // Save to localStorage
+                const existingMedia = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
+                existingMedia.push(mediaData);
+                localStorage.setItem('cavalight_media', JSON.stringify(existingMedia));
+                
+                alert('Clip uploaded successfully!');
+                closeModal('uploadMediaModal');
+                loadMedia(); // Refresh media list
+                
+                // Also refresh dashboard if open
+                loadDashboardMedia();
+                
             } catch (error) {
                 console.error('Upload error:', error);
                 alert('Error uploading clip: ' + error.message);
@@ -4442,7 +4381,7 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
         }
 
         // Create Event
-        async function createEvent() {
+        function createEvent() {
             const title = document.getElementById('eventTitle').value;
             const description = document.getElementById('eventDescription').value;
             const date = document.getElementById('eventDate').value;
@@ -4456,43 +4395,33 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
 
             try {
                 // Get current user
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser'));
                 
-                // Save to Firebase
-                if (database) {
-                    const eventData = {
-                        title: title,
-                        description: description,
-                        date: date,
-                        type: type,
-                        location: location,
-                        createdBy: currentUser?.username || 'Admin',
-                        createdById: currentUser?.uid || 'admin',
-                        createdAt: new Date().toISOString(),
-                        participants: 0
-                    };
-                    
-                    await database.ref('events').push(eventData);
-                    alert('Event created successfully!');
-                    closeModal('createEventModal');
-                    loadEvents(); // Refresh events list
-                } else {
-                    alert('Database not available. Event saved locally.');
-                    const existingEvents = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-                    existingEvents.push({
-                        title: title,
-                        description: description,
-                        date: date,
-                        type: type,
-                        location: location,
-                        createdBy: currentUser?.username || 'Admin',
-                        timestamp: new Date().toISOString()
-                    });
-                    localStorage.setItem('cavalight_events', JSON.stringify(existingEvents));
-                    alert('Event saved locally!');
-                    closeModal('createEventModal');
-                    loadEvents(); // Refresh events list
-                }
+                // Create event object
+                const eventData = {
+                    id: Date.now(),
+                    title: title,
+                    description: description,
+                    date: date,
+                    type: type,
+                    location: location,
+                    createdBy: currentUser?.username || 'Admin',
+                    createdById: currentUser?.id || 'admin',
+                    participants: 0
+                };
+                
+                // Save to localStorage
+                const existingEvents = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
+                existingEvents.push(eventData);
+                localStorage.setItem('cavalight_events', JSON.stringify(existingEvents));
+                
+                alert('Event created successfully!');
+                closeModal('createEventModal');
+                loadEvents(); // Refresh events list
+                
+                // Also refresh dashboard if open
+                loadDashboardEvents();
+                
             } catch (error) {
                 console.error('Event creation error:', error);
                 alert('Error creating event: ' + error.message);
@@ -4500,7 +4429,7 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
         }
 
         // Create News
-        async function createNews() {
+        function createNews() {
             const title = document.getElementById('newsTitle').value;
             const content = document.getElementById('newsContent').value;
             const category = document.getElementById('newsCategory').value;
@@ -4513,41 +4442,32 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
 
             try {
                 // Get current user
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser'));
                 
-                // Save to Firebase
-                if (database) {
-                    const newsData = {
-                        title: title,
-                        content: content,
-                        category: category,
-                        image: image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
-                        author: currentUser?.username || 'Admin',
-                        authorId: currentUser?.uid || 'admin',
-                        date: new Date().toISOString(),
-                        views: 0
-                    };
-                    
-                    await database.ref('news').push(newsData);
-                    alert('News published successfully!');
-                    closeModal('createNewsModal');
-                    loadNews(); // Refresh news list
-                } else {
-                    alert('Database not available. News saved locally.');
-                    const existingNews = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
-                    existingNews.push({
-                        title: title,
-                        content: content,
-                        category: category,
-                        image: image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
-                        author: currentUser?.username || 'Admin',
-                        timestamp: new Date().toISOString()
-                    });
-                    localStorage.setItem('cavalight_news', JSON.stringify(existingNews));
-                    alert('News saved locally!');
-                    closeModal('createNewsModal');
-                    loadNews(); // Refresh news list
-                }
+                // Create news object
+                const newsData = {
+                    id: Date.now(),
+                    title: title,
+                    content: content,
+                    category: category,
+                    image: image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+                    author: currentUser?.username || 'Admin',
+                    authorId: currentUser?.id || 'admin',
+                    date: new Date().toISOString().split('T')[0]
+                };
+                
+                // Save to localStorage
+                const existingNews = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
+                existingNews.push(newsData);
+                localStorage.setItem('cavalight_news', JSON.stringify(existingNews));
+                
+                alert('News published successfully!');
+                closeModal('createNewsModal');
+                loadNews(); // Refresh news list
+                
+                // Also refresh dashboard if open
+                loadDashboardNews();
+                
             } catch (error) {
                 console.error('News creation error:', error);
                 alert('Error publishing news: ' + error.message);
@@ -4600,6 +4520,9 @@ const ADMIN_CODE = "CAV-ADMIN-9999";
             
             // Trigger scroll once to activate counters if already in view
             setTimeout(checkCounters, 100);
+            
+            // Initialize EmailJS
+            emailjs.init("gO4Y8T0cZIAi1GZT_");
         });
     </script>
 </body>
