@@ -1,20 +1,37 @@
-<!-- index.html -->
-<div id="maintenance-message" style="display: none;">
-    <h1>Website Under Construction</h1>
-    <p>We're working hard to bring you an even better experience! Check back soon.</p>
-</div>
-
-<div id="content">
-    <!-- Your main website content here -->
-</div>
-
-<script>
-    // Example: Show message if a certain condition is met (e.g., during maintenance)
-    // In a real scenario, you'd check a server flag or time.
-    const maintenanceMode = false; // Set to true to show maintenance
-
-    if (maintenanceMode) {
-        document.getElementById('maintenance-message').style.display = 'block';
-        document.getElementById('content').style.display = 'none';
-    }
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Website Updating</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .message {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <h1>We’re Updating Our Website</h1>
+        <p>Please check back soon. Thank you for your patience!</p>
+    </div>
+</body>
+</html>
