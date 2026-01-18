@@ -2,36 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Website Updating</title>
+    <title>CAVALIGHT – Website Updating</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            margin: 0;
+            height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            color: #ffffff;
         }
-        .message {
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 50px 40px;
+            border-radius: 16px;
             text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            max-width: 420px;
+            width: 90%;
         }
+
         h1 {
+            font-size: 2.5em;
             margin-bottom: 10px;
+            letter-spacing: 2px;
         }
+
+        h2 {
+            font-weight: normal;
+            margin-bottom: 25px;
+            color: #cce7ff;
+        }
+
         p {
-            color: #555;
+            font-size: 1.1em;
+            color: #e0e0e0;
+            margin-bottom: 30px;
+        }
+
+        .footer {
+            font-size: 0.9em;
+            color: #b0c7d1;
+            margin-top: 20px;
+        }
+
+        .footer span {
+            color: #7dd3fc;
         }
     </style>
 </head>
 <body>
-    <div class="message">
-        <h1>We’re Updating Our Website</h1>
-        <p>Please check back soon. Thank you for your patience!</p>
+    <div class="card">
+        <h1>CAVALIGHT</h1>
+        <h2>Website Updating</h2>
+        <p>We’re making improvements to bring you a better experience.<br>
+           Please check back soon.</p>
+
+        <div class="footer">
+            byy <span>dev A1d</span>
+        </div>
     </div>
 </body>
 </html>
