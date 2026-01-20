@@ -1343,6 +1343,10 @@
             display: none; /* Hidden by default, shown for team members */
         }
 
+        .team-portal.active {
+            display: block;
+        }
+
         .team-portal-bg {
             position: absolute;
             top: 0;
@@ -1410,6 +1414,10 @@
         .admin-panel {
             position: relative;
             display: none; /* Hidden by default, shown for admins */
+        }
+
+        .admin-panel.active {
+            display: block;
         }
 
         .admin-panel-bg {
@@ -1481,6 +1489,10 @@
             min-height: 100vh;
             padding-top: 80px;
             background: #050510;
+        }
+
+        .dashboard.active {
+            display: block;
         }
 
         .dashboard-header {
@@ -1702,6 +1714,10 @@
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
@@ -2251,7 +2267,7 @@
                 <!-- Dynamic menu items based on role -->
                 <li class="nav-item" id="teamPortalItem" style="display: none;"><a href="#team-portal" class="nav-link">Team Portal</a></li>
                 <li class="nav-item" id="adminPanelItem" style="display: none;"><a href="#admin-panel" class="nav-link">Admin Panel</a></li>
-                <li class="nav-item" id="dashboardItem" style="display: none;"><a href="#" class="nav-link" onclick="showDashboard()">Dashboard</a></li>
+                <li class="nav-item" id="dashboardItem" style="display: none;"><a href="#dashboard" class="nav-link" onclick="showDashboard(event)">Dashboard</a></li>
                 
                 <div class="nav-cta">
                     <div id="userRoleBadge" style="display: none;"></div>
@@ -2442,215 +2458,262 @@
         </section>
 
         <!-- Roster Section -->
-        <section class="roster section-padding" id="roster">
-            <div class="roster-bg"></div>
-            <div class="container">
-                <div class="roster-header">
-                    <div class="roster-badge">Professional Team</div>
-                    <h2 class="section-title">OUR ROSTER</h2>
-                    <p class="section-subtitle">
-                        Meet our competitive Valorant roster. These players represent CAVALIGHT in regional 
-                        and international tournaments with dedication and skill.
-                    </p>
+<section class="roster section-padding" id="roster">
+    <div class="roster-bg"></div>
+    <div class="container">
+        <div class="roster-header">
+            <div class="roster-badge">Professional Team</div>
+            <h2 class="section-title">OUR ROSTER</h2>
+            <p class="section-subtitle">
+                Meet our competitive Valorant roster. These players represent CAVALIGHT in regional 
+                and international tournaments with dedication and skill.
+            </p>
+        </div>
+        
+        <div class="roster-cards-container">
+            <!-- Player 1: A1D -->
+            <div class="player-card">
+                <div class="player-card-header">
+                    <div>
+                        <div class="player-card-name">A1D</div>
+                        <div class="player-card-role">INITIATOR</div>
+                        <div class="player-card-rank">
+                            <i class="fas fa-crown"></i> ASCENDANT
+                        </div>
+                    </div>
+                    <div class="player-card-social">
+                        <a href="https://www.instagram.com/adilk_ouri/" target="_blank" class="player-social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="player-social-icon" title="Discord: a1d001">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://www.twitch.tv/a1d_001" target="_blank" class="player-social-icon">
+                            <i class="fab fa-twitch"></i>
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="roster-cards-container">
-                    <!-- Player 1: A1D -->
-                    <div class="player-card">
-                        <div class="player-card-header">
-                            <div>
-                                <div class="player-card-name">A1D</div>
-                                <div class="player-card-role">INITIATOR</div>
-                                <div class="player-card-rank">
-                                    <i class="fas fa-crown"></i> ASCENDANT
-                                </div>
-                            </div>
-                            <div class="player-card-social">
-                                <a href="https://www.instagram.com/adilk_ouri/" target="_blank" class="player-social-icon">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="#" class="player-social-icon" title="Discord: a1d001">
-                                    <i class="fab fa-discord"></i>
-                                </a>
-                                <a href="https://www.twitch.tv/a1d_001" target="_blank" class="player-social-icon">
-                                    <i class="fab fa-twitch"></i>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="player-card-stats">
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">1.09</div>
-                                <div class="player-card-stat-label">K/D RATIO</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">55%</div>
-                                <div class="player-card-stat-label">WIN RATE</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">234</div>
-                                <div class="player-card-stat-label">ACS</div>
-                            </div>
-                        </div>
-                        
-                        <div class="player-card-agents">
-                            <div class="player-card-main-agent">SOVA</div>
-                            <div class="player-card-secondary-agent">DEADLOCK</div>
-                        </div>
-                        
-                        <a href="https://tracker.gg/valorant/profile/riot/A1d%23CΛL1/overview?platform=pc&playlist=competitive&season=3ea2b318-423b-cf86-25da-7cbb0eefbe2d" 
-                           target="_blank" class="player-card-tracker-link">
-                            <i class="fas fa-chart-line"></i> View Tracker.gg
-                        </a>
+                <div class="player-card-stats">
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">1.09</div>
+                        <div class="player-card-stat-label">K/D RATIO</div>
                     </div>
-                    
-                    <!-- Player 2: Ocasio -->
-                    <div class="player-card">
-                        <div class="player-card-header">
-                            <div>
-                                <div class="player-card-name">OCASIO</div>
-                                <div class="player-card-role">DUELIST / CONTROLLER</div>
-                                <div class="player-card-rank">
-                                    <i class="fas fa-crown"></i> ASCENDANT
-                                </div>
-                            </div>
-                            <div class="player-card-social">
-                                <a href="https://www.instagram.com/hrrn.ahmed/" target="_blank" class="player-social-icon">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="#" class="player-social-icon" title="Discord: hrrnyuji">
-                                    <i class="fab fa-discord"></i>
-                                </a>
-                                <a href="https://www.twitch.tv/ocasio_a" target="_blank" class="player-social-icon">
-                                    <i class="fab fa-twitch"></i>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="player-card-stats">
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">1.46</div>
-                                <div class="player-card-stat-label">K/D RATIO</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">58%</div>
-                                <div class="player-card-stat-label">WIN RATE</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">267</div>
-                                <div class="player-card-stat-label">ACS</div>
-                            </div>
-                        </div>
-                        
-                        <div class="player-card-agents">
-                            <div class="player-card-main-agent">JETT</div>
-                            <div class="player-card-secondary-agent">OMEN</div>
-                        </div>
-                        
-                        <a href="https://tracker.gg/valorant/profile/riot/ocasio%235993/overview?playlist=premier&platform=pc" 
-                           target="_blank" class="player-card-tracker-link">
-                            <i class="fas fa-chart-line"></i> View Tracker.gg
-                        </a>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">55%</div>
+                        <div class="player-card-stat-label">WIN RATE</div>
                     </div>
-                    
-                    <!-- Player 3: Papyrus -->
-                    <div class="player-card">
-                        <div class="player-card-header">
-                            <div>
-                                <div class="player-card-name">PAPYRUS</div>
-                                <div class="player-card-role">INITIATOR</div>
-                                <div class="player-card-rank">
-                                    <i class="fas fa-crown"></i> ASCENDANT
-                                </div>
-                            </div>
-                            <div class="player-card-social">
-                                <a href="https://www.instagram.com/saad_sans7/" target="_blank" class="player-social-icon">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="#" class="player-social-icon" title="Discord: saad__224">
-                                    <i class="fab fa-discord"></i>
-                                </a>
-                                <a href="https://www.twitch.tv/papyrus_saad" target="_blank" class="player-social-icon">
-                                    <i class="fab fa-twitch"></i>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="player-card-stats">
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">1.00</div>
-                                <div class="player-card-stat-label">K/D RATIO</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">57%</div>
-                                <div class="player-card-stat-label">WIN RATE</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">245</div>
-                                <div class="player-card-stat-label">ACS</div>
-                            </div>
-                        </div>
-                        
-                        <div class="player-card-agents">
-                            <div class="player-card-main-agent">BREACH</div>
-                            <div class="player-card-secondary-agent">FADE</div>
-                        </div>
-                        
-                        <a href="https://tracker.gg/valorant/profile/riot/Papyrus%23snp/overview?playlist=premier&platform=pc" 
-                           target="_blank" class="player-card-tracker-link">
-                            <i class="fas fa-chart-line"></i> View Tracker.gg
-                        </a>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">234</div>
+                        <div class="player-card-stat-label">ACS</div>
                     </div>
-                    
-                    <!-- Player 4: Sinatra -->
-                    <div class="player-card">
-                        <div class="player-card-header">
-                            <div>
-                                <div class="player-card-name">SINATRA</div>
-                                <div class="player-card-role">INITIATOR</div>
-                                <div class="player-card-rank diamond">
-                                    <i class="fas fa-gem"></i> DIAMOND
-                                </div>
-                            </div>
-                            <div class="player-card-social">
-                                <a href="https://www.instagram.com/scorpi0.ali/" target="_blank" class="player-social-icon">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="#" class="player-social-icon" title="Discord: peregego">
-                                    <i class="fab fa-discord"></i>
-                                </a>
-                            </div>
+                </div>
+                
+                <div class="player-card-agents">
+                    <div class="player-card-main-agent">SOVA</div>
+                    <div class="player-card-secondary-agent">DEADLOCK</div>
+                </div>
+                
+                <a href="https://tracker.gg/valorant/profile/riot/A1d%23CΛL1/overview?platform=pc&playlist=competitive&season=3ea2b318-423b-cf86-25da-7cbb0eefbe2d" 
+                   target="_blank" class="player-card-tracker-link">
+                    <i class="fas fa-chart-line"></i> View Tracker.gg
+                </a>
+            </div>
+            
+            <!-- Player 2: Ocasio (Updated to Duelist Only) -->
+            <div class="player-card">
+                <div class="player-card-header">
+                    <div>
+                        <div class="player-card-name">OCASIO</div>
+                        <div class="player-card-role">DUELIST</div> <!-- Removed CONTROLLER -->
+                        <div class="player-card-rank">
+                            <i class="fas fa-crown"></i> ASCENDANT
                         </div>
-                        
-                        <div class="player-card-stats">
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">1.45</div>
-                                <div class="player-card-stat-label">K/D RATIO</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">53%</div>
-                                <div class="player-card-stat-label">WIN RATE</div>
-                            </div>
-                            <div class="player-card-stat">
-                                <div class="player-card-stat-value">267</div>
-                                <div class="player-card-stat-label">ACS</div>
-                            </div>
-                        </div>
-                        
-                        <div class="player-card-agents">
-                            <div class="player-card-main-agent">JETT</div>
-                            <div class="player-card-secondary-agent">VYSE</div>
-                        </div>
-                        
-                        <a href="https://tracker.gg/valorant/profile/riot/Frank%20sinatra%2370s/overview?playlist=competitive&platform=pc" 
-                           target="_blank" class="player-card-tracker-link">
-                            <i class="fas fa-chart-line"></i> View Tracker.gg
+                    </div>
+                    <div class="player-card-social">
+                        <a href="https://www.instagram.com/hrrn.ahmed/" target="_blank" class="player-social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="player-social-icon" title="Discord: hrrnyuji">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://www.twitch.tv/ocasio_a" target="_blank" class="player-social-icon">
+                            <i class="fab fa-twitch"></i>
                         </a>
                     </div>
                 </div>
+                
+                <div class="player-card-stats">
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">1.46</div>
+                        <div class="player-card-stat-label">K/D RATIO</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">58%</div>
+                        <div class="player-card-stat-label">WIN RATE</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">267</div>
+                        <div class="player-card-stat-label">ACS</div>
+                    </div>
+                </div>
+                
+                <div class="player-card-agents">
+                    <div class="player-card-main-agent">JETT</div>
+                    <div class="player-card-secondary-agent">RAZE</div> <!-- Changed from OMEN to RAZE -->
+                </div>
+                
+                <a href="https://tracker.gg/valorant/profile/riot/ocasio%235993/overview?playlist=premier&platform=pc" 
+                   target="_blank" class="player-card-tracker-link">
+                    <i class="fas fa-chart-line"></i> View Tracker.gg
+                </a>
             </div>
-        </section>
-
+            
+            <!-- Player 3: Papyrus -->
+            <div class="player-card">
+                <div class="player-card-header">
+                    <div>
+                        <div class="player-card-name">PAPYRUS</div>
+                        <div class="player-card-role">INITIATOR</div>
+                        <div class="player-card-rank">
+                            <i class="fas fa-crown"></i> ASCENDANT
+                        </div>
+                    </div>
+                    <div class="player-card-social">
+                        <a href="https://www.instagram.com/saad_sans7/" target="_blank" class="player-social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="player-social-icon" title="Discord: saad__224">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://www.twitch.tv/papyrus_saad" target="_blank" class="player-social-icon">
+                            <i class="fab fa-twitch"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="player-card-stats">
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">1.00</div>
+                        <div class="player-card-stat-label">K/D RATIO</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">57%</div>
+                        <div class="player-card-stat-label">WIN RATE</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">245</div>
+                        <div class="player-card-stat-label">ACS</div>
+                    </div>
+                </div>
+                
+                <div class="player-card-agents">
+                    <div class="player-card-main-agent">BREACH</div>
+                    <div class="player-card-secondary-agent">FADE</div>
+                </div>
+                
+                <a href="https://tracker.gg/valorant/profile/riot/Papyrus%23snp/overview?playlist=premier&platform=pc" 
+                   target="_blank" class="player-card-tracker-link">
+                    <i class="fas fa-chart-line"></i> View Tracker.gg
+                </a>
+            </div>
+            
+            <!-- Player 4: Sinatra -->
+            <div class="player-card">
+                <div class="player-card-header">
+                    <div>
+                        <div class="player-card-name">SINATRA</div>
+                        <div class="player-card-role">INITIATOR</div>
+                        <div class="player-card-rank diamond">
+                            <i class="fas fa-gem"></i> DIAMOND
+                        </div>
+                    </div>
+                    <div class="player-card-social">
+                        <a href="https://www.instagram.com/scorpi0.ali/" target="_blank" class="player-social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="player-social-icon" title="Discord: peregego">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="player-card-stats">
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">1.45</div>
+                        <div class="player-card-stat-label">K/D RATIO</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">53%</div>
+                        <div class="player-card-stat-label">WIN RATE</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">267</div>
+                        <div class="player-card-stat-label">ACS</div>
+                    </div>
+                </div>
+                
+                <div class="player-card-agents">
+                    <div class="player-card-main-agent">JETT</div>
+                    <div class="player-card-secondary-agent">VYSE</div>
+                </div>
+                
+                <a href="https://tracker.gg/valorant/profile/riot/Frank%20sinatra%2370s/overview?playlist=competitive&platform=pc" 
+                   target="_blank" class="player-card-tracker-link">
+                    <i class="fas fa-chart-line"></i> View Tracker.gg
+                </a>
+            </div>
+            
+            <!-- Player 5: Molky (NEW PLAYER) -->
+            <div class="player-card">
+                <div class="player-card-header">
+                    <div>
+                        <div class="player-card-name">MOLKY</div>
+                        <div class="player-card-role">CONTROLLER</div>
+                        <div class="player-card-rank">
+                            <i class="fas fa-fire" style="color: #FF6B9D;"></i> IMMORTAL
+                        </div>
+                    </div>
+                    <div class="player-card-social">
+                        <a href="#" class="player-social-icon" title="Discord: molky">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="#" class="player-social-icon">
+                            <i class="fab fa-twitch"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="player-card-stats">
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">1.10</div>
+                        <div class="player-card-stat-label">K/D RATIO</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">59%</div>
+                        <div class="player-card-stat-label">WIN RATE</div>
+                    </div>
+                    <div class="player-card-stat">
+                        <div class="player-card-stat-value">245</div>
+                        <div class="player-card-stat-label">ACS</div>
+                    </div>
+                </div>
+                
+                <div class="player-card-agents">
+                    <div class="player-card-main-agent">OMEN</div>
+                    <div class="player-card-secondary-agent" style="background: linear-gradient(135deg, #6a11cb, #2575fc);">
+                        CONTROLLER
+                    </div>
+                </div>
+                
+                <a href="https://tracker.gg/valorant/profile/riot/Molky%23TSUKI/overview?platform=pc&playlist=competitive&season=3ea2b318-423b-cf86-25da-7cbb0eefbe2d" 
+                   target="_blank" class="player-card-tracker-link">
+                    <i class="fas fa-chart-line"></i> View Tracker.gg
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
         <!-- Media Section (Clips & Videos) -->
         <section class="media section-padding" id="media">
             <div class="media-bg"></div>
@@ -2790,42 +2853,42 @@
                         <div class="portal-icon"><i class="fas fa-chart-bar"></i></div>
                         <h3 class="portal-title">Scrim Results</h3>
                         <p class="portal-description">Upload and review scrim results and analytics</p>
-                        <a href="#" class="btn btn-success mt-20">UPLOAD RESULTS</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="alert('Scrim results functionality to be implemented')">UPLOAD RESULTS</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-video"></i></div>
                         <h3 class="portal-title">Strategy Videos</h3>
                         <p class="portal-description">Access and upload team strategy videos</p>
-                        <a href="#" class="btn btn-success mt-20">VIEW STRATEGIES</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="alert('Strategy videos functionality to be implemented')">VIEW STRATEGIES</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-dumbbell"></i></div>
                         <h3 class="portal-title">Training Plans</h3>
                         <p class="portal-description">View and manage team training schedules</p>
-                        <a href="#" class="btn btn-success mt-20">MANAGE TRAINING</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="alert('Training plans functionality to be implemented')">MANAGE TRAINING</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-calendar-alt"></i></div>
                         <h3 class="portal-title">Upcoming Matches</h3>
                         <p class="portal-description">View tournament schedules and match details</p>
-                        <a href="#" class="btn btn-success mt-20">VIEW SCHEDULE</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="alert('Upcoming matches functionality to be implemented')">VIEW SCHEDULE</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-comments"></i></div>
                         <h3 class="portal-title">Team Chat</h3>
                         <p class="portal-description">Access private team communication channels</p>
-                        <a href="#" class="btn btn-success mt-20">JOIN CHAT</a>
+                        <a href="https://discord.gg/Um8VR8yk" target="_blank" class="btn btn-success mt-20">JOIN CHAT</a>
                     </div>
                     
                     <div class="portal-card">
                         <div class="portal-icon"><i class="fas fa-file-alt"></i></div>
                         <h3 class="portal-title">Team Posts</h3>
                         <p class="portal-description">Create and view team-only posts and updates</p>
-                        <a href="#" class="btn btn-success mt-20">VIEW POSTS</a>
+                        <a href="#" class="btn btn-success mt-20" onclick="alert('Team posts functionality to be implemented')">VIEW POSTS</a>
                     </div>
                 </div>
             </div>
@@ -2944,7 +3007,7 @@
                         </p>
                         
                         <div class="footer-social">
-                            <a href="#" class="social-icon">
+                            <a href="https://discord.gg/Um8VR8yk" target="_blank" class="social-icon">
                                 <i class="fab fa-discord"></i>
                             </a>
                             <a href="#" class="social-icon">
@@ -3425,11 +3488,6 @@
     </div>
 
     <script>
-        // Initialize EmailJS with your Public Key
-        (function() {
-            emailjs.init("gO4Y8T0cZIAi1GZT_");
-        })();
-
         // =============================================
         // ACCESS CODES
         // =============================================
@@ -3450,6 +3508,9 @@
             checkCounters(); // Initialize counters
             loadInitialData();
             checkLoggedInUser();
+            
+            // Initialize EmailJS with your Public Key
+            emailjs.init("gO4Y8T0cZIAi1GZT_");
         });
 
         // ============================================
@@ -3489,8 +3550,14 @@
 
         // Close mobile menu when clicking a link
         navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                if (this.getAttribute('href') !== '#') {
+            link.addEventListener('click', function(e) {
+                // Check if it's a dashboard link
+                if (this.getAttribute('href') === '#dashboard') {
+                    e.preventDefault();
+                    showDashboard();
+                }
+                
+                if (navMenu.classList.contains('active')) {
                     navMenu.classList.remove('active');
                     if (mobileMenuBtn) {
                         mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
@@ -3548,7 +3615,7 @@
         // ============================================
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#') return;
+                if (this.getAttribute('href') === '#' || this.getAttribute('href') === '#dashboard') return;
                 
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
@@ -3595,7 +3662,7 @@
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
-                modal.style.display = 'flex';
+                modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
         }
@@ -3603,7 +3670,7 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
-                modal.style.display = 'none';
+                modal.classList.remove('active');
                 document.body.style.overflow = 'auto';
                 // Clear form fields
                 const inputs = modal.querySelectorAll('input, textarea, select');
@@ -3645,7 +3712,7 @@
         // Close modal when clicking outside
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
+                event.target.classList.remove('active');
                 document.body.style.overflow = 'auto';
             }
         }
@@ -3797,7 +3864,13 @@
                 localStorage.removeItem('cavalight_userRole');
                 alert('Logged out successfully!');
                 resetUI();
-                window.location.href = '#home';
+                // Hide dashboard if open
+                hideDashboard();
+                // Scroll to home
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
             return false;
         }
@@ -3852,8 +3925,8 @@
             if (dashboardItem) dashboardItem.style.display = isTeam ? 'block' : 'none';
             
             // Sections
-            if (teamPortalSection) teamPortalSection.style.display = isTeam ? 'block' : 'none';
-            if (adminPanelSection) adminPanelSection.style.display = isAdmin ? 'block' : 'none';
+            if (teamPortalSection) teamPortalSection.classList.toggle('active', isTeam);
+            if (adminPanelSection) adminPanelSection.classList.toggle('active', isAdmin);
             
             // Buttons
             if (uploadClipBtn) uploadClipBtn.style.display = isLoggedIn ? 'block' : 'none';
@@ -3908,8 +3981,8 @@
             if (teamPortalItem) teamPortalItem.style.display = 'none';
             if (adminPanelItem) adminPanelItem.style.display = 'none';
             if (dashboardItem) dashboardItem.style.display = 'none';
-            if (teamPortalSection) teamPortalSection.style.display = 'none';
-            if (adminPanelSection) adminPanelSection.style.display = 'none';
+            if (teamPortalSection) teamPortalSection.classList.remove('active');
+            if (adminPanelSection) adminPanelSection.classList.remove('active');
             if (uploadClipBtn) uploadClipBtn.style.display = 'none';
             if (createEventBtn) createEventBtn.style.display = 'none';
             if (createNewsBtn) createNewsBtn.style.display = 'none';
@@ -3919,15 +3992,18 @@
         // DASHBOARD FUNCTIONS
         // =============================================
         
-        function showDashboard() {
+        function showDashboard(e) {
+            if (e) e.preventDefault();
             document.getElementById('main-website').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('dashboard').classList.add('active');
             return false;
         }
 
-        function hideDashboard() {
+        function hideDashboard(e) {
+            if (e) e.preventDefault();
             document.getElementById('main-website').style.display = 'block';
-            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('dashboard').classList.remove('active');
+            return false;
         }
 
         function showDashboardSection(sectionId) {
@@ -4589,7 +4665,7 @@
             };
 
             // Send email using EmailJS
-            emailjs.send('service_9dsp8hh', 'template_fd84q8s', templateParams)
+            emailjs.send('service_1hbotzt', 'template_3aqjamb', templateParams)
                 .then(function(response) {
                     console.log('SUCCESS!', response.status, response.text);
                     document.getElementById('form-message').innerHTML = 
