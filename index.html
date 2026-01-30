@@ -3806,458 +3806,432 @@
             </form>
         </div>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // =============================================
+    // SUPABASE CONFIGURATION - UPDATE THESE!
+    // =============================================
+    const SUPABASE_URL = 'https://your-project-id.supabase.co';  // CHANGE THIS
+    const SUPABASE_ANON_KEY = 'your-anon-key-here';  // CHANGE THIS
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <script>
-        // =============================================
-        // ACCESS CODES
-        // =============================================
-        const TEAM_MEMBER_CODE = "8215";
-        const ADMIN_CODE = "CAV-ADMIN-9999";
+    // =============================================
+    // ACCESS CODES
+    // =============================================
+    const TEAM_MEMBER_CODE = "8215";
+    const ADMIN_CODE = "CAV-ADMIN-9999";
 
-        // =============================================
-        // DISCORD USER COPY FUNCTIONALITY
-        // =============================================
-        const discordUsers = {
-            'a1d': 'a1d001',
-            'ocasio': 'hrrnyuji',
-            'papyrus': 'saad__224',
-            'sinatra': 'peregego',
-            'molky': 'molky'
-        };
+    // =============================================
+    // DISCORD USER COPY FUNCTIONALITY
+    // =============================================
+    const discordUsers = {
+        'a1d': 'a1d001',
+        'ocasio': 'hrrnyuji',
+        'papyrus': 'saad__224',
+        'sinatra': 'peregego',
+        'molky': 'molky'
+    };
 
-        function copyDiscordUsername(playerName) {
-            const username = discordUsers[playerName.toLowerCase()];
-            if (!username) {
-                alert(`Discord username not found for ${playerName}`);
-                return;
-            }
+    function copyDiscordUsername(playerName) {
+        const username = discordUsers[playerName.toLowerCase()];
+        if (!username) {
+            alert(`Discord username not found for ${playerName}`);
+            return;
+        }
+        
+        navigator.clipboard.writeText(username).then(() => {
+            showToast(`Discord username "${username}" copied to clipboard!`);
             
-            navigator.clipboard.writeText(username).then(() => {
-                showToast(`Discord username "${username}" copied to clipboard!`);
+            const clickedIcon = event.target.closest('.player-social-icon');
+            if (clickedIcon) {
+                const originalColor = clickedIcon.style.color;
+                const originalBackground = clickedIcon.style.background;
                 
-                const clickedIcon = event.target.closest('.player-social-icon');
-                if (clickedIcon) {
-                    const originalColor = clickedIcon.style.color;
-                    const originalBackground = clickedIcon.style.background;
-                    
-                    clickedIcon.style.color = '#ffffff';
-                    clickedIcon.style.background = '#7289da';
-                    
-                    setTimeout(() => {
-                        clickedIcon.style.color = originalColor;
-                        clickedIcon.style.background = originalBackground;
-                    }, 1000);
-                }
-            }).catch(err => {
-                console.error('User  copied: ', err);
-                alert('Press Ctrl v to paste.');
-            });
-        }
-
-        function showToast(message) {
-            let toast = document.getElementById('discord-toast');
-            
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'discord-toast';
-                toast.style.cssText = `
-                    position: fixed;
-                    bottom: 30px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: rgba(20, 25, 60, 0.95);
-                    color: #00ccff;
-                    padding: 15px 25px;
-                    border-radius: 10px;
-                    border: 1px solid #00ccff;
-                    z-index: 9999;
-                    font-family: 'Rajdhani', sans-serif;
-                    font-weight: 600;
-                    font-size: 1rem;
-                    display: none;
-                    backdrop-filter: blur(10px);
-                    box-shadow: 0 10px 30px rgba(0, 204, 255, 0.3);
-                    text-align: center;
-                    min-width: 300px;
-                `;
-                document.body.appendChild(toast);
-            }
-            
-            toast.textContent = message;
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        // ============================================
-        // PRELOADER
-        // ============================================
-        window.addEventListener('load', function() {
-            const preloader = document.getElementById('preloader');
-            setTimeout(() => {
-                preloader.style.opacity = '0';
-                preloader.style.visibility = 'hidden';
-            }, 1000);
-            
-            // Initialize data
-            checkCounters(); // Initialize counters
-            loadInitialData();
-            checkLoggedInUser();
-            
-            // Initialize EmailJS with your Public Key
-            emailjs.init("gO4Y8T0cZIAi1GZT_");
-        });
-
-        // ============================================
-        // NAVIGATION
-        // ============================================
-        const navbar = document.getElementById('navbar');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navMenu = document.getElementById('navMenu');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            
-            // Back to top button
-            const backToTop = document.getElementById('backToTop');
-            if (window.scrollY > 500) {
-                backToTop.classList.add('active');
-            } else {
-                backToTop.classList.remove('active');
-            }
-        });
-
-        // Mobile menu toggle
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-                mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
-                    ? '<i class="fas fa-times"></i>' 
-                    : '<i class="fas fa-bars"></i>';
-            });
-        }
-
-        // Close mobile menu when clicking a link
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#dashboard') {
-                    e.preventDefault();
-                    showDashboard();
-                }
+                clickedIcon.style.color = '#ffffff';
+                clickedIcon.style.background = '#7289da';
                 
-                if (navMenu.classList.contains('active')) {
-                    navMenu.classList.remove('active');
-                    if (mobileMenuBtn) {
-                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-                    }
-                }
-            });
-        });
-
-        // ============================================
-        // ANIMATED COUNTERS
-        // ============================================
-        function animateCounter(element) {
-            const target = parseInt(element.getAttribute('data-count'));
-            const current = parseInt(element.textContent);
-            const increment = target / 50;
-            
-            if (current < target) {
-                element.textContent = Math.floor(current + increment);
-                setTimeout(() => animateCounter(element), 20);
-            } else {
-                element.textContent = target;
+                setTimeout(() => {
+                    clickedIcon.style.color = originalColor;
+                    clickedIcon.style.background = originalBackground;
+                }, 1000);
             }
+        }).catch(err => {
+            console.error('User copied: ', err);
+            alert('Press Ctrl+V to paste.');
+        });
+    }
+
+    function showToast(message) {
+        let toast = document.getElementById('discord-toast');
+        
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'discord-toast';
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(20, 25, 60, 0.95);
+                color: #00ccff;
+                padding: 15px 25px;
+                border-radius: 10px;
+                border: 1px solid #00ccff;
+                z-index: 9999;
+                font-family: 'Rajdhani', sans-serif;
+                font-weight: 600;
+                font-size: 1rem;
+                display: none;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 10px 30px rgba(0, 204, 255, 0.3);
+                text-align: center;
+                min-width: 300px;
+            `;
+            document.body.appendChild(toast);
         }
+        
+        toast.textContent = message;
+        toast.style.display = 'block';
+        
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+    }
 
-        function checkCounters() {
-            const counters = document.querySelectorAll('[data-count]');
-            
-            counters.forEach(counter => {
-                const position = counter.getBoundingClientRect().top;
-                const screenPosition = window.innerHeight / 1.3;
-                
-                if (position < screenPosition && counter.textContent === '0') {
-                    animateCounter(counter);
-                }
-            });
+    // ============================================
+    // PRELOADER
+    // ============================================
+    window.addEventListener('load', function() {
+        const preloader = document.getElementById('preloader');
+        setTimeout(() => {
+            preloader.style.opacity = '0';
+            preloader.style.visibility = 'hidden';
+        }, 1000);
+        
+        // Initialize data
+        checkCounters(); // Initialize counters
+        checkLoggedInUser();
+        
+        // Initialize EmailJS with your Public Key
+        emailjs.init("gO4Y8T0cZIAi1GZT_");
+        
+        // Load initial data
+        loadInitialData();
+    });
+
+    // ============================================
+    // NAVIGATION
+    // ============================================
+    const navbar = document.getElementById('navbar');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
         }
-
-        window.addEventListener('scroll', checkCounters);
-
-        // ============================================
-        // BACK TO TOP BUTTON
-        // ============================================
+        
+        // Back to top button
         const backToTop = document.getElementById('backToTop');
-        if (backToTop) {
-            backToTop.addEventListener('click', function() {
+        if (window.scrollY > 500) {
+            backToTop.classList.add('active');
+        } else {
+            backToTop.classList.remove('active');
+        }
+    });
+
+    // Mobile menu toggle
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+    }
+
+    // Close mobile menu when clicking a link
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.getAttribute('href') === '#dashboard') {
+                e.preventDefault();
+                showDashboard();
+            }
+            
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        });
+    });
+
+    // ============================================
+    // ANIMATED COUNTERS
+    // ============================================
+    function animateCounter(element) {
+        const target = parseInt(element.getAttribute('data-count'));
+        const current = parseInt(element.textContent);
+        const increment = target / 50;
+        
+        if (current < target) {
+            element.textContent = Math.floor(current + increment);
+            setTimeout(() => animateCounter(element), 20);
+        } else {
+            element.textContent = target;
+        }
+    }
+
+    function checkCounters() {
+        const counters = document.querySelectorAll('[data-count]');
+        
+        counters.forEach(counter => {
+            const position = counter.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.3;
+            
+            if (position < screenPosition && counter.textContent === '0') {
+                animateCounter(counter);
+            }
+        });
+    }
+
+    window.addEventListener('scroll', checkCounters);
+
+    // ============================================
+    // BACK TO TOP BUTTON
+    // ============================================
+    const backToTop = document.getElementById('backToTop');
+    if (backToTop) {
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // ============================================
+    // SMOOTH SCROLLING
+    // ============================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            if (this.getAttribute('href') === '#' || this.getAttribute('href') === '#dashboard') return;
+            
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
                 window.scrollTo({
-                    top: 0,
+                    top: targetElement.offsetTop - 80,
                     behavior: 'smooth'
                 });
-            });
-        }
-
-        // ============================================
-        // SMOOTH SCROLLING
-        // ============================================
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#' || this.getAttribute('href') === '#dashboard') return;
-                
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
+            }
         });
+    });
 
-        // ============================================
-        // ACTIVE NAV LINK ON SCROLL
-        // ============================================
-        const sections = document.querySelectorAll('section, .hero');
+    // ============================================
+    // ACTIVE NAV LINK ON SCROLL
+    // ============================================
+    const sections = document.querySelectorAll('section, .hero');
 
-        window.addEventListener('scroll', function() {
-            let current = '';
-            const scrollPosition = window.scrollY + 100;
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                
-                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                    current = section.getAttribute('id') || '';
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // =============================================
-        // MODAL FUNCTIONS
-        // =============================================
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                // Clear form fields
-                const inputs = modal.querySelectorAll('input, textarea, select');
-                inputs.forEach(input => {
-                    if (input.type !== 'submit' && input.type !== 'button') {
-                        input.value = '';
-                    }
-                });
-            }
-        }
-
-        function switchToRegister() {
-            closeModal('loginModal');
-            openModal('registerModal');
-        }
-
-        function switchToLogin() {
-            closeModal('registerModal');
-            openModal('loginModal');
-        }
-
-        // Modal opening functions
-        function openUploadModal() {
-            openModal('uploadMediaModal');
-        }
-
-        function openEventModal() {
-            openModal('createEventModal');
-        }
-
-        function openNewsModal() {
-            openModal('createNewsModal');
-        }
-
-        function openUserModal() {
-            alert('User modal functionality to be implemented');
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // =============================================
-        // CHECK LOGGED IN USER
-        // =============================================
-        function checkLoggedInUser() {
-            const userData = localStorage.getItem('cavalight_currentUser');
-            const userRole = localStorage.getItem('cavalight_userRole');
-            
-            if (userData && userRole) {
-                try {
-                    const user = JSON.parse(userData);
-                    updateUIForRole(userRole, user.username);
-                } catch (e) {
-                    console.error('Error parsing user data:', e);
-                }
-            }
-        }
-
-        // =============================================
-        // AUTHENTICATION FUNCTIONS (Local Storage Based)
-        // =============================================
+    window.addEventListener('scroll', function() {
+        let current = '';
+        const scrollPosition = window.scrollY + 100;
         
-        // User Registration
-        function registerUser() {
-            const username = document.getElementById('regUsername').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-            const accessCode = document.getElementById('regAccessCode').value;
-
-            // Validation
-            if (!username || !email || !password || !confirmPassword) {
-                alert('Please fill in all required fields!');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters long!');
-                return;
-            }
-
-            // Check if user already exists
-            const existingUsers = JSON.parse(localStorage.getItem('cavalight_users') || '[]');
-            const userExists = existingUsers.some(user => user.email === email);
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
             
-            if (userExists) {
-                alert('This email is already registered. Please use a different email or sign in.');
-                return;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                current = section.getAttribute('id') || '';
             }
-
-            // Determine role
-            let role = 'community';
-            if (accessCode === TEAM_MEMBER_CODE) {
-                role = 'team';
-            } else if (accessCode === ADMIN_CODE) {
-                role = 'admin';
-            } else if (accessCode && accessCode !== '') {
-                alert('Invalid access code. Registered as Community Member.');
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
             }
+        });
+    });
 
-            // Create user object
-            const userData = {
-                id: Date.now().toString(),
-                username: username,
-                email: email,
-                password: btoa(password), // Simple encoding (not secure for production)
-                role: role,
-                createdAt: new Date().toISOString(),
-                lastLogin: new Date().toISOString()
-            };
+    // =============================================
+    // MODAL FUNCTIONS
+    // =============================================
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
 
-            // Save user to localStorage
-            existingUsers.push(userData);
-            localStorage.setItem('cavalight_users', JSON.stringify(existingUsers));
-            
-            // Save current user data
-            localStorage.setItem('cavalight_currentUser', JSON.stringify({
-                id: userData.id,
-                username: username,
-                email: email,
-                role: role
-            }));
-            localStorage.setItem('cavalight_userRole', role);
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Clear form fields
+            const inputs = modal.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.type !== 'submit' && input.type !== 'button') {
+                    input.value = '';
+                }
+            });
+        }
+    }
 
-            // Update UI
-            updateUIForRole(role, username);
-            
-            alert(`🎉 Welcome to CAVALIGHT, ${username}!`);
-            closeModal('registerModal');
+    function switchToRegister() {
+        closeModal('loginModal');
+        openModal('registerModal');
+    }
+
+    function switchToLogin() {
+        closeModal('registerModal');
+        openModal('loginModal');
+    }
+
+    // Modal opening functions
+    function openUploadModal() {
+        openModal('uploadMediaModal');
+    }
+
+    function openEventModal() {
+        openModal('createEventModal');
+    }
+
+    function openNewsModal() {
+        openModal('createNewsModal');
+    }
+
+    function openUserModal() {
+        alert('User modal functionality to be implemented');
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // =============================================
+    // CHECK LOGGED IN USER
+    // =============================================
+    function checkLoggedInUser() {
+        const userData = localStorage.getItem('cavalight_currentUser');
+        const userRole = localStorage.getItem('cavalight_userRole');
+        
+        if (userData && userRole) {
+            try {
+                const user = JSON.parse(userData);
+                updateUIForRole(userRole, user.username);
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+            }
+        }
+    }
+
+    // =============================================
+    // AUTHENTICATION WITH SUPABASE
+    // =============================================
+
+    async function loginUser() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+            alert('Please fill in all fields!');
+            return;
         }
 
-        // User Login
-        function loginUser() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
 
-            if (!email || !password) {
-                alert('Please fill in all fields!');
-                return;
-            }
-
-            // Get users from localStorage
-            const existingUsers = JSON.parse(localStorage.getItem('cavalight_users') || '[]');
-            const user = existingUsers.find(user => user.email === email);
-
-            if (!user) {
-                alert('No account found with this email. Please register first.');
-                return;
-            }
-
-            // Check password (simple base64 encoding for demo)
-            if (btoa(password) !== user.password) {
-                alert('Incorrect password. Please try again.');
-                return;
-            }
-
-            // Update last login
-            user.lastLogin = new Date().toISOString();
-            localStorage.setItem('cavalight_users', JSON.stringify(existingUsers));
-
-            // Save current user data
-            localStorage.setItem('cavalight_currentUser', JSON.stringify({
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                role: user.role
-            }));
-            localStorage.setItem('cavalight_userRole', user.role);
-
-            // Update UI
-            updateUIForRole(user.role, user.username);
+            if (error) throw error;
             
-            alert(`👋 Welcome back, ${user.username}!`);
+            alert(`👋 Welcome back!`);
             closeModal('loginModal');
+        } catch (error) {
+            alert('Login failed: ' + error.message);
+        }
+    }
+
+    async function registerUser() {
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('regConfirmPassword').value;
+        const accessCode = document.getElementById('regAccessCode').value;
+
+        if (!email || !password || !confirmPassword) {
+            alert('Please fill in all required fields!');
+            return;
         }
 
-        // Logout User
-        function logoutUser() {
-            if (confirm('Are you sure you want to log out?')) {
-                localStorage.removeItem('cavalight_currentUser');
-                localStorage.removeItem('cavalight_userRole');
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters long!');
+            return;
+        }
+
+        try {
+            // Sign up with Supabase Auth
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (authError) throw authError;
+
+            // If access code is provided, update role
+            if (accessCode) {
+                let role = 'community';
+                if (accessCode === TEAM_MEMBER_CODE) {
+                    role = 'team';
+                } else if (accessCode === ADMIN_CODE) {
+                    role = 'admin';
+                }
+                
+                // Get the user ID after signup
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (user) {
+                    const { error: profileError } = await supabase
+                        .from('user_profiles')
+                        .update({ role: role })
+                        .eq('id', user.id);
+                    
+                    if (profileError) console.error('Role update error:', profileError);
+                }
+            }
+
+            alert('🎉 Registration successful! Please check your email to confirm your account.');
+            closeModal('registerModal');
+        } catch (error) {
+            alert('Registration failed: ' + error.message);
+        }
+    }
+
+    async function logoutUser() {
+        if (confirm('Are you sure you want to log out?')) {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
                 alert('Logged out successfully!');
                 resetUI();
                 hideDashboard();
@@ -4265,316 +4239,283 @@
                     top: 0,
                     behavior: 'smooth'
                 });
+            } catch (error) {
+                console.error('Logout error:', error);
             }
-            return false;
+        }
+        return false;
+    }
+
+    // =============================================
+    // UI MANAGEMENT FUNCTIONS
+    // =============================================
+    
+    function updateUIForRole(role, username) {
+        // Get UI elements
+        const registerBtn = document.getElementById('registerBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const userRoleBadge = document.getElementById('userRoleBadge');
+        const teamPortalItem = document.getElementById('teamPortalItem');
+        const adminPanelItem = document.getElementById('adminPanelItem');
+        const dashboardItem = document.getElementById('dashboardItem');
+        const teamPortalSection = document.getElementById('team-portal');
+        const adminPanelSection = document.getElementById('admin-panel');
+        const uploadClipBtn = document.getElementById('uploadClipBtn');
+        const createEventBtn = document.getElementById('createEventBtn');
+        const createNewsBtn = document.getElementById('createNewsBtn');
+
+        // Update navigation buttons
+        if (registerBtn && loginBtn) {
+            registerBtn.textContent = username.toUpperCase();
+            registerBtn.onclick = () => false;
+            registerBtn.style.cursor = 'default';
+            
+            loginBtn.textContent = 'LOGOUT';
+            loginBtn.onclick = logoutUser;
         }
 
-        // =============================================
-        // UI MANAGEMENT FUNCTIONS
-        // =============================================
+        // Update role badge
+        if (userRoleBadge) {
+            userRoleBadge.style.display = 'block';
+            userRoleBadge.textContent = getRoleDisplayName(role);
+            userRoleBadge.className = 'role-badge ' + 
+                (role === 'team' ? 'role-team' : 
+                 role === 'admin' ? 'role-admin' : 'role-community');
+        }
+
+        // Show/hide elements based on role
+        const isLoggedIn = true;
+        const isTeam = role === 'team' || role === 'admin';
+        const isAdmin = role === 'admin';
+
+        // Navigation items
+        if (teamPortalItem) teamPortalItem.style.display = isTeam ? 'block' : 'none';
+        if (adminPanelItem) adminPanelItem.style.display = isAdmin ? 'block' : 'none';
+        if (dashboardItem) dashboardItem.style.display = isTeam ? 'block' : 'none';
         
-        function updateUIForRole(role, username) {
-            // Get UI elements
-            const registerBtn = document.getElementById('registerBtn');
-            const loginBtn = document.getElementById('loginBtn');
-            const userRoleBadge = document.getElementById('userRoleBadge');
-            const teamPortalItem = document.getElementById('teamPortalItem');
-            const adminPanelItem = document.getElementById('adminPanelItem');
-            const dashboardItem = document.getElementById('dashboardItem');
-            const teamPortalSection = document.getElementById('team-portal');
-            const adminPanelSection = document.getElementById('admin-panel');
-            const uploadClipBtn = document.getElementById('uploadClipBtn');
-            const createEventBtn = document.getElementById('createEventBtn');
-            const createNewsBtn = document.getElementById('createNewsBtn');
-
-            // Update navigation buttons
-            if (registerBtn && loginBtn) {
-                registerBtn.textContent = username.toUpperCase();
-                registerBtn.onclick = () => false;
-                registerBtn.style.cursor = 'default';
-                
-                loginBtn.textContent = 'LOGOUT';
-                loginBtn.onclick = logoutUser;
-            }
-
-            // Update role badge
-            if (userRoleBadge) {
-                userRoleBadge.style.display = 'block';
-                userRoleBadge.textContent = getRoleDisplayName(role);
-                userRoleBadge.className = 'role-badge ' + 
-                    (role === 'team' ? 'role-team' : 
-                     role === 'admin' ? 'role-admin' : 'role-community');
-            }
-
-            // Show/hide elements based on role
-            const isLoggedIn = true;
-            const isTeam = role === 'team' || role === 'admin';
-            const isAdmin = role === 'admin';
-
-            // Navigation items
-            if (teamPortalItem) teamPortalItem.style.display = isTeam ? 'block' : 'none';
-            if (adminPanelItem) adminPanelItem.style.display = isAdmin ? 'block' : 'none';
-            if (dashboardItem) dashboardItem.style.display = isTeam ? 'block' : 'none';
-            
-            // Sections
-            if (teamPortalSection) teamPortalSection.classList.toggle('active', isTeam);
-            if (adminPanelSection) adminPanelSection.classList.toggle('active', isAdmin);
-            
-            // Buttons
-            if (uploadClipBtn) uploadClipBtn.style.display = isLoggedIn ? 'block' : 'none';
-            if (createEventBtn) createEventBtn.style.display = isAdmin ? 'block' : 'none';
-            if (createNewsBtn) createNewsBtn.style.display = isAdmin ? 'block' : 'none';
-            
-            // Load dashboard data if admin
-            if (isAdmin) {
-                loadUsers();
-                loadDashboardMedia();
-                loadDashboardEvents();
-                loadDashboardNews();
-            }
-        }
-
-        function getRoleDisplayName(role) {
-            switch(role) {
-                case 'team': return 'TEAM MEMBER';
-                case 'admin': return 'ADMINISTRATOR';
-                default: return 'COMMUNITY MEMBER';
-            }
-        }
-
-        function resetUI() {
-            const registerBtn = document.getElementById('registerBtn');
-            const loginBtn = document.getElementById('loginBtn');
-            const userRoleBadge = document.getElementById('userRoleBadge');
-            
-            if (registerBtn && loginBtn) {
-                registerBtn.textContent = 'REGISTER';
-                registerBtn.onclick = () => openModal('registerModal');
-                registerBtn.style.cursor = 'pointer';
-                
-                loginBtn.textContent = 'SIGN IN';
-                loginBtn.onclick = () => openModal('loginModal');
-            }
-            
-            if (userRoleBadge) {
-                userRoleBadge.style.display = 'none';
-            }
-            
-            // Hide role-specific sections
-            const teamPortalItem = document.getElementById('teamPortalItem');
-            const adminPanelItem = document.getElementById('adminPanelItem');
-            const dashboardItem = document.getElementById('dashboardItem');
-            const teamPortalSection = document.getElementById('team-portal');
-            const adminPanelSection = document.getElementById('admin-panel');
-            const uploadClipBtn = document.getElementById('uploadClipBtn');
-            const createEventBtn = document.getElementById('createEventBtn');
-            const createNewsBtn = document.getElementById('createNewsBtn');
-            
-            if (teamPortalItem) teamPortalItem.style.display = 'none';
-            if (adminPanelItem) adminPanelItem.style.display = 'none';
-            if (dashboardItem) dashboardItem.style.display = 'none';
-            if (teamPortalSection) teamPortalSection.classList.remove('active');
-            if (adminPanelSection) adminPanelSection.classList.remove('active');
-            if (uploadClipBtn) uploadClipBtn.style.display = 'none';
-            if (createEventBtn) createEventBtn.style.display = 'none';
-            if (createNewsBtn) createNewsBtn.style.display = 'none';
-        }
-
-        // =============================================
-        // DASHBOARD FUNCTIONS
-        // =============================================
+        // Sections
+        if (teamPortalSection) teamPortalSection.classList.toggle('active', isTeam);
+        if (adminPanelSection) adminPanelSection.classList.toggle('active', isAdmin);
         
-        function showDashboard(e) {
-            if (e) e.preventDefault();
-            document.getElementById('main-website').style.display = 'none';
-            document.getElementById('dashboard').classList.add('active');
-            return false;
-        }
-
-        function hideDashboard(e) {
-            if (e) e.preventDefault();
-            document.getElementById('main-website').style.display = 'block';
-            document.getElementById('dashboard').classList.remove('active');
-            return false;
-        }
-
-        function showDashboardSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.dashboard-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            const section = document.getElementById(sectionId + '-section');
-            if (section) {
-                section.classList.add('active');
-            }
-            
-            // Update active nav link
-            document.querySelectorAll('.sidebar-nav a').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Find and activate the clicked link
-            const clickedLink = event.target.closest('a');
-            if (clickedLink) {
-                clickedLink.classList.add('active');
-            }
-            
-            return false;
-        }
-
-        // =============================================
-        // DATA MANAGEMENT FUNCTIONS
-        // =============================================
+        // Buttons
+        if (uploadClipBtn) uploadClipBtn.style.display = isLoggedIn ? 'block' : 'none';
+        if (createEventBtn) createEventBtn.style.display = isAdmin ? 'block' : 'none';
+        if (createNewsBtn) createNewsBtn.style.display = isAdmin ? 'block' : 'none';
         
-        // Load Initial Data
-        function loadInitialData() {
-            loadMedia();
-            loadEvents();
-            loadNews();
+        // Load dashboard data if admin
+        if (isAdmin) {
+            loadDashboardUsers();
+            loadDashboardMedia();
+            loadDashboardEvents();
+            loadDashboardNews();
         }
+    }
 
-        // Media Filtering
-        function filterMedia(category) {
-            const tabs = document.querySelectorAll('.media-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Find and activate the clicked tab
-            const clickedTab = event.target;
-            clickedTab.classList.add('active');
-            
-            // Filter media items
-            const mediaItems = document.querySelectorAll('.media-item');
-            mediaItems.forEach(item => {
-                if (category === 'all' || item.dataset.category === category) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+    function getRoleDisplayName(role) {
+        switch(role) {
+            case 'team': return 'TEAM MEMBER';
+            case 'admin': return 'ADMINISTRATOR';
+            default: return 'COMMUNITY MEMBER';
         }
+    }
 
-        // Load Media
-        function loadMedia() {
-            try {
-                let mediaItems = JSON.parse(localStorage.getItem('cavalight_media'));
+    function resetUI() {
+        const registerBtn = document.getElementById('registerBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const userRoleBadge = document.getElementById('userRoleBadge');
+        
+        if (registerBtn && loginBtn) {
+            registerBtn.textContent = 'REGISTER';
+            registerBtn.onclick = () => openModal('registerModal');
+            registerBtn.style.cursor = 'pointer';
+            
+            loginBtn.textContent = 'SIGN IN';
+            loginBtn.onclick = () => openModal('loginModal');
+        }
+        
+        if (userRoleBadge) {
+            userRoleBadge.style.display = 'none';
+        }
+        
+        // Hide role-specific sections
+        const teamPortalItem = document.getElementById('teamPortalItem');
+        const adminPanelItem = document.getElementById('adminPanelItem');
+        const dashboardItem = document.getElementById('dashboardItem');
+        const teamPortalSection = document.getElementById('team-portal');
+        const adminPanelSection = document.getElementById('admin-panel');
+        const uploadClipBtn = document.getElementById('uploadClipBtn');
+        const createEventBtn = document.getElementById('createEventBtn');
+        const createNewsBtn = document.getElementById('createNewsBtn');
+        
+        if (teamPortalItem) teamPortalItem.style.display = 'none';
+        if (adminPanelItem) adminPanelItem.style.display = 'none';
+        if (dashboardItem) dashboardItem.style.display = 'none';
+        if (teamPortalSection) teamPortalSection.classList.remove('active');
+        if (adminPanelSection) adminPanelSection.classList.remove('active');
+        if (uploadClipBtn) uploadClipBtn.style.display = 'none';
+        if (createEventBtn) createEventBtn.style.display = 'none';
+        if (createNewsBtn) createNewsBtn.style.display = 'none';
+    }
+
+    // =============================================
+    // DASHBOARD FUNCTIONS
+    // =============================================
+    
+    function showDashboard(e) {
+        if (e) e.preventDefault();
+        document.getElementById('main-website').style.display = 'none';
+        document.getElementById('dashboard').classList.add('active');
+        return false;
+    }
+
+    function hideDashboard(e) {
+        if (e) e.preventDefault();
+        document.getElementById('main-website').style.display = 'block';
+        document.getElementById('dashboard').classList.remove('active');
+        return false;
+    }
+
+    function showDashboardSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.dashboard-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Show selected section
+        const section = document.getElementById(sectionId + '-section');
+        if (section) {
+            section.classList.add('active');
+        }
+        
+        // Update active nav link
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Find and activate the clicked link
+        const clickedLink = event.target.closest('a');
+        if (clickedLink) {
+            clickedLink.classList.add('active');
+        }
+        
+        return false;
+    }
+
+    // =============================================
+    // DATA MANAGEMENT FUNCTIONS
+    // =============================================
+    
+    // Load Initial Data
+    async function loadInitialData() {
+        await loadMedia();
+        await loadEvents();
+        await loadNews();
+    }
+
+    // Media Filtering
+    function filterMedia(category) {
+        const tabs = document.querySelectorAll('.media-tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Find and activate the clicked tab
+        const clickedTab = event.target;
+        clickedTab.classList.add('active');
+        
+        // Filter media items
+        const mediaItems = document.querySelectorAll('.media-item');
+        mediaItems.forEach(item => {
+            if (category === 'all' || item.dataset.category === category) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Load Media
+    async function loadMedia() {
+        try {
+            const { data: mediaItems, error } = await supabase
+                .from('media')
+                .select('*')
+                .eq('is_approved', true)
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            const mediaGrid = document.getElementById('mediaGrid');
+            if (!mediaGrid) return;
+            
+            mediaGrid.innerHTML = '';
+            
+            mediaItems.forEach(media => {
+                const mediaItem = document.createElement('div');
+                mediaItem.className = 'media-item';
+                mediaItem.dataset.category = media.category;
                 
-                if (!mediaItems || mediaItems.length === 0) {
-                    // Sample media data
-                    mediaItems = [
-                        {
-                            id: 1,
-                            title: "A1D's INSANE 1v5 ACE",
-                            description: "Watch A1D clutch a 1v5 situation in tournament finals",
-                            category: "highlights",
-                            url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                            thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                            views: 1250,
-                            likes: 89,
-                            date: "2023-11-15",
-                            uploader: "Admin"
-                        },
-                        {
-                            id: 2,
-                            title: "Tournament Finals - CAVALIGHT vs RIVALS",
-                            description: "Full match highlights from our latest tournament win",
-                            category: "tournaments",
-                            url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                            thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                            views: 3200,
-                            likes: 156,
-                            date: "2023-11-10",
-                            uploader: "Admin"
-                        },
-                        {
-                            id: 3,
-                            title: "Community Clip of the Week",
-                            description: "Amazing play submitted by our community member",
-                            category: "community",
-                            url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                            thumbnail: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                            views: 850,
-                            likes: 42,
-                            date: "2023-11-05",
-                            uploader: "Community"
-                        }
-                    ];
-                    localStorage.setItem('cavalight_media', JSON.stringify(mediaItems));
-                }
+                // Check if user is admin
+                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser') || '{}');
+                const isAdmin = currentUser.role === 'admin';
                 
-                const mediaGrid = document.getElementById('mediaGrid');
-                if (!mediaGrid) return;
-                
-                mediaGrid.innerHTML = '';
-                
-                mediaItems.forEach(media => {
-                    const mediaItem = document.createElement('div');
-                    mediaItem.className = 'media-item';
-                    mediaItem.dataset.category = media.category;
-                    
-                    // Check if user is admin
-                    const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser') || '{}');
-                    const isAdmin = currentUser.role === 'admin';
-                    
-                    let adminActions = '';
-                    if (isAdmin) {
-                        adminActions = `
-                            <div class="media-admin-actions">
-                                <button class="btn btn-warning btn-small" onclick="editMedia(${media.id})">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-small" onclick="deleteMedia(${media.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        `;
-                    }
-                    
-                    mediaItem.innerHTML = `
-                        <div class="media-item-header" style="background-image: url('${media.thumbnail}'); background-size: cover; background-position: center;">
-                        </div>
-                        <div class="media-item-content">
-                            <h3 class="media-item-title">${media.title}</h3>
-                            <p class="media-item-description">${media.description}</p>
-                            <div class="media-item-meta">
-                                <span><i class="fas fa-eye"></i> ${media.views} views</span>
-                                <span><i class="fas fa-heart"></i> ${media.likes} likes</span>
-                                <span><i class="fas fa-calendar"></i> ${media.date}</span>
-                                <span><i class="fas fa-user"></i> ${media.uploader}</span>
-                            </div>
-                            <div class="media-item-actions">
-                                <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;" onclick="window.open('${media.url}', '_blank')">
-                                    <i class="fas fa-play"></i> Watch
-                                </button>
-                                <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="shareMedia('${media.title}', '${media.url}')">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
-                            </div>
-                            ${adminActions}
+                let adminActions = '';
+                if (isAdmin) {
+                    adminActions = `
+                        <div class="media-admin-actions">
+                            <button class="btn btn-warning btn-small" onclick="editMedia('${media.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger btn-small" onclick="deleteMedia('${media.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </div>
                     `;
-                    
-                    mediaGrid.appendChild(mediaItem);
-                });
+                }
                 
-                // Also update dashboard if open
-                loadDashboardMedia();
+                mediaItem.innerHTML = `
+                    <div class="media-item-header" style="background-image: url('${media.thumbnail || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'}');">
+                    </div>
+                    <div class="media-item-content">
+                        <h3 class="media-item-title">${media.title}</h3>
+                        <p class="media-item-description">${media.description}</p>
+                        <div class="media-item-meta">
+                            <span><i class="fas fa-eye"></i> ${media.views_count || 0} views</span>
+                            <span><i class="fas fa-heart"></i> ${media.likes_count || 0} likes</span>
+                            <span><i class="fas fa-calendar"></i> ${new Date(media.created_at).toLocaleDateString()}</span>
+                            <span><i class="fas fa-user"></i> ${media.uploader || 'Admin'}</span>
+                        </div>
+                        <div class="media-item-actions">
+                            <a href="${media.url}" target="_blank" class="btn btn-outline">
+                                <i class="fas fa-play"></i> Watch
+                            </a>
+                            <button class="btn btn-primary" onclick="likeMedia('${media.id}')">
+                                <i class="fas fa-heart"></i> Like
+                            </button>
+                        </div>
+                        ${adminActions}
+                    </div>
+                `;
                 
-            } catch (error) {
-                console.error('Error loading media:', error);
-            }
-        }
-
-        // Edit Media
-        function editMedia(mediaId) {
-            const mediaItems = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
-            const media = mediaItems.find(item => item.id === mediaId);
+                mediaGrid.appendChild(mediaItem);
+            });
             
-            if (!media) {
-                alert('Media not found!');
-                return;
-            }
+            // Also update dashboard if open
+            loadDashboardMedia();
+            
+        } catch (error) {
+            console.error('Error loading media:', error);
+        }
+    }
+
+    // Edit Media
+    async function editMedia(mediaId) {
+        try {
+            const { data: media, error } = await supabase
+                .from('media')
+                .select('*')
+                .eq('id', mediaId)
+                .single();
+            
+            if (error) throw error;
             
             // Fill edit form
             document.getElementById('editMediaId').value = media.id;
@@ -4583,190 +4524,168 @@
             document.getElementById('editMediaCategory').value = media.category;
             document.getElementById('editMediaUrl').value = media.url;
             document.getElementById('editMediaThumbnail').value = media.thumbnail || '';
-            document.getElementById('editMediaViews').value = media.views || 0;
-            document.getElementById('editMediaLikes').value = media.likes || 0;
+            document.getElementById('editMediaViews').value = media.views_count || 0;
+            document.getElementById('editMediaLikes').value = media.likes_count || 0;
             
             openModal('editMediaModal');
+        } catch (error) {
+            console.error('Error loading media for edit:', error);
+            alert('Media not found!');
         }
+    }
 
-        // Save Media Edit
-        function saveMediaEdit() {
-            const mediaId = parseInt(document.getElementById('editMediaId').value);
-            const mediaItems = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
-            const index = mediaItems.findIndex(item => item.id === mediaId);
+    // Save Media Edit
+    async function saveMediaEdit() {
+        const mediaId = document.getElementById('editMediaId').value;
+        
+        try {
+            const { error } = await supabase
+                .from('media')
+                .update({
+                    title: document.getElementById('editMediaTitle').value,
+                    description: document.getElementById('editMediaDescription').value,
+                    category: document.getElementById('editMediaCategory').value,
+                    url: document.getElementById('editMediaUrl').value,
+                    thumbnail: document.getElementById('editMediaThumbnail').value,
+                    views_count: parseInt(document.getElementById('editMediaViews').value) || 0,
+                    likes_count: parseInt(document.getElementById('editMediaLikes').value) || 0
+                })
+                .eq('id', mediaId);
             
-            if (index === -1) {
-                alert('Media not found!');
-                return;
-            }
+            if (error) throw error;
             
-            // Update media item
-            mediaItems[index] = {
-                ...mediaItems[index],
-                title: document.getElementById('editMediaTitle').value,
-                description: document.getElementById('editMediaDescription').value,
-                category: document.getElementById('editMediaCategory').value,
-                url: document.getElementById('editMediaUrl').value,
-                thumbnail: document.getElementById('editMediaThumbnail').value || mediaItems[index].thumbnail,
-                views: parseInt(document.getElementById('editMediaViews').value) || mediaItems[index].views,
-                likes: parseInt(document.getElementById('editMediaLikes').value) || mediaItems[index].likes
-            };
-            
-            localStorage.setItem('cavalight_media', JSON.stringify(mediaItems));
             alert('Media updated successfully!');
             closeModal('editMediaModal');
             loadMedia();
+            
+        } catch (error) {
+            console.error('Error updating media:', error);
+            alert('Failed to update media.');
         }
+    }
 
-        // Delete Media
-        function deleteMedia(mediaId) {
-            if (!confirm('Are you sure you want to delete this media?')) {
-                return;
-            }
+    // Delete Media
+    async function deleteMedia(mediaId) {
+        if (!confirm('Are you sure you want to delete this media?')) return;
+        
+        try {
+            const { error } = await supabase
+                .from('media')
+                .delete()
+                .eq('id', mediaId);
             
-            const mediaItems = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
-            const filteredItems = mediaItems.filter(item => item.id !== mediaId);
+            if (error) throw error;
             
-            localStorage.setItem('cavalight_media', JSON.stringify(filteredItems));
             alert('Media deleted successfully!');
             loadMedia();
+        } catch (error) {
+            console.error('Error deleting media:', error);
+            alert('Failed to delete media.');
         }
+    }
 
-        function shareMedia(title, url) {
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    url: url
-                });
-            } else {
-                navigator.clipboard.writeText(url).then(() => {
-                    alert('Link copied to clipboard!');
-                });
-            }
+    function shareMedia(title, url) {
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                url: url
+            });
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard!');
+            });
         }
+    }
 
-        // Load Events
-        function loadEvents() {
-            try {
-                let events = JSON.parse(localStorage.getItem('cavalight_events'));
+    // Load Events
+    async function loadEvents() {
+        try {
+            const { data: events, error } = await supabase
+                .from('events')
+                .select('*')
+                .eq('is_approved', true)
+                .order('date', { ascending: true });
+            
+            if (error) throw error;
+            
+            const eventsTimeline = document.getElementById('eventsTimeline');
+            if (!eventsTimeline) return;
+            
+            eventsTimeline.innerHTML = '';
+            
+            events.forEach(event => {
+                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser') || '{}');
+                const isAdmin = currentUser.role === 'admin';
                 
-                if (!events || events.length === 0) {
-                    events = [
-                        {
-                            id: 1,
-                            title: "Valorant Community Cup #6",
-                            description: "Join our monthly community tournament with prizes for top teams!",
-                            date: "2023-12-15 18:00",
-                            type: "tournament",
-                            location: "Discord & Twitch",
-                            participants: 32,
-                            status: "upcoming"
-                        },
-                        {
-                            id: 2,
-                            title: "Pro Scrim Session",
-                            description: "Professional scrim session with other competitive teams",
-                            date: "2023-12-10 20:00",
-                            type: "scrim",
-                            location: "Valorant Custom Game",
-                            participants: 10,
-                            status: "upcoming"
-                        },
-                        {
-                            id: 3,
-                            title: "Community Training Day",
-                            description: "Learn from our pro players and improve your skills",
-                            date: "2023-12-05 19:00",
-                            type: "training",
-                            location: "Discord Voice",
-                            participants: 50,
-                            status: "completed"
-                        }
-                    ];
-                    localStorage.setItem('cavalight_events', JSON.stringify(events));
+                let adminActions = '';
+                if (isAdmin) {
+                    adminActions = `
+                        <div class="event-admin-actions">
+                            <button class="btn btn-warning btn-small" onclick="editEvent('${event.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger btn-small" onclick="deleteEvent('${event.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
                 }
                 
-                const eventsTimeline = document.getElementById('eventsTimeline');
-                if (!eventsTimeline) return;
-                
-                eventsTimeline.innerHTML = '';
-                
-                events.forEach(event => {
-                    const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser') || '{}');
-                    const isAdmin = currentUser.role === 'admin';
-                    
-                    let adminActions = '';
-                    if (isAdmin) {
-                        adminActions = `
-                            <div class="event-admin-actions">
-                                <button class="btn btn-warning btn-small" onclick="editEvent(${event.id})">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-small" onclick="deleteEvent(${event.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        `;
-                    }
-                    
-                    const eventItem = document.createElement('div');
-                    eventItem.className = 'event-item';
-                    eventItem.innerHTML = `
-                        <div class="event-date">
-                            <i class="fas fa-calendar-alt"></i>
-                            ${event.date}
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item';
+                eventItem.innerHTML = `
+                    <div class="event-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        ${event.date}
+                    </div>
+                    <h3 class="event-title">${event.title}</h3>
+                    <p class="event-description">${event.description}</p>
+                    <div class="event-details">
+                        <div class="event-detail">
+                            <i class="fas fa-gamepad"></i>
+                            ${event.type.toUpperCase()}
                         </div>
-                        <h3 class="event-title">${event.title}</h3>
-                        <p class="event-description">${event.description}</p>
-                        <div class="event-details">
-                            <div class="event-detail">
-                                <i class="fas fa-gamepad"></i>
-                                ${event.type.toUpperCase()}
-                            </div>
-                            <div class="event-detail">
-                                <i class="fas fa-map-marker-alt"></i>
-                                ${event.location}
-                            </div>
-                            <div class="event-detail">
-                                <i class="fas fa-users"></i>
-                                ${event.participants} Participants
-                            </div>
-                            <div class="event-detail">
-                                <i class="fas fa-info-circle"></i>
-                                ${event.status.toUpperCase()}
-                            </div>
+                        <div class="event-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${event.location}
                         </div>
-                        <div class="event-actions">
-                            <button class="btn btn-primary" onclick="rsvpToEvent(${event.id})">
-                                <i class="fas fa-calendar-plus"></i> RSVP
-                            </button>
-                            <button class="btn btn-outline" onclick="showEventDetails(${event.id})">
-                                <i class="fas fa-info-circle"></i> Details
-                            </button>
+                        <div class="event-detail">
+                            <i class="fas fa-users"></i>
+                            ${event.participants_count || 0} Participants
                         </div>
-                        ${adminActions}
-                    `;
-                    
-                    eventsTimeline.appendChild(eventItem);
-                });
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn btn-primary" onclick="rsvpToEvent('${event.id}')">
+                            <i class="fas fa-calendar-plus"></i> RSVP
+                        </button>
+                        <button class="btn btn-outline" onclick="showEventDetails('${event.id}')">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                    </div>
+                    ${adminActions}
+                `;
                 
-                // Also update dashboard if open
-                loadDashboardEvents();
-                
-            } catch (error) {
-                console.error('Error loading events:', error);
-            }
-        }
-
-        // Edit Event
-        function editEvent(eventId) {
-            const events = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-            const event = events.find(item => item.id === eventId);
+                eventsTimeline.appendChild(eventItem);
+            });
             
-            if (!event) {
-                alert('Event not found!');
-                return;
-            }
+            // Also update dashboard if open
+            loadDashboardEvents();
+            
+        } catch (error) {
+            console.error('Error loading events:', error);
+        }
+    }
+
+    // Edit Event
+    async function editEvent(eventId) {
+        try {
+            const { data: event, error } = await supabase
+                .from('events')
+                .select('*')
+                .eq('id', eventId)
+                .single();
+            
+            if (error) throw error;
             
             // Fill edit form
             document.getElementById('editEventId').value = event.id;
@@ -4775,208 +4694,193 @@
             document.getElementById('editEventDate').value = event.date.replace(' ', 'T');
             document.getElementById('editEventType').value = event.type;
             document.getElementById('editEventLocation').value = event.location;
-            document.getElementById('editEventParticipants').value = event.participants || 0;
+            document.getElementById('editEventParticipants').value = event.participants_count || 0;
             document.getElementById('editEventStatus').value = event.status || 'upcoming';
             
             openModal('editEventModal');
+        } catch (error) {
+            console.error('Error loading event for edit:', error);
+            alert('Event not found!');
         }
+    }
 
-        // Save Event Edit
-        function saveEventEdit() {
-            const eventId = parseInt(document.getElementById('editEventId').value);
-            const events = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-            const index = events.findIndex(item => item.id === eventId);
+    // Save Event Edit
+    async function saveEventEdit() {
+        const eventId = document.getElementById('editEventId').value;
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .update({
+                    title: document.getElementById('editEventTitle').value,
+                    description: document.getElementById('editEventDescription').value,
+                    date: document.getElementById('editEventDate').value.replace('T', ' '),
+                    type: document.getElementById('editEventType').value,
+                    location: document.getElementById('editEventLocation').value,
+                    participants_count: parseInt(document.getElementById('editEventParticipants').value) || 0,
+                    status: document.getElementById('editEventStatus').value
+                })
+                .eq('id', eventId);
             
-            if (index === -1) {
-                alert('Event not found!');
-                return;
-            }
+            if (error) throw error;
             
-            // Update event item
-            events[index] = {
-                ...events[index],
-                title: document.getElementById('editEventTitle').value,
-                description: document.getElementById('editEventDescription').value,
-                date: document.getElementById('editEventDate').value.replace('T', ' '),
-                type: document.getElementById('editEventType').value,
-                location: document.getElementById('editEventLocation').value,
-                participants: parseInt(document.getElementById('editEventParticipants').value) || events[index].participants,
-                status: document.getElementById('editEventStatus').value || 'upcoming'
-            };
-            
-            localStorage.setItem('cavalight_events', JSON.stringify(events));
             alert('Event updated successfully!');
             closeModal('editEventModal');
             loadEvents();
+            
+        } catch (error) {
+            console.error('Error updating event:', error);
+            alert('Failed to update event.');
         }
+    }
 
-        // Delete Event
-        function deleteEvent(eventId) {
-            if (!confirm('Are you sure you want to delete this event?')) {
-                return;
-            }
+    // Delete Event
+    async function deleteEvent(eventId) {
+        if (!confirm('Are you sure you want to delete this event?')) return;
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .delete()
+                .eq('id', eventId);
             
-            const events = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-            const filteredEvents = events.filter(item => item.id !== eventId);
+            if (error) throw error;
             
-            localStorage.setItem('cavalight_events', JSON.stringify(filteredEvents));
             alert('Event deleted successfully!');
             loadEvents();
+        } catch (error) {
+            console.error('Error deleting event:', error);
+            alert('Failed to delete event.');
         }
+    }
 
-        function rsvpToEvent(eventId) {
-            const user = JSON.parse(localStorage.getItem('cavalight_currentUser'));
-            if (!user) {
-                alert('Please login to RSVP to events.');
-                openModal('loginModal');
-                return;
-            }
+    async function rsvpToEvent(eventId) {
+        const user = JSON.parse(localStorage.getItem('cavalight_currentUser'));
+        if (!user) {
+            alert('Please login to RSVP to events.');
+            openModal('loginModal');
+            return;
+        }
+        
+        try {
+            const { error } = await supabase
+                .from('event_rsvps')
+                .insert({
+                    event_id: eventId,
+                    user_id: user.id,
+                    user_name: user.username
+                });
             
-            let rsvps = JSON.parse(localStorage.getItem('cavalight_rsvps') || '{}');
-            
-            if (rsvps[eventId]) {
-                if (rsvps[eventId].includes(user.id)) {
-                    alert('You have already RSVPed to this event.');
-                    return;
-                }
-                rsvps[eventId].push(user.id);
-            } else {
-                rsvps[eventId] = [user.id];
-            }
-            
-            localStorage.setItem('cavalight_rsvps', JSON.stringify(rsvps));
-            alert('Successfully RSVPed to the event!');
+            if (error) throw error;
             
             // Update participant count
-            const events = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-            const eventIndex = events.findIndex(e => e.id === eventId);
-            if (eventIndex !== -1) {
-                events[eventIndex].participants = (events[eventIndex].participants || 0) + 1;
-                localStorage.setItem('cavalight_events', JSON.stringify(events));
-                loadEvents();
-            }
-        }
-
-        function showEventDetails(eventId) {
-            const events = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-            const event = events.find(e => e.id === eventId);
+            const { error: updateError } = await supabase.rpc('increment_event_participants', {
+                event_id: eventId
+            });
             
-            if (event) {
-                alert(`📅 ${event.title}\n\n📝 ${event.description}\n\n🗓️ ${event.date}\n\n📍 ${event.location}\n\n👥 ${event.participants || 0} Participants\n\n📊 Status: ${event.status.toUpperCase()}`);
-            }
+            if (updateError) console.error('Update error:', updateError);
+            
+            alert('Successfully RSVPed to the event!');
+            loadEvents();
+            
+        } catch (error) {
+            console.error('Error RSVPing to event:', error);
+            alert('Failed to RSVP to event.');
         }
+    }
 
-        // Load News
-        function loadNews() {
-            try {
-                let newsItems = JSON.parse(localStorage.getItem('cavalight_news'));
+    async function showEventDetails(eventId) {
+        try {
+            const { data: event, error } = await supabase
+                .from('events')
+                .select('*')
+                .eq('id', eventId)
+                .single();
+            
+            if (error) throw error;
+            
+            alert(`📅 ${event.title}\n\n📝 ${event.description}\n\n🗓️ ${event.date}\n\n📍 ${event.location}\n\n👥 ${event.participants_count || 0} Participants\n\n📊 Status: ${event.status.toUpperCase()}`);
+        } catch (error) {
+            console.error('Error loading event details:', error);
+        }
+    }
+
+    // Load News
+    async function loadNews() {
+        try {
+            const { data: newsItems, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('is_approved', true)
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            const newsGrid = document.getElementById('newsGrid');
+            if (!newsGrid) return;
+            
+            newsGrid.innerHTML = '';
+            
+            newsItems.forEach(news => {
+                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser') || '{}');
+                const isAdmin = currentUser.role === 'admin';
                 
-                if (!newsItems || newsItems.length === 0) {
-                    newsItems = [
-                        {
-                            id: 1,
-                            title: "CAVALIGHT Wins Regional Championship",
-                            content: "Our team dominated the regional finals, securing first place and qualifying for nationals.",
-                            category: "tournament",
-                            image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                            date: "2023-11-20",
-                            author: "Admin",
-                            status: "published"
-                        },
-                        {
-                            id: 2,
-                            title: "New Player Tryouts Announcement",
-                            content: "We're looking for talented players to join our academy team. Tryouts start next week!",
-                            category: "announcement",
-                            image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                            date: "2023-11-18",
-                            author: "Team Manager",
-                            status: "published"
-                        },
-                        {
-                            id: 3,
-                            title: "Community Update: Discord Server Milestone",
-                            content: "We've reached 1000+ members in our Discord community! Join us for special events.",
-                            category: "community",
-                            image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-                            date: "2023-11-15",
-                            author: "Community Manager",
-                            status: "published"
-                        }
-                    ];
-                    localStorage.setItem('cavalight_news', JSON.stringify(newsItems));
-                }
-                
-                const newsGrid = document.getElementById('newsGrid');
-                if (!newsGrid) return;
-                
-                newsGrid.innerHTML = '';
-                
-                newsItems.forEach(news => {
-                    const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser') || '{}');
-                    const isAdmin = currentUser.role === 'admin';
-                    
-                    let adminActions = '';
-                    if (isAdmin) {
-                        adminActions = `
-                            <div class="news-admin-actions">
-                                <button class="btn btn-warning btn-small" onclick="editNews(${news.id})">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-small" onclick="deleteNews(${news.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        `;
-                    }
-                    
-                    const newsItem = document.createElement('div');
-                    newsItem.className = 'news-item';
-                    newsItem.innerHTML = `
-                        <div class="news-item-header" style="background-image: url('${news.image}'); background-size: cover; background-position: center;">
-                            <div style="position: relative; z-index: 2; text-align: center;">
-                                <div style="background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 10px;">
-                                    <i class="fas fa-newspaper" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                                    <div style="text-transform: uppercase; letter-spacing: 2px;">${news.category}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="news-item-content">
-                            <div class="news-item-date">
-                                <i class="fas fa-calendar"></i>
-                                ${news.date}
-                            </div>
-                            <h3 class="news-item-title">${news.title}</h3>
-                            <p class="news-item-excerpt">${news.content.substring(0, 100)}...</p>
-                            <div class="news-item-actions">
-                                <button class="btn btn-outline" style="width: 100%;" onclick="readMoreNews(${news.id})">
-                                    <i class="fas fa-book-open"></i> Read More
-                                </button>
-                            </div>
-                            ${adminActions}
+                let adminActions = '';
+                if (isAdmin) {
+                    adminActions = `
+                        <div class="news-admin-actions">
+                            <button class="btn btn-warning btn-small" onclick="editNews('${news.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger btn-small" onclick="deleteNews('${news.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </div>
                     `;
-                    
-                    newsGrid.appendChild(newsItem);
-                });
+                }
                 
-                // Also update dashboard if open
-                loadDashboardNews();
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item';
+                newsItem.innerHTML = `
+                    <div class="news-item-header" style="background-image: url('${news.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'}');">
+                    </div>
+                    <div class="news-item-content">
+                        <div class="news-item-date">
+                            <i class="fas fa-calendar"></i>
+                            ${new Date(news.created_at).toLocaleDateString()}
+                        </div>
+                        <h3 class="news-item-title">${news.title}</h3>
+                        <p class="news-item-excerpt">${news.content.substring(0, 100)}...</p>
+                        <div class="news-item-actions">
+                            <button class="btn btn-outline" onclick="readMoreNews('${news.id}')">
+                                <i class="fas fa-book-open"></i> Read More
+                            </button>
+                        </div>
+                        ${adminActions}
+                    </div>
+                `;
                 
-            } catch (error) {
-                console.error('Error loading news:', error);
-            }
-        }
-
-        // Edit News
-        function editNews(newsId) {
-            const newsItems = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
-            const news = newsItems.find(item => item.id === newsId);
+                newsGrid.appendChild(newsItem);
+            });
             
-            if (!news) {
-                alert('News not found!');
-                return;
-            }
+            // Also update dashboard if open
+            loadDashboardNews();
+            
+        } catch (error) {
+            console.error('Error loading news:', error);
+        }
+    }
+
+    // Edit News
+    async function editNews(newsId) {
+        try {
+            const { data: news, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('id', newsId)
+                .single();
+            
+            if (error) throw error;
             
             // Fill edit form
             document.getElementById('editNewsId').value = news.id;
@@ -4988,384 +4892,600 @@
             document.getElementById('editNewsStatus').value = news.status || 'published';
             
             openModal('editNewsModal');
+        } catch (error) {
+            console.error('Error loading news for edit:', error);
+            alert('News not found!');
         }
+    }
 
-        // Save News Edit
-        function saveNewsEdit() {
-            const newsId = parseInt(document.getElementById('editNewsId').value);
-            const newsItems = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
-            const index = newsItems.findIndex(item => item.id === newsId);
+    // Save News Edit
+    async function saveNewsEdit() {
+        const newsId = document.getElementById('editNewsId').value;
+        
+        try {
+            const { error } = await supabase
+                .from('news')
+                .update({
+                    title: document.getElementById('editNewsTitle').value,
+                    content: document.getElementById('editNewsContent').value,
+                    category: document.getElementById('editNewsCategory').value,
+                    image: document.getElementById('editNewsImage').value,
+                    author: document.getElementById('editNewsAuthor').value,
+                    status: document.getElementById('editNewsStatus').value
+                })
+                .eq('id', newsId);
             
-            if (index === -1) {
-                alert('News not found!');
-                return;
-            }
+            if (error) throw error;
             
-            // Update news item
-            newsItems[index] = {
-                ...newsItems[index],
-                title: document.getElementById('editNewsTitle').value,
-                content: document.getElementById('editNewsContent').value,
-                category: document.getElementById('editNewsCategory').value,
-                image: document.getElementById('editNewsImage').value || newsItems[index].image,
-                author: document.getElementById('editNewsAuthor').value || newsItems[index].author,
-                status: document.getElementById('editNewsStatus').value || 'published'
-            };
-            
-            localStorage.setItem('cavalight_news', JSON.stringify(newsItems));
             alert('News updated successfully!');
             closeModal('editNewsModal');
             loadNews();
+            
+        } catch (error) {
+            console.error('Error updating news:', error);
+            alert('Failed to update news.');
         }
+    }
 
-        // Delete News
-        function deleteNews(newsId) {
-            if (!confirm('Are you sure you want to delete this news post?')) {
-                return;
-            }
+    // Delete News
+    async function deleteNews(newsId) {
+        if (!confirm('Are you sure you want to delete this news post?')) return;
+        
+        try {
+            const { error } = await supabase
+                .from('news')
+                .delete()
+                .eq('id', newsId);
             
-            const newsItems = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
-            const filteredItems = newsItems.filter(item => item.id !== newsId);
+            if (error) throw error;
             
-            localStorage.setItem('cavalight_news', JSON.stringify(filteredItems));
             alert('News deleted successfully!');
             loadNews();
+        } catch (error) {
+            console.error('Error deleting news:', error);
+            alert('Failed to delete news.');
         }
+    }
 
-        function readMoreNews(newsId) {
-            const newsItems = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
-            const news = newsItems.find(item => item.id === newsId);
+    async function readMoreNews(newsId) {
+        try {
+            const { data: news, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('id', newsId)
+                .single();
             
-            if (news) {
-                alert(`📰 ${news.title}\n\n${news.content}\n\n- ${news.author}, ${news.date}\n\nCategory: ${news.category.toUpperCase()}`);
-            }
+            if (error) throw error;
+            
+            alert(`📰 ${news.title}\n\n${news.content}\n\n- ${news.author}, ${new Date(news.created_at).toLocaleDateString()}\n\nCategory: ${news.category.toUpperCase()}`);
+        } catch (error) {
+            console.error('Error loading news details:', error);
+        }
+    }
+
+    // =============================================
+    // ADMIN PANEL FUNCTIONS
+    // =============================================
+
+    // Load Dashboard Users
+    async function loadDashboardUsers() {
+        try {
+            const { data: users, error } = await supabase
+                .from('user_profiles')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.role}</td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-outline btn-small" onclick="editUserRole('${user.id}')">
+                            <i class="fas fa-edit"></i> Edit Role
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="deleteUser('${user.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                userList.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error loading users:', error);
+        }
+    }
+
+    // Load Dashboard Media
+    async function loadDashboardMedia() {
+        try {
+            const { data: media, error } = await supabase
+                .from('media')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            const mediaList = document.getElementById('mediaList');
+            mediaList.innerHTML = '';
+            
+            media.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.title}</td>
+                    <td>${item.category}</td>
+                    <td>${item.views_count || 0}</td>
+                    <td>${item.likes_count || 0}</td>
+                    <td>${item.is_approved ? '✅ Approved' : '❌ Pending'}</td>
+                    <td>
+                        <button class="btn btn-outline btn-small" onclick="editMedia('${item.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="deleteMedia('${item.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        ${!item.is_approved ? `
+                        <button class="btn btn-success btn-small" onclick="approveMedia('${item.id}')">
+                            <i class="fas fa-check"></i> Approve
+                        </button>` : ''}
+                    </td>
+                `;
+                mediaList.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error loading dashboard media:', error);
+        }
+    }
+
+    // Load Dashboard Events
+    async function loadDashboardEvents() {
+        try {
+            const { data: events, error } = await supabase
+                .from('events')
+                .select('*')
+                .order('date', { ascending: true });
+            
+            if (error) throw error;
+            
+            const eventList = document.getElementById('eventList');
+            eventList.innerHTML = '';
+            
+            events.forEach(event => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${event.title}</td>
+                    <td>${event.date}</td>
+                    <td>${event.type}</td>
+                    <td>${event.participants_count || 0}</td>
+                    <td>${event.is_approved ? '✅ Approved' : '❌ Pending'}</td>
+                    <td>
+                        <button class="btn btn-outline btn-small" onclick="editEvent('${event.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="deleteEvent('${event.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        ${!event.is_approved ? `
+                        <button class="btn btn-success btn-small" onclick="approveEvent('${event.id}')">
+                            <i class="fas fa-check"></i> Approve
+                        </button>` : ''}
+                    </td>
+                `;
+                eventList.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error loading dashboard events:', error);
+        }
+    }
+
+    // Load Dashboard News
+    async function loadDashboardNews() {
+        try {
+            const { data: news, error } = await supabase
+                .from('news')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+            
+            const newsList = document.getElementById('newsList');
+            newsList.innerHTML = '';
+            
+            news.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.title}</td>
+                    <td>${item.category}</td>
+                    <td>${item.views_count || 0}</td>
+                    <td>${item.is_approved ? '✅ Approved' : '❌ Pending'}</td>
+                    <td>
+                        <button class="btn btn-outline btn-small" onclick="editNews('${item.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="deleteNews('${item.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        ${!item.is_approved ? `
+                        <button class="btn btn-success btn-small" onclick="approveNews('${item.id}')">
+                            <i class="fas fa-check"></i> Approve
+                        </button>` : ''}
+                    </td>
+                `;
+                newsList.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error loading dashboard news:', error);
+        }
+    }
+
+    // Admin Approval Functions
+    async function approveMedia(mediaId) {
+        try {
+            const { error } = await supabase
+                .from('media')
+                .update({ is_approved: true })
+                .eq('id', mediaId);
+            
+            if (error) throw error;
+            
+            alert('Media approved successfully!');
+            loadDashboardMedia();
+            loadMedia(); // Refresh public view
+        } catch (error) {
+            console.error('Error approving media:', error);
+            alert('Failed to approve media.');
+        }
+    }
+
+    async function approveEvent(eventId) {
+        try {
+            const { error } = await supabase
+                .from('events')
+                .update({ is_approved: true })
+                .eq('id', eventId);
+            
+            if (error) throw error;
+            
+            alert('Event approved successfully!');
+            loadDashboardEvents();
+            loadEvents(); // Refresh public view
+        } catch (error) {
+            console.error('Error approving event:', error);
+            alert('Failed to approve event.');
+        }
+    }
+
+    async function approveNews(newsId) {
+        try {
+            const { error } = await supabase
+                .from('news')
+                .update({ is_approved: true })
+                .eq('id', newsId);
+            
+            if (error) throw error;
+            
+            alert('News approved successfully!');
+            loadDashboardNews();
+            loadNews(); // Refresh public view
+        } catch (error) {
+            console.error('Error approving news:', error);
+            alert('Failed to approve news.');
+        }
+    }
+
+    // Update User Role
+    async function editUserRole(userId) {
+        const newRole = prompt('Enter new role (community/team/admin):', 'community');
+        
+        if (!newRole || !['community', 'team', 'admin'].includes(newRole)) {
+            alert('Invalid role! Must be: community, team, or admin');
+            return;
+        }
+        
+        try {
+            const { error } = await supabase
+                .from('user_profiles')
+                .update({ role: newRole })
+                .eq('id', userId);
+            
+            if (error) throw error;
+            
+            alert('User role updated successfully!');
+            loadDashboardUsers();
+        } catch (error) {
+            console.error('Error updating user role:', error);
+            alert('Failed to update user role.');
+        }
+    }
+
+    // Delete User
+    async function deleteUser(userId) {
+        if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
+        
+        try {
+            // First delete from user_profiles
+            const { error: profileError } = await supabase
+                .from('user_profiles')
+                .delete()
+                .eq('id', userId);
+            
+            if (profileError) throw profileError;
+            
+            // Note: To delete from auth.users, you need to use Admin API
+            // This requires server-side implementation
+            
+            alert('User deleted successfully!');
+            loadDashboardUsers();
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            alert('Failed to delete user.');
+        }
+    }
+
+    // Upload Media
+    async function uploadMedia() {
+        const title = document.getElementById('mediaTitle').value;
+        const description = document.getElementById('mediaDescription').value;
+        const category = document.getElementById('mediaCategory').value;
+        const url = document.getElementById('mediaUrl').value;
+        const thumbnail = document.getElementById('mediaThumbnail').value;
+
+        if (!title || !description || !category || !url) {
+            alert('Please fill in all required fields!');
+            return;
         }
 
-        // Load Dashboard Media
-        function loadDashboardMedia() {
-            try {
-                const mediaItems = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
-                const mediaList = document.getElementById('mediaList');
-                
-                if (mediaList) {
-                    mediaList.innerHTML = '';
-                    
-                    mediaItems.forEach(media => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${media.title}</td>
-                            <td>${media.category}</td>
-                            <td>${media.uploader || 'Unknown'}</td>
-                            <td>${media.date}</td>
-                            <td>${media.views || 0}</td>
-                            <td>
-                                <button class="btn btn-outline btn-small" onclick="editMedia(${media.id})">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-small" onclick="deleteMedia(${media.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </td>
-                        `;
-                        mediaList.appendChild(row);
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading dashboard media:', error);
-            }
-        }
-
-        // Load Dashboard Events
-        function loadDashboardEvents() {
-            try {
-                const events = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-                const eventList = document.getElementById('eventList');
-                
-                if (eventList) {
-                    eventList.innerHTML = '';
-                    
-                    events.forEach(event => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${event.title}</td>
-                            <td>${event.date}</td>
-                            <td>${event.type}</td>
-                            <td>${event.participants || 0}</td>
-                            <td>${event.status || 'upcoming'}</td>
-                            <td>
-                                <button class="btn btn-outline btn-small" onclick="editEvent(${event.id})">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-small" onclick="deleteEvent(${event.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </td>
-                        `;
-                        eventList.appendChild(row);
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading dashboard events:', error);
-            }
-        }
-
-        // Load Dashboard News
-        function loadDashboardNews() {
-            try {
-                const newsItems = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
-                const newsList = document.getElementById('newsList');
-                
-                if (newsList) {
-                    newsList.innerHTML = '';
-                    
-                    newsItems.forEach(news => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${news.title}</td>
-                            <td>${news.date}</td>
-                            <td>${news.author}</td>
-                            <td>${news.status || 'published'}</td>
-                            <td>
-                                <button class="btn btn-outline btn-small" onclick="editNews(${news.id})">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-small" onclick="deleteNews(${news.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </td>
-                        `;
-                        newsList.appendChild(row);
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading dashboard news:', error);
-            }
-        }
-
-        // Load Users
-        function loadUsers() {
-            try {
-                const users = JSON.parse(localStorage.getItem('cavalight_users') || '[]');
-                const userList = document.getElementById('userList');
-                
-                if (userList) {
-                    userList.innerHTML = '';
-                    
-                    users.forEach(user => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${user.username}</td>
-                            <td>${user.email}</td>
-                            <td>${user.role}</td>
-                            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
-                            <td>
-                                <button class="btn btn-outline btn-small">Edit</button>
-                                <button class="btn btn-danger btn-small">Delete</button>
-                            </td>
-                        `;
-                        userList.appendChild(row);
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading users:', error);
-            }
-        }
-
-        // Upload Media
-        function uploadMedia() {
-            const title = document.getElementById('mediaTitle').value;
-            const description = document.getElementById('mediaDescription').value;
-            const category = document.getElementById('mediaCategory').value;
-            const url = document.getElementById('mediaUrl').value;
-            const thumbnail = document.getElementById('mediaThumbnail').value;
-
-            if (!title || !description || !category || !url) {
-                alert('Please fill in all required fields!');
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) {
+                alert('Please login to upload media.');
+                openModal('loginModal');
                 return;
             }
-
-            try {
-                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser'));
-                
-                if (!currentUser) {
-                    alert('Please login to upload media.');
-                    openModal('loginModal');
-                    return;
-                }
-                
-                const mediaData = {
-                    id: Date.now(),
+            
+            const { error } = await supabase
+                .from('media')
+                .insert({
                     title: title,
                     description: description,
                     category: category,
                     url: url,
                     thumbnail: thumbnail || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
-                    uploader: currentUser.username || 'Anonymous',
-                    uploaderId: currentUser.id || 'anonymous',
-                    date: new Date().toISOString().split('T')[0],
-                    views: 0,
-                    likes: 0
-                };
-                
-                const existingMedia = JSON.parse(localStorage.getItem('cavalight_media') || '[]');
-                existingMedia.push(mediaData);
-                localStorage.setItem('cavalight_media', JSON.stringify(existingMedia));
-                
-                alert('Clip uploaded successfully!');
-                closeModal('uploadMediaModal');
-                loadMedia();
-                
-            } catch (error) {
-                console.error('Upload error:', error);
-                alert('Error uploading clip: ' + error.message);
-            }
+                    uploader: user.email.split('@')[0],
+                    created_by: user.id,
+                    is_approved: false,
+                    views_count: 0,
+                    likes_count: 0
+                });
+            
+            if (error) throw error;
+            
+            alert('Clip uploaded successfully! Awaiting admin approval.');
+            closeModal('uploadMediaModal');
+            loadMedia();
+            
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert('Error uploading clip: ' + error.message);
+        }
+    }
+
+    // Create Event
+    async function createEvent() {
+        const title = document.getElementById('eventTitle').value;
+        const description = document.getElementById('eventDescription').value;
+        const date = document.getElementById('eventDate').value;
+        const type = document.getElementById('eventType').value;
+        const location = document.getElementById('eventLocation').value;
+
+        if (!title || !description || !date || !type || !location) {
+            alert('Please fill in all fields!');
+            return;
         }
 
-        // Create Event
-        function createEvent() {
-            const title = document.getElementById('eventTitle').value;
-            const description = document.getElementById('eventDescription').value;
-            const date = document.getElementById('eventDate').value;
-            const type = document.getElementById('eventType').value;
-            const location = document.getElementById('eventLocation').value;
-
-            if (!title || !description || !date || !type || !location) {
-                alert('Please fill in all fields!');
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) {
+                alert('Please login to create events.');
+                openModal('loginModal');
                 return;
             }
-
-            try {
-                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser'));
-                
-                if (!currentUser || currentUser.role !== 'admin') {
-                    alert('Only administrators can create events.');
-                    return;
-                }
-                
-                const eventData = {
-                    id: Date.now(),
+            
+            const { error } = await supabase
+                .from('events')
+                .insert({
                     title: title,
                     description: description,
                     date: date.replace('T', ' '),
                     type: type,
                     location: location,
-                    createdBy: currentUser.username || 'Admin',
-                    createdById: currentUser.id || 'admin',
-                    participants: 0,
+                    created_by: user.id,
+                    is_approved: false,
+                    participants_count: 0,
                     status: 'upcoming'
-                };
-                
-                const existingEvents = JSON.parse(localStorage.getItem('cavalight_events') || '[]');
-                existingEvents.push(eventData);
-                localStorage.setItem('cavalight_events', JSON.stringify(existingEvents));
-                
-                alert('Event created successfully!');
-                closeModal('createEventModal');
-                loadEvents();
-                
-            } catch (error) {
-                console.error('Event creation error:', error);
-                alert('Error creating event: ' + error.message);
-            }
+                });
+            
+            if (error) throw error;
+            
+            alert('Event created successfully! Awaiting admin approval.');
+            closeModal('createEventModal');
+            loadEvents();
+            
+        } catch (error) {
+            console.error('Event creation error:', error);
+            alert('Error creating event: ' + error.message);
+        }
+    }
+
+    // Create News
+    async function createNews() {
+        const title = document.getElementById('newsTitle').value;
+        const content = document.getElementById('newsContent').value;
+        const category = document.getElementById('newsCategory').value;
+        const image = document.getElementById('newsImage').value;
+
+        if (!title || !content || !category) {
+            alert('Please fill in all required fields!');
+            return;
         }
 
-        // Create News
-        function createNews() {
-            const title = document.getElementById('newsTitle').value;
-            const content = document.getElementById('newsContent').value;
-            const category = document.getElementById('newsCategory').value;
-            const image = document.getElementById('newsImage').value;
-
-            if (!title || !content || !category) {
-                alert('Please fill in all required fields!');
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) {
+                alert('Please login to create news.');
+                openModal('loginModal');
                 return;
             }
-
-            try {
-                const currentUser = JSON.parse(localStorage.getItem('cavalight_currentUser'));
-                
-                if (!currentUser || currentUser.role !== 'admin') {
-                    alert('Only administrators can create news posts.');
-                    return;
-                }
-                
-                const newsData = {
-                    id: Date.now(),
+            
+            const { error } = await supabase
+                .from('news')
+                .insert({
                     title: title,
                     content: content,
                     category: category,
                     image: image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
-                    author: currentUser.username || 'Admin',
-                    authorId: currentUser.id || 'admin',
-                    date: new Date().toISOString().split('T')[0],
-                    status: 'published'
-                };
-                
-                const existingNews = JSON.parse(localStorage.getItem('cavalight_news') || '[]');
-                existingNews.push(newsData);
-                localStorage.setItem('cavalight_news', JSON.stringify(existingNews));
-                
-                alert('News published successfully!');
-                closeModal('createNewsModal');
-                loadNews();
-                
-            } catch (error) {
-                console.error('News creation error:', error);
-                alert('Error publishing news: ' + error.message);
-            }
+                    author: user.email.split('@')[0],
+                    created_by: user.id,
+                    is_approved: false,
+                    views_count: 0
+                });
+            
+            if (error) throw error;
+            
+            alert('News created successfully! Awaiting admin approval.');
+            closeModal('createNewsModal');
+            loadNews();
+            
+        } catch (error) {
+            console.error('News creation error:', error);
+            alert('Error creating news: ' + error.message);
+        }
+    }
+
+    // =============================================
+    // EMAILJS CONTACT FORM
+    // =============================================
+    function sendEmail() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+
+        if (!name || !email || !subject || !message) {
+            alert('Please fill in all fields!');
+            return;
         }
 
-        // =============================================
-        // EMAILJS CONTACT FORM
-        // =============================================
-        function sendEmail() {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
+        const templateParams = {
+            from_name: name,
+            from_email: email,
+            subject: subject,
+            message: message,
+            to_name: 'CAVALIGHT Team'
+        };
 
-            if (!name || !email || !subject || !message) {
-                alert('Please fill in all fields!');
+        emailjs.send('service_1hbotzt', 'template_3aqjamb', templateParams)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+                document.getElementById('form-message').innerHTML = 
+                    '<span style="color: #4CAF50;">✓ Message sent successfully! We\'ll get back to you soon.</span>';
+                document.getElementById('contactForm').reset();
+            }, function(error) {
+                console.log('FAILED...', error);
+                document.getElementById('form-message').innerHTML = 
+                    '<span style="color: #f44336;">✗ Failed to send message. Please try again later.</span>';
+            });
+    }
+
+    // =============================================
+    // INITIALIZE ON LOAD
+    // =============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize counters
+        checkCounters();
+        
+        // Trigger scroll once to activate counters if already in view
+        setTimeout(checkCounters, 100);
+        
+        // Check if user is logged in
+        checkLoggedInUser();
+        
+        // Initialize Supabase auth state listener
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                // User is signed in
+                const user = session.user;
+                // Get user role from database
+                getUserRole(user.id);
+            } else {
+                // User is signed out
+                localStorage.removeItem('cavalight_currentUser');
+                localStorage.removeItem('cavalight_userRole');
+                resetUI();
+            }
+        });
+    });
+
+    // Get user role from Supabase
+    async function getUserRole(userId) {
+        try {
+            const { data: profile, error } = await supabase
+                .from('user_profiles')
+                .select('role, username')
+                .eq('id', userId)
+                .single();
+            
+            if (error) throw error;
+            
+            // Save to localStorage
+            localStorage.setItem('cavalight_currentUser', JSON.stringify({
+                id: userId,
+                email: profile.username,
+                username: profile.username
+            }));
+            localStorage.setItem('cavalight_userRole', profile.role);
+            
+            // Update UI
+            updateUIForRole(profile.role, profile.username);
+        } catch (error) {
+            console.error('Error getting user role:', error);
+            // Default to community if no profile found
+            localStorage.setItem('cavalight_userRole', 'community');
+        }
+    }
+
+    // Like media function
+    async function likeMedia(mediaId) {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) {
+                alert('Please login to like media.');
+                openModal('loginModal');
                 return;
             }
-
-            const templateParams = {
-                from_name: name,
-                from_email: email,
-                subject: subject,
-                message: message,
-                to_name: 'CAVALIGHT Team'
-            };
-
-            emailjs.send('service_1hbotzt', 'template_3aqjamb', templateParams)
-                .then(function(response) {
-                    console.log('SUCCESS!', response.status, response.text);
-                    document.getElementById('form-message').innerHTML = 
-                        '<span style="color: #4CAF50;">✓ Message sent successfully! We\'ll get back to you soon.</span>';
-                    document.getElementById('contactForm').reset();
-                }, function(error) {
-                    console.log('FAILED...', error);
-                    document.getElementById('form-message').innerHTML = 
-                        '<span style="color: #f44336;">✗ Failed to send message. Please try again later.</span>';
-                });
+            
+            const { error } = await supabase.rpc('increment_likes', {
+                media_id: mediaId
+            });
+            
+            if (error) throw error;
+            
+            alert('Liked!');
+            loadMedia();
+        } catch (error) {
+            console.error('Error liking media:', error);
         }
-
-        // =============================================
-        // INITIALIZE ON LOAD
-        // =============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize counters
-            checkCounters();
-            
-            // Trigger scroll once to activate counters if already in view
-            setTimeout(checkCounters, 100);
-            
-            // Initialize data
-            loadInitialData();
-            
-            // Check if user is logged in
-            checkLoggedInUser();
-        });
-    </script>
+    }
+</script>
 </body>
 </html>
