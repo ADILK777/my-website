@@ -3122,48 +3122,86 @@
         // =============================================
         // AUTHENTICATION (Supabase Auth)
         // =============================================
-        async function registerUser() {
-            const username = document.getElementById('regUsername').value;
-            const email = document.getElementById('regEmail').value;
-            const pwd = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirmPassword').value;
-            const code = document.getElementById('regAccessCode').value;
+async function registerUser() {
+  const username = document.getElementById('regUsername').value;
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirmPassword').value;
+  const accessCode = document.getElementById('regAccessCode').value;
 
-            if (!username || !email || !pwd || !confirm) {
-                showToast('Please fill all fields', true);
-                return;
-            }
-            if (pwd !== confirm) {
-                showToast('Passwords do not match', true);
-                return;
-            }
-            if (pwd.length < 6) {
-                showToast('Password must be at least 6 characters', true);
-                return;
-            }
+  if (!username || !email || !password || !confirm) {
+    alert('Please fill all fields');
+    return;
+  }
+  
+  if (password !== confirm) {
+    alert('Passwords do not match');
+    return;
+  }
 
-            let role = 'community';
-            if (code === TEAM_MEMBER_CODE) role = 'team';
-            else if (code === ADMIN_CODE) role = 'admin';
-            else if (code && code !== '') showToast('Invalid access code. Registered as Community Member.', true);
+  // Determine role
+  let role = 'community';
+  if (accessCode === '8215') role = 'team';
+  else if (accessCode === 'CAV-ADMIN-9999') role = 'admin';
 
-            const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-                email, password: pwd,
-                options: { data: { username, role } }
-            });
-            if (authError) {
-                showToast('Registration error: ' + authError.message, true);
-                return;
-            }
-
-            const { error: insertError } = await supabaseClient.from('profiles').insert([
-                { id: authData.user.id, username, email, role, created_at: new Date() }
-            ]);
-            if (insertError) console.warn('Profile insert warning:', insertError);
-
-            showToast('Registration successful! Check your email for confirmation.');
-            closeModal('registerModal');
+  try {
+    // Sign up with Supabase
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          username: username,
+          role: role
         }
+      }
+    });
+
+    if (error) {
+      alert('Registration error: ' + error.message);
+      return;
+    }
+
+    if (!data || !data.user) {
+      alert('Registration failed: No user data returned');
+      return;
+    }
+
+    console.log('User created:', data.user.id);
+
+    // Wait a moment for auth to propagate
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Create profile with explicit error handling
+    const { error: profileError } = await supabaseClient
+      .from('profiles')
+      .insert([{
+        id: data.user.id,
+        username: username,
+        email: email,
+        role: role
+      }]);
+
+    if (profileError) {
+      console.error('Profile creation error:', profileError);
+      
+      // If RLS error, try using service role (if you have it)
+      if (profileError.message.includes('row-level security')) {
+        alert('RLS policy error. Please run the SQL fix in Supabase.');
+      } else {
+        alert('Error creating profile: ' + profileError.message);
+      }
+      return;
+    }
+
+    alert('Registration successful! You can now login.');
+    closeModal('registerModal');
+    
+  } catch (err) {
+    console.error('Registration error:', err);
+    alert('An unexpected error occurred');
+  }
+}
 async function loginUser() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
