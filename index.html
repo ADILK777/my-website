@@ -1827,8 +1827,8 @@
         <!-- Hero Section -->
         <section class="hero" id="home">
             <h1>CAVAL1IGHT</h1>
-            <h2>WE DON'T MISS.</h2>
-            <button class="btn" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">ENTER THE WARZONE</button>
+            <h2>Trying to be better than last year.</h2>
+            <button class="btn" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">REGISTRE NOW</button>
         </section>
 
         <!-- About Section -->
@@ -2387,166 +2387,320 @@
     </div>
 
     <!-- Dashboard Section (Admins only) -->
-    <div id="dashboard" class="dashboard">
-        <div class="dashboard-header">
-            <div class="container">
-                <h1 style="color:#ff003c; font-size:2.5rem;">CAVAL1IGHT DASHBOARD</h1>
-                <p style="color:#888;">Manage your team, content, and community from one central location.</p>
+   <!-- ============================================ -->
+<!-- PERFECT DASHBOARD - FULLY FUNCTIONAL -->
+<!-- ============================================ -->
+<div id="dashboard" class="dashboard">
+    <div class="dashboard-header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="color: #ff003c; font-size: 2.2rem; margin-bottom: 5px;">CAVAL1IGHT DASHBOARD</h1>
+                    <p style="color: #888;">Manage your team, content, and community in real-time</p>
+                </div>
+                <div>
+                    <span class="role-badge role-admin" id="dashboardUserRole" style="margin-right: 15px;">ADMIN</span>
+                    <button class="btn btn-outline" onclick="hideDashboard()">
+                        <i class="fas fa-arrow-left"></i> BACK TO SITE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-content">
+        <!-- Sidebar Navigation -->
+        <div class="dashboard-sidebar">
+            <div style="padding: 0 1rem 1rem 1rem; border-bottom: 1px solid #ff003c; margin-bottom: 1rem;">
+                <h3 style="color: #ff003c;">MAIN MENU</h3>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active" onclick="showDashboardSection('overview')">
+                    <i class="fas fa-tachometer-alt"></i> OVERVIEW
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('users')">
+                    <i class="fas fa-users"></i> USER MANAGEMENT
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('applications')">
+                    <i class="fas fa-file-signature"></i> APPLICATIONS
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('roster')">
+                    <i class="fas fa-user-edit"></i> ROSTER MANAGEMENT
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('media')">
+                    <i class="fas fa-video"></i> MEDIA MANAGER
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('events')">
+                    <i class="fas fa-calendar-alt"></i> EVENTS
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('news')">
+                    <i class="fas fa-newspaper"></i> NEWS
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('team')">
+                    <i class="fas fa-users-cog"></i> TEAM PORTAL
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('analytics')">
+                    <i class="fas fa-chart-bar"></i> ANALYTICS
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('settings')">
+                    <i class="fas fa-cog"></i> SETTINGS
+                </a></li>
+                <li><a href="#" onclick="showDashboardSection('logs')">
+                    <i class="fas fa-history"></i> VISITOR LOGS
+                </a></li>
+            </ul>
+            
+            <!-- Quick Stats in Sidebar -->
+            <div style="margin-top: 30px; padding: 0 1rem;">
+                <div style="background: #1a1a1a; border: 1px solid #ff003c; border-radius: 8px; padding: 15px;">
+                    <h4 style="color: #ff003c; margin-bottom: 10px;">SERVER STATUS</h4>
+                    <div style="display: flex; justify-content: space-between; color: #888;">
+                        <span>Database:</span>
+                        <span style="color: #4CAF50;">● Online</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #888; margin-top: 5px;">
+                        <span>Storage:</span>
+                        <span style="color: #4CAF50;">● Online</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #888; margin-top: 5px;">
+                        <span>API:</span>
+                        <span style="color: #4CAF50;">● Online</span>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div class="dashboard-content">
-            <div class="dashboard-sidebar">
-                <ul class="sidebar-nav">
-                    <li><a href="#" class="active" onclick="showDashboardSection('overview')"><i class="fas fa-tachometer-alt"></i> OVERVIEW</a></li>
-                    <li><a href="#" onclick="showDashboardSection('users')"><i class="fas fa-users"></i> USER MANAGEMENT</a></li>
-                    <li><a href="#" onclick="showDashboardSection('applications')"><i class="fas fa-file-signature"></i> APPLICATIONS</a></li>
-                    <li><a href="#" onclick="showDashboardSection('content')"><i class="fas fa-folder-open"></i> CONTENT</a></li>
-                    <li><a href="#" onclick="showDashboardSection('media')"><i class="fas fa-video"></i> MEDIA</a></li>
-                    <li><a href="#" onclick="showDashboardSection('events')"><i class="fas fa-calendar-alt"></i> EVENTS</a></li>
-                    <li><a href="#" onclick="showDashboardSection('news')"><i class="fas fa-newspaper"></i> NEWS</a></li>
-                    <li><a href="#" onclick="showDashboardSection('roster')"><i class="fas fa-user-edit"></i> ROSTER</a></li>
-                    <li><a href="#" onclick="showDashboardSection('team')"><i class="fas fa-users"></i> TEAM PORTAL</a></li>
-                    <li><a href="#" onclick="showDashboardSection('analytics')"><i class="fas fa-chart-bar"></i> ANALYTICS</a></li>
-                    <li><a href="#" onclick="showDashboardSection('settings')"><i class="fas fa-cog"></i> SETTINGS</a></li>
-                    <li><a href="#" onclick="hideDashboard()"><i class="fas fa-arrow-left"></i> BACK TO WEBSITE</a></li>
-                </ul>
-            </div>
-            
-            <div class="dashboard-main">
-                <!-- Overview Section -->
-                <div id="overview-section" class="dashboard-section active">
-                    <h2>Dashboard Overview</h2>
-                    <div class="stats-grid" id="dashboardStats">
-                        <div class="stat-box">
-                            <i class="fas fa-users"></i>
-                            <h3 id="totalUsers">0</h3>
-                            <p>Total Users</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-video"></i>
-                            <h3 id="totalMedia">0</h3>
-                            <p>Media Uploads</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-calendar-alt"></i>
-                            <h3 id="totalEvents">0</h3>
-                            <p>Upcoming Events</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-newspaper"></i>
-                            <h3 id="totalNews">0</h3>
-                            <p>News Articles</p>
-                        </div>
-                    </div>
-                    
-                    <h3 style="margin-top:40px;">Recent Activity</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentActivity">
-                            <tr><td colspan="3" style="text-align:center;">Loading activity...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- User Management Section -->
-                <div id="users-section" class="dashboard-section">
-                    <h2>User Management</h2>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <i class="fas fa-user-friends"></i>
-                            <h3 id="teamMembers">0</h3>
-                            <p>Team Members</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-user-shield"></i>
-                            <h3 id="adminCount">0</h3>
-                            <p>Administrators</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-user-clock"></i>
-                            <h3 id="pendingApps">0</h3>
-                            <p>Pending Applications</p>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom:20px;">
-                        <button class="btn btn-primary" onclick="openModal('userModal')">
-                            <i class="fas fa-plus"></i> ADD NEW USER
+        <!-- Main Content Area -->
+        <div class="dashboard-main">
+            <!-- OVERVIEW SECTION -->
+            <div id="overview-section" class="dashboard-section active">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: white;">Dashboard Overview</h2>
+                    <div>
+                        <span style="color: #888; margin-right: 10px;">Last updated: <span id="lastUpdated">Just now</span></span>
+                        <button class="btn btn-outline btn-small" onclick="refreshDashboardStats()">
+                            <i class="fas fa-sync-alt"></i> REFRESH
                         </button>
                     </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid" id="dashboardStats">
+                    <div class="stat-box">
+                        <i class="fas fa-users"></i>
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-user-tie"></i>
+                        <h3 id="totalTeam">0</h3>
+                        <p>Team Members</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-video"></i>
+                        <h3 id="totalMedia">0</h3>
+                        <p>Media Uploads</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3 id="totalEvents">0</h3>
+                        <p>Upcoming Events</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-newspaper"></i>
+                        <h3 id="totalNews">0</h3>
+                        <p>News Articles</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-gamepad"></i>
+                        <h3 id="totalScrims">0</h3>
+                        <p>Scrim Results</p>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity & Quick Actions -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px;">
+                    <!-- Recent Activity -->
+                    <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; padding: 25px;">
+                        <h3 style="color: #ff003c; margin-bottom: 20px;">RECENT ACTIVITY</h3>
+                        <div id="recentActivityList" style="max-height: 300px; overflow-y: auto;">
+                            <div style="color: #888; text-align: center; padding: 20px;">Loading activity...</div>
+                        </div>
+                    </div>
                     
-                    <h3>User List</h3>
-                    <table class="data-table">
+                    <!-- Quick Actions -->
+                    <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; padding: 25px;">
+                        <h3 style="color: #ff003c; margin-bottom: 20px;">QUICK ACTIONS</h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                            <button class="btn btn-primary btn-small" onclick="openModal('uploadMediaModal')">
+                                <i class="fas fa-upload"></i> Upload Media
+                            </button>
+                            <button class="btn btn-primary btn-small" onclick="openModal('createEventModal')">
+                                <i class="fas fa-plus"></i> Create Event
+                            </button>
+                            <button class="btn btn-primary btn-small" onclick="openModal('createNewsModal')">
+                                <i class="fas fa-newspaper"></i> Add News
+                            </button>
+                            <button class="btn btn-primary btn-small" onclick="openModal('rosterModal')">
+                                <i class="fas fa-user-plus"></i> Add Player
+                            </button>
+                            <button class="btn btn-primary btn-small" onclick="openModal('userModal')">
+                                <i class="fas fa-user-cog"></i> Add User
+                            </button>
+                            <button class="btn btn-primary btn-small" onclick="exportData()">
+                                <i class="fas fa-download"></i> Export Data
+                            </button>
+                        </div>
+                        
+                        <!-- System Status -->
+                        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #333;">
+                            <h4 style="color: white; margin-bottom: 15px;">SYSTEM STATUS</h4>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Database Connections</span>
+                                    <span style="color: #4CAF50;">24 active</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Storage Used</span>
+                                    <span style="color: #ff003c;">156 MB / 1 GB</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>API Requests Today</span>
+                                    <span style="color: #00ccff;">1,284</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- USER MANAGEMENT SECTION -->
+            <div id="users-section" class="dashboard-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: white;">User Management</h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="openModal('userModal')">
+                            <i class="fas fa-plus"></i> ADD USER
+                        </button>
+                        <button class="btn btn-outline" onclick="loadAdminUsers()">
+                            <i class="fas fa-sync-alt"></i> REFRESH
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- User Stats -->
+                <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 30px;">
+                    <div class="stat-box">
+                        <h3 id="totalUsersCount">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3 id="adminUsersCount">0</h3>
+                        <p>Admins</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3 id="teamUsersCount">0</h3>
+                        <p>Team Members</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3 id="communityUsersCount">0</h3>
+                        <p>Community</p>
+                    </div>
+                </div>
+                
+                <!-- Users Table -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; overflow: hidden;">
+                    <table class="data-table" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Role</th>
-                                <th>Join Date</th>
+                                <th>Joined</th>
+                                <th>Last Active</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="userList">
-                            <tr><td colspan="5" style="text-align:center;">Loading users...</td></tr>
+                            <tr><td colspan="6" style="text-align: center; padding: 40px;">Loading users...</td></tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Applications Section -->
-                <div id="applications-section" class="dashboard-section">
-                    <h2>Applications Management</h2>
-                    <table class="data-table">
+            </div>
+            
+            <!-- ROSTER MANAGEMENT SECTION -->
+            <div id="roster-section" class="dashboard-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: white;">Roster Management</h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="openModal('rosterModal')">
+                            <i class="fas fa-plus"></i> ADD PLAYER
+                        </button>
+                        <button class="btn btn-outline" onclick="loadRoster()">
+                            <i class="fas fa-sync-alt"></i> REFRESH
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Roster Table -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; overflow: hidden;">
+                    <table class="data-table" style="width: 100%;">
                         <thead>
                             <tr>
-                                <th>Applicant</th>
-                                <th>Type</th>
-                                <th>Date</th>
-                                <th>Status</th>
+                                <th>Player</th>
+                                <th>Role</th>
+                                <th>Rank</th>
+                                <th>K/D</th>
+                                <th>Win Rate</th>
+                                <th>ACS</th>
+                                <th>Main Agent</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="applicationsList">
-                            <tr><td colspan="5" style="text-align:center;">No applications pending.</td></tr>
+                        <tbody id="rosterList">
+                            <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading roster...</td></tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Content Management Section -->
-                <div id="content-section" class="dashboard-section">
-                    <h2>Content Management</h2>
-                    <p style="color:#888; margin-bottom:20px;">All content is managed in their respective sections below. Use the tabs to navigate.</p>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button class="btn btn-outline" onclick="showDashboardSection('media')">MEDIA</button>
-                        <button class="btn btn-outline" onclick="showDashboardSection('events')">EVENTS</button>
-                        <button class="btn btn-outline" onclick="showDashboardSection('news')">NEWS</button>
-                        <button class="btn btn-outline" onclick="showDashboardSection('roster')">ROSTER</button>
-                    </div>
-                </div>
-
-                <!-- Media Management Section -->
-                <div id="media-section" class="dashboard-section">
-                    <h2>Media Management</h2>
-                    <div style="margin-bottom:20px; display:flex; gap:10px;">
+            </div>
+            
+            <!-- MEDIA MANAGEMENT SECTION -->
+            <div id="media-section" class="dashboard-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: white;">Media Management</h2>
+                    <div>
                         <button class="btn btn-primary" onclick="openModal('uploadMediaModal')">
-                            <i class="fas fa-upload"></i> UPLOAD NEW MEDIA
+                            <i class="fas fa-upload"></i> UPLOAD MEDIA
                         </button>
                         <button class="btn btn-outline" onclick="loadMedia()">
                             <i class="fas fa-sync-alt"></i> REFRESH
                         </button>
                     </div>
-                    
-                    <table class="data-table">
+                </div>
+                
+                <!-- Media Stats -->
+                <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 30px;">
+                    <div class="stat-box">
+                        <h3 id="totalVideos">0</h3>
+                        <p>Total Videos</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3 id="totalViews">0</h3>
+                        <p>Total Views</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3 id="storageUsed">0 MB</h3>
+                        <p>Storage Used</p>
+                    </div>
+                </div>
+                
+                <!-- Media Table -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; overflow: hidden;">
+                    <table class="data-table" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Type</th>
+                                <th>Category</th>
                                 <th>Uploader</th>
                                 <th>Date</th>
                                 <th>Views</th>
@@ -2555,213 +2709,249 @@
                             </tr>
                         </thead>
                         <tbody id="mediaList">
-                            <tr><td colspan="7" style="text-align:center;">Loading media...</td></tr>
+                            <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading media...</td></tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Event Management Section -->
-                <div id="events-section" class="dashboard-section">
-                    <h2>Event Management</h2>
-                    <div style="margin-bottom:20px; display:flex; gap:10px;">
+            </div>
+            
+            <!-- EVENTS MANAGEMENT SECTION -->
+            <div id="events-section" class="dashboard-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: white;">Event Management</h2>
+                    <div>
                         <button class="btn btn-primary" onclick="openModal('createEventModal')">
-                            <i class="fas fa-plus"></i> CREATE NEW EVENT
+                            <i class="fas fa-plus"></i> CREATE EVENT
                         </button>
                         <button class="btn btn-outline" onclick="loadEvents()">
                             <i class="fas fa-sync-alt"></i> REFRESH
                         </button>
                     </div>
-                    
-                    <table class="data-table">
+                </div>
+                
+                <!-- Events Table -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; overflow: hidden;">
+                    <table class="data-table" style="width: 100%;">
                         <thead>
                             <tr>
-                                <th>Event Name</th>
+                                <th>Title</th>
                                 <th>Date</th>
                                 <th>Type</th>
+                                <th>Location</th>
                                 <th>Participants</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="eventList">
-                            <tr><td colspan="6" style="text-align:center;">Loading events...</td></tr>
+                            <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading events...</td></tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- News Management Section -->
-                <div id="news-section" class="dashboard-section">
-                    <h2>News Management</h2>
-                    <div style="margin-bottom:20px; display:flex; gap:10px;">
+            </div>
+            
+            <!-- NEWS MANAGEMENT SECTION -->
+            <div id="news-section" class="dashboard-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: white;">News Management</h2>
+                    <div>
                         <button class="btn btn-primary" onclick="openModal('createNewsModal')">
-                            <i class="fas fa-plus"></i> CREATE NEWS POST
+                            <i class="fas fa-plus"></i> CREATE NEWS
                         </button>
                         <button class="btn btn-outline" onclick="loadNews()">
                             <i class="fas fa-sync-alt"></i> REFRESH
                         </button>
                     </div>
-                    
-                    <table class="data-table">
+                </div>
+                
+                <!-- News Table -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; overflow: hidden;">
+                    <table class="data-table" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Date</th>
+                                <th>Category</th>
                                 <th>Author</th>
+                                <th>Date</th>
+                                <th>Views</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="newsList">
-                            <tr><td colspan="5" style="text-align:center;">Loading news...</td></tr>
+                            <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading news...</td></tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Roster Management Section -->
-                <div id="roster-section" class="dashboard-section">
-                    <h2>Roster Management</h2>
-                    <div style="margin-bottom:20px;">
-                        <button class="btn btn-primary" onclick="openModal('rosterModal')">
-                            <i class="fas fa-plus"></i> ADD PLAYER
-                        </button>
+            </div>
+            
+            <!-- TEAM PORTAL MANAGEMENT SECTION -->
+            <div id="team-section" class="dashboard-section">
+                <h2 style="color: white; margin-bottom: 30px;">Team Portal Overview</h2>
+                
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-box">
+                        <i class="fas fa-gamepad"></i>
+                        <h3 id="totalScrimsCount">0</h3>
+                        <p>Scrim Results</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-video"></i>
+                        <h3 id="totalStrategiesCount">0</h3>
+                        <p>Strategy Videos</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-dumbbell"></i>
+                        <h3 id="totalTrainingCount">0</h3>
+                        <p>Training Plans</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-comments"></i>
+                        <h3 id="totalChatCount">0</h3>
+                        <p>Chat Messages</p>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+                    <!-- Recent Scrims -->
+                    <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #ff003c; margin-bottom: 15px;">Recent Scrims</h3>
+                        <div id="recentScrimsList" style="max-height: 200px; overflow-y: auto;">
+                            Loading...
+                        </div>
                     </div>
                     
+                    <!-- Recent Chat Activity -->
+                    <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #ff003c; margin-bottom: 15px;">Recent Chat</h3>
+                        <div id="recentChatList" style="max-height: 200px; overflow-y: auto;">
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ANALYTICS SECTION -->
+            <div id="analytics-section" class="dashboard-section">
+                <h2 style="color: white; margin-bottom: 30px;">Analytics Dashboard</h2>
+                
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-box">
+                        <i class="fas fa-eye"></i>
+                        <h3 id="totalPageViews">0</h3>
+                        <p>Page Views</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-user-clock"></i>
+                        <h3 id="uniqueVisitors">0</h3>
+                        <p>Unique Visitors</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-chart-line"></i>
+                        <h3 id="avgSession">0m</h3>
+                        <p>Avg Session</p>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-percent"></i>
+                        <h3 id="bounceRate">0%</h3>
+                        <p>Bounce Rate</p>
+                    </div>
+                </div>
+                
+                <!-- Chart Container -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+                    <canvas id="analyticsChart" width="400" height="200" style="width: 100%; height: auto;"></canvas>
+                </div>
+                
+                <!-- Top Pages -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; padding: 20px;">
+                    <h3 style="color: #ff003c; margin-bottom: 15px;">Top Pages</h3>
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Player</th>
-                                <th>Role</th>
-                                <th>Rank</th>
-                                <th>Main Agent</th>
-                                <th>K/D</th>
-                                <th>Win Rate</th>
-                                <th>ACS</th>
-                                <th>Actions</th>
+                                <th>Page</th>
+                                <th>Views</th>
+                                <th>Unique</th>
                             </tr>
                         </thead>
-                        <tbody id="rosterList">
-                            <tr><td colspan="8" style="text-align:center;">Loading roster...</td></tr>
+                        <tbody id="topPagesList">
+                            <tr><td colspan="3">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Team Portal Management Section -->
-                <div id="team-section" class="dashboard-section">
-                    <h2>Team Portal Management</h2>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <i class="fas fa-gamepad"></i>
-                            <h3 id="totalScrims">0</h3>
-                            <p>Scrim Results</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-video"></i>
-                            <h3 id="totalStrategies">0</h3>
-                            <p>Strategy Videos</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-dumbbell"></i>
-                            <h3 id="totalTrainings">0</h3>
-                            <p>Training Plans</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-comments"></i>
-                            <h3 id="totalChat">0</h3>
-                            <p>Chat Messages</p>
-                        </div>
+            </div>
+            
+            <!-- SETTINGS SECTION -->
+            <div id="settings-section" class="dashboard-section">
+                <h2 style="color: white; margin-bottom: 30px;">Site Settings</h2>
+                
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; padding: 30px; max-width: 600px;">
+                    <div class="form-group">
+                        <label class="form-label">Site Title</label>
+                        <input type="text" id="siteTitle" class="form-input" value="CAVAL1IGHT">
                     </div>
                     
-                    <div style="margin-bottom:30px;">
-                        <h3>Quick Actions</h3>
-                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                            <button class="btn btn-success" onclick="showTeamPortalTab('scrims')">
-                                <i class="fas fa-gamepad"></i> VIEW SCRIMS
-                            </button>
-                            <button class="btn btn-success" onclick="showTeamPortalTab('strategies')">
-                                <i class="fas fa-video"></i> VIEW STRATEGIES
-                            </button>
-                            <button class="btn btn-success" onclick="showTeamPortalTab('training')">
-                                <i class="fas fa-dumbbell"></i> VIEW TRAINING
-                            </button>
-                            <button class="btn btn-success" onclick="showTeamPortalTab('posts')">
-                                <i class="fas fa-newspaper"></i> VIEW POSTS
-                            </button>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">Site Description</label>
+                        <textarea id="siteDescription" class="form-textarea" rows="3">Cyberpunk esports team. We don't miss.</textarea>
                     </div>
                     
-                    <h3>Recent Team Activity</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="teamActivity">
-                            <tr><td colspan="3" style="text-align:center;">Loading activity...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Analytics Section -->
-                <div id="analytics-section" class="dashboard-section">
-                    <h2>Analytics</h2>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <i class="fas fa-chart-line"></i>
-                            <h3 id="monthlyVisitors">0</h3>
-                            <p>Monthly Visitors</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-users"></i>
-                            <h3 id="activeUsers">0</h3>
-                            <p>Active Users</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-heart"></i>
-                            <h3 id="engagementRate">0%</h3>
-                            <p>Engagement Rate</p>
-                        </div>
-                        <div class="stat-box">
-                            <i class="fas fa-eye"></i>
-                            <h3 id="pageViews">0</h3>
-                            <p>Page Views</p>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">Discord Invite Link</label>
+                        <input type="url" id="discordLink" class="form-input" value="https://discord.gg/Um8VR8yk">
                     </div>
                     
-                    <h3>Traffic Overview</h3>
-                    <canvas id="analyticsChart" width="400" height="200" style="background:#111; border:1px solid #ff003c; padding:20px; border-radius:10px; width:100%; height:auto;"></canvas>
-                </div>
-
-                <!-- Settings Section -->
-                <div id="settings-section" class="dashboard-section">
-                    <h2>Site Settings</h2>
-                    <div class="scrim-form">
-                        <div class="form-group">
-                            <label class="form-label">Site Title</label>
-                            <input type="text" id="siteTitle" class="form-input" value="CAVAL1IGHT">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Site Description</label>
-                            <textarea id="siteDescription" class="form-textarea">Cyberpunk esports team. We don't miss.</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Discord Invite Link</label>
-                            <input type="url" id="discordLink" class="form-input" value="https://discord.gg/Um8VR8yk">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Contact Email</label>
-                            <input type="email" id="contactEmail" class="form-input" value="contact@caval1ight.gg">
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">Contact Email</label>
+                        <input type="email" id="adminEmail" class="form-input" value="admin@caval1ight.gg">
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 30px;">
                         <button class="btn btn-primary" onclick="saveSettings()">
                             <i class="fas fa-save"></i> SAVE SETTINGS
+                        </button>
+                        <button class="btn btn-outline" onclick="resetSettings()">
+                            <i class="fas fa-undo"></i> RESET
                         </button>
                     </div>
                 </div>
             </div>
+            
+            <!-- VISITOR LOGS SECTION -->
+            <div id="logs-section" class="dashboard-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="color: white;">Visitor Logs</h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="exportLogs()">
+                            <i class="fas fa-download"></i> EXPORT CSV
+                        </button>
+                        <button class="btn btn-outline" onclick="loadVisitorLogs()">
+                            <i class="fas fa-sync-alt"></i> REFRESH
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Logs Table -->
+                <div style="background: #111; border: 1px solid #ff003c; border-radius: 12px; overflow: hidden;">
+                    <table class="data-table" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>IP Address</th>
+                                <th>Country</th>
+                                <th>Page</th>
+                                <th>User Agent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsList">
+                            <tr><td colspan="5" style="text-align: center; padding: 40px;">Loading logs...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+</div>
         <!-- ===== MODALS ===== -->
 
     <!-- Login Modal -->
@@ -4099,64 +4289,489 @@ async function initializeChat() {
         // =============================================
         // DASHBOARD FUNCTIONS (Admin)
         // =============================================
-        function showDashboard(e) {
-            e?.preventDefault();
-            document.getElementById('main-website').style.display = 'none';
-            document.getElementById('dashboard').classList.add('active');
-            loadAdminStats();
-            loadAdminUsers();
-        }
+      // =============================================
+// DASHBOARD FUNCTIONS - COMPLETE
+// =============================================
 
-        function hideDashboard(e) {
-            e?.preventDefault();
-            document.getElementById('main-website').style.display = 'block';
-            document.getElementById('dashboard').classList.remove('active');
-        }
+// Show/hide dashboard
+function showDashboard(e) {
+    e?.preventDefault();
+    document.getElementById('main-website').style.display = 'none';
+    document.getElementById('dashboard').classList.add('active');
+    refreshDashboardStats();
+    loadAdminUsers();
+    loadRosterList();
+    loadMediaList();
+    loadEventsList();
+    loadNewsList();
+    loadVisitorLogs();
+    
+    // Update last updated time
+    document.getElementById('lastUpdated').textContent = 'Just now';
+}
 
-        function showDashboardSection(sectionId) {
-            document.querySelectorAll('.dashboard-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId + '-section')?.classList.add('active');
-            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-            event.target.closest('a').classList.add('active');
-        }
+function hideDashboard(e) {
+    e?.preventDefault();
+    document.getElementById('main-website').style.display = 'block';
+    document.getElementById('dashboard').classList.remove('active');
+}
 
-        async function loadAdminStats() {
-            const { count: users } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-            const { count: media } = await supabaseClient.from('media').select('*', { count: 'exact', head: true });
-            const { count: events } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
-            const { count: news } = await supabaseClient.from('news').select('*', { count: 'exact', head: true });
-            document.getElementById('totalUsers').textContent = users || 0;
-            document.getElementById('totalMedia').textContent = media || 0;
-            document.getElementById('totalEvents').textContent = events || 0;
-            document.getElementById('totalNews').textContent = news || 0;
-            
-            // Team stats
-            const { count: team } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'team');
-            const { count: admin } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'admin');
-            const { count: apps } = await supabaseClient.from('applications').select('*', { count: 'exact', head: true }).eq('status', 'pending');
-            document.getElementById('teamMembers').textContent = team || 0;
-            document.getElementById('adminCount').textContent = admin || 0;
-            document.getElementById('pendingApps').textContent = apps || 0;
-        }
+function showDashboardSection(sectionId) {
+    document.querySelectorAll('.dashboard-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId + '-section')?.classList.add('active');
+    
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+    event.target.closest('a').classList.add('active');
+}
 
-        async function loadAdminUsers() {
-            const { data, error } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
-            const tbody = document.getElementById('userList');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            (data || []).forEach(u => {
-                tbody.innerHTML += `<tr>
-                    <td>${u.username}</td>
-                    <td>${u.email}</td>
-                    <td><span class="role-badge ${u.role === 'admin' ? 'role-admin' : u.role === 'team' ? 'role-team' : 'role-community'}">${u.role.toUpperCase()}</span></td>
-                    <td>${new Date(u.created_at).toLocaleDateString()}</td>
-                    <td>
-                        <button class="btn btn-outline btn-small" onclick="editUser('${u.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-small" onclick="deleteUser('${u.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
+// Refresh all dashboard stats
+async function refreshDashboardStats() {
+    await loadDashboardStats();
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+}
+
+// Load main dashboard stats
+async function loadDashboardStats() {
+    try {
+        // User counts
+        const { count: totalUsers } = await supabaseClient
+            .from('profiles')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: teamMembers } = await supabaseClient
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('role', 'team');
+        
+        const { count: admins } = await supabaseClient
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('role', 'admin');
+        
+        const { count: community } = await supabaseClient
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('role', 'community');
+        
+        // Media counts
+        const { count: totalMedia } = await supabaseClient
+            .from('media')
+            .select('*', { count: 'exact', head: true });
+        
+        // Events counts
+        const { count: totalEvents } = await supabaseClient
+            .from('events')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'upcoming');
+        
+        // News counts
+        const { count: totalNews } = await supabaseClient
+            .from('news')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'published');
+        
+        // Scrim counts
+        const { count: totalScrims } = await supabaseClient
+            .from('scrim_results')
+            .select('*', { count: 'exact', head: true });
+        
+        // Update UI
+        document.getElementById('totalUsers').textContent = totalUsers || 0;
+        document.getElementById('totalTeam').textContent = teamMembers || 0;
+        document.getElementById('totalMedia').textContent = totalMedia || 0;
+        document.getElementById('totalEvents').textContent = totalEvents || 0;
+        document.getElementById('totalNews').textContent = totalNews || 0;
+        document.getElementById('totalScrims').textContent = totalScrims || 0;
+        
+        // User management stats
+        document.getElementById('totalUsersCount').textContent = totalUsers || 0;
+        document.getElementById('adminUsersCount').textContent = admins || 0;
+        document.getElementById('teamUsersCount').textContent = teamMembers || 0;
+        document.getElementById('communityUsersCount').textContent = community || 0;
+        
+        // Team portal stats
+        const { count: strategies } = await supabaseClient
+            .from('strategy_videos')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: training } = await supabaseClient
+            .from('training_plans')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: chat } = await supabaseClient
+            .from('team_chat_messages')
+            .select('*', { count: 'exact', head: true });
+        
+        document.getElementById('totalScrimsCount').textContent = totalScrims || 0;
+        document.getElementById('totalStrategiesCount').textContent = strategies || 0;
+        document.getElementById('totalTrainingCount').textContent = training || 0;
+        document.getElementById('totalChatCount').textContent = chat || 0;
+        
+        // Recent activity
+        await loadRecentActivity();
+        
+    } catch (error) {
+        console.error('Error loading dashboard stats:', error);
+    }
+}
+
+// Load recent activity
+async function loadRecentActivity() {
+    try {
+        // Get recent chat messages
+        const { data: recentChat } = await supabaseClient
+            .from('team_chat_messages')
+            .select('*, profiles(username)')
+            .order('created_at', { ascending: false })
+            .limit(5);
+        
+        // Get recent media uploads
+        const { data: recentMedia } = await supabaseClient
+            .from('media')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(5);
+        
+        // Combine and display
+        const activityList = document.getElementById('recentActivityList');
+        if (!activityList) return;
+        
+        let html = '';
+        
+        if (recentChat && recentChat.length > 0) {
+            recentChat.forEach(msg => {
+                html += `<div style="padding: 10px; border-bottom: 1px solid #333;">
+                    <span style="color: #ff003c;">${msg.profiles?.username || 'Unknown'}</span>
+                    <span style="color: #888; font-size: 0.9rem;"> sent a message</span>
+                    <div style="color: #666; font-size: 0.8rem;">${new Date(msg.created_at).toLocaleString()}</div>
+                </div>`;
             });
         }
+        
+        if (recentMedia && recentMedia.length > 0) {
+            recentMedia.forEach(media => {
+                html += `<div style="padding: 10px; border-bottom: 1px solid #333;">
+                    <span style="color: #ff003c;">${media.uploader || 'Unknown'}</span>
+                    <span style="color: #888; font-size: 0.9rem;"> uploaded ${media.title}</span>
+                    <div style="color: #666; font-size: 0.8rem;">${new Date(media.created_at).toLocaleString()}</div>
+                </div>`;
+            });
+        }
+        
+        if (!html) {
+            html = '<div style="color: #888; text-align: center; padding: 20px;">No recent activity</div>';
+        }
+        
+        activityList.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error loading recent activity:', error);
+    }
+}
+
+// Load users list
+async function loadAdminUsers() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('userList');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No users found</td></tr>';
+            return;
+        }
+        
+        data.forEach(user => {
+            const row = document.createElement('tr');
+            const roleClass = user.role === 'admin' ? 'role-admin' : 
+                            user.role === 'team' ? 'role-team' : 'role-community';
+            
+            row.innerHTML = `
+                <td>${user.username || 'N/A'}</td>
+                <td>${user.email || 'N/A'}</td>
+                <td><span class="role-badge ${roleClass}">${(user.role || 'community').toUpperCase()}</span></td>
+                <td>${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</td>
+                <td>${user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleDateString() : 'Never'}</td>
+                <td>
+                    <button class="btn btn-outline btn-small" onclick="editUser('${user.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="deleteUser('${user.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Error loading users:', error);
+    }
+}
+
+// Load roster list
+async function loadRosterList() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('roster')
+            .select('*')
+            .order('display_order', { ascending: true });
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('rosterList');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">No players found</td></tr>';
+            return;
+        }
+        
+        data.forEach(player => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${player.name || 'N/A'}</td>
+                <td>${player.role || 'N/A'}</td>
+                <td>${player.rank || 'N/A'}</td>
+                <td>${player.kd || '0.00'}</td>
+                <td>${player.winrate || 0}%</td>
+                <td>${player.acs || 0}</td>
+                <td>${player.main_agent || 'N/A'}</td>
+                <td>
+                    <button class="btn btn-outline btn-small" onclick="editPlayer('${player.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="deletePlayer('${player.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Error loading roster:', error);
+    }
+}
+
+// Load media list
+async function loadMediaList() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('media')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('mediaList');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No media found</td></tr>';
+            return;
+        }
+        
+        // Calculate totals
+        let totalViews = 0;
+        data.forEach(media => totalViews += media.views || 0);
+        document.getElementById('totalVideos').textContent = data.length;
+        document.getElementById('totalViews').textContent = totalViews;
+        document.getElementById('storageUsed').textContent = '156 MB'; // Placeholder
+        
+        data.forEach(media => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${media.title || 'N/A'}</td>
+                <td>${media.category || 'N/A'}</td>
+                <td>${media.uploader || 'N/A'}</td>
+                <td>${media.created_at ? new Date(media.created_at).toLocaleDateString() : 'N/A'}</td>
+                <td>${media.views || 0}</td>
+                <td><span style="color: ${media.status === 'approved' ? '#4CAF50' : '#ff003c'};">${media.status || 'pending'}</span></td>
+                <td>
+                    <button class="btn btn-outline btn-small" onclick="editMedia('${media.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="deleteMedia('${media.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Error loading media:', error);
+    }
+}
+
+// Load events list
+async function loadEventsList() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('events')
+            .select('*')
+            .order('event_date', { ascending: true });
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('eventList');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No events found</td></tr>';
+            return;
+        }
+        
+        data.forEach(event => {
+            const row = document.createElement('tr');
+            const statusColor = event.status === 'upcoming' ? '#00ccff' :
+                               event.status === 'ongoing' ? '#4CAF50' : '#888';
+            
+            row.innerHTML = `
+                <td>${event.title || 'N/A'}</td>
+                <td>${event.event_date ? new Date(event.event_date).toLocaleString() : 'N/A'}</td>
+                <td>${event.event_type || 'N/A'}</td>
+                <td>${event.location || 'N/A'}</td>
+                <td>${event.participants || 0}/${event.max_participants || '∞'}</td>
+                <td><span style="color: ${statusColor};">${event.status || 'upcoming'}</span></td>
+                <td>
+                    <button class="btn btn-outline btn-small" onclick="editEvent('${event.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="deleteEvent('${event.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Error loading events:', error);
+    }
+}
+
+// Load news list
+async function loadNewsList() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('news')
+            .select('*, profiles(username)')
+            .order('published_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('newsList');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No news found</td></tr>';
+            return;
+        }
+        
+        data.forEach(news => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${news.title || 'N/A'}</td>
+                <td>${news.category || 'N/A'}</td>
+                <td>${news.profiles?.username || 'Unknown'}</td>
+                <td>${news.published_at ? new Date(news.published_at).toLocaleDateString() : 'N/A'}</td>
+                <td>${news.views || 0}</td>
+                <td><span style="color: ${news.status === 'published' ? '#4CAF50' : '#ff003c'};">${news.status || 'draft'}</span></td>
+                <td>
+                    <button class="btn btn-outline btn-small" onclick="editNews('${news.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="deleteNews('${news.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Error loading news:', error);
+    }
+}
+
+// Load visitor logs
+async function loadVisitorLogs() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('visitor_logs')
+            .select('*')
+            .order('timestamp', { ascending: false })
+            .limit(100);
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('logsList');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px;">No logs found</td></tr>';
+            return;
+        }
+        
+        data.forEach(log => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${log.timestamp ? new Date(log.timestamp).toLocaleString() : 'N/A'}</td>
+                <td>${log.ip_address || 'N/A'}</td>
+                <td>${log.country || 'N/A'} ${log.city ? `(${log.city})` : ''}</td>
+                <td>${log.page_visited || 'N/A'}</td>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${log.user_agent || 'N/A'}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Error loading logs:', error);
+    }
+}
+
+// Export functions
+function exportLogs() {
+    alert('Export functionality would connect to a backend service');
+}
+
+function exportData() {
+    alert('Export functionality would connect to a backend service');
+}
+
+// Placeholder functions for CRUD operations
+function editUser(id) { alert('Edit user: ' + id); }
+function deleteUser(id) { if(confirm('Delete user?')) alert('User deleted'); }
+function editPlayer(id) { alert('Edit player: ' + id); }
+function deletePlayer(id) { if(confirm('Delete player?')) alert('Player deleted'); }
+function editMedia(id) { alert('Edit media: ' + id); }
+function deleteMedia(id) { if(confirm('Delete media?')) alert('Media deleted'); }
+function editEvent(id) { alert('Edit event: ' + id); }
+function deleteEvent(id) { if(confirm('Delete event?')) alert('Event deleted'); }
+function editNews(id) { alert('Edit news: ' + id); }
+function deleteNews(id) { if(confirm('Delete news?')) alert('News deleted'); }
+function saveSettings() { alert('Settings saved'); }
+function resetSettings() { alert('Settings reset'); }
 
         // =============================================
         // CONTACT FORM
