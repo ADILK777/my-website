@@ -3164,35 +3164,62 @@
             showToast('Registration successful! Check your email for confirmation.');
             closeModal('registerModal');
         }
+async function loginUser() {
+  const email = document.getElementById('loginEmail').value;
+  const pwd = document.getElementById('loginPassword').value;
+  
+  if (!email || !pwd) {
+    showToast('Enter email and password', true);
+    return;
+  }
 
-        async function loginUser() {
-            const email = document.getElementById('loginEmail').value;
-            const pwd = document.getElementById('loginPassword').value;
-            if (!email || !pwd) {
-                showToast('Enter email and password', true);
-                return;
-            }
-
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: pwd });
-            if (error) {
-                showToast('Login failed: ' + error.message, true);
-                return;
-            }
-
-            const { data: profile } = await supabaseClient
-                .from('profiles')
-                .select('username, role')
-                .eq('id', data.user.id)
-                .single();
-
-            if (profile) {
-                currentUser = { id: data.user.id, username: profile.username, email, role: profile.role };
-                currentRole = profile.role;
-                updateUIForRole(profile.role, profile.username);
-                showToast(`Welcome back, ${profile.username}!`);
-            }
-            closeModal('loginModal');
-        }
+  console.log('Attempting login for:', email);
+  
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ 
+    email, 
+    password: pwd 
+  });
+  
+  if (error) {
+    console.error('Login error:', error);
+    showToast('Login failed: ' + error.message, true);
+    return;
+  }
+  
+  console.log('Login successful, user:', data.user);
+  
+  // Get profile from profiles table
+  const { data: profile, error: profileError } = await supabaseClient
+    .from('profiles')
+    .select('username, role')
+    .eq('id', data.user.id)
+    .single();
+  
+  if (profileError) {
+    console.error('Profile fetch error:', profileError);
+    showToast('Error loading profile', true);
+    return;
+  }
+  
+  if (profile) {
+    currentUser = { 
+      id: data.user.id, 
+      username: profile.username, 
+      email, 
+      role: profile.role 
+    };
+    currentRole = profile.role;
+    
+    console.log('Profile loaded:', profile);
+    
+    // Update UI
+    updateUIForRole(profile.role, profile.username);
+    showToast(`Welcome back, ${profile.username}!`);
+    
+    // Close modal
+    closeModal('loginModal');
+  }
+}
 
         async function logoutUser() {
             await supabaseClient.auth.signOut();
