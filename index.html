@@ -1774,6 +1774,58 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+/* Dashboard Table Styles */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111;
+    border: 1px solid #ff003c;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.data-table th {
+    background: #ff003c;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.data-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #333;
+    color: #ddd;
+}
+
+.data-table tr:hover {
+    background: #1a1a1a;
+}
+
+.stat-box {
+    background: #111;
+    border: 1px solid #ff003c;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(255,0,60,0.3);
+}
+
+.stat-box h3 {
+    font-size: 2.5rem;
+    color: #ff003c;
+    margin: 10px 0;
+}
+
+.stat-box p {
+    color: #888;
+    font-size: 0.9rem;
+}
     </style>
 </head>
 <body>
@@ -2015,7 +2067,7 @@
                         </div>
                     </div>
                     <div class="about-image">
-                        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Gaming Community">
+                        <img src="logo.png" alt="Gaming Community">
                     </div>
                 </div>
             </div>
@@ -2237,56 +2289,63 @@
             </div>
         </section>
 
-        <!-- Admin Panel Section (Admins only) -->
-        <section class="admin-panel section-padding" id="admin-panel">
-            <div class="container">
-                <h2 class="section-title">ADMIN PANEL</h2>
-                <p class="section-subtitle">Full control panel for CAVAL1IGHT administrators. Manage users, content, and team operations.</p>
-                
-                <div class="admin-grid">
-                    <div class="admin-card">
-                        <div class="admin-icon"><i class="fas fa-users-cog"></i></div>
-                        <h3 class="admin-title">User Management</h3>
-                        <p class="admin-description">Manage all user accounts, roles, and permissions. Approve or reject applications.</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('users')">MANAGE USERS</a>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <div class="admin-icon"><i class="fas fa-file-signature"></i></div>
-                        <h3 class="admin-title">Applications</h3>
-                        <p class="admin-description">Review and process new player and staff applications. Track application status.</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('applications')">VIEW APPLICATIONS</a>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <div class="admin-icon"><i class="fas fa-folder-open"></i></div>
-                        <h3 class="admin-title">Content Management</h3>
-                        <p class="admin-description">Approve, edit, or delete all uploaded content including media clips and strategy videos.</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('content')">MANAGE CONTENT</a>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <div class="admin-icon"><i class="fas fa-newspaper"></i></div>
-                        <h3 class="admin-title">News & Events</h3>
-                        <p class="admin-description">Create, edit, and publish news articles and events. Manage the content calendar.</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('news')">MANAGE NEWS/EVENTS</a>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <div class="admin-icon"><i class="fas fa-user-edit"></i></div>
-                        <h3 class="admin-title">Roster Management</h3>
-                        <p class="admin-description">Edit team roster, update player information, stats, and social links. Add or remove players.</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('roster')">MANAGE ROSTER</a>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <div class="admin-icon"><i class="fas fa-chart-line"></i></div>
-                        <h3 class="admin-title">Analytics</h3>
-                        <p class="admin-description">View detailed analytics on site traffic, user engagement, and team performance metrics.</p>
-                        <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('analytics')">VIEW ANALYTICS</a>
-                    </div>
-                </div>
+<!-- Admin Panel Section (Admins only) -->
+<section class="admin-panel section-padding" id="admin-panel">
+    <div class="container">
+        <h2 class="section-title">ADMIN PANEL</h2>
+        <p class="section-subtitle">Full control panel for CAVAL1IGHT administrators. Manage users, content, and team operations.</p>
+        
+        <div class="admin-grid">
+            <!-- User Management Card -->
+            <div class="admin-card">
+                <div class="admin-icon"><i class="fas fa-users-cog"></i></div>
+                <h3 class="admin-title">User Management</h3>
+                <p class="admin-description">Manage all user accounts, roles, and permissions. Approve or reject applications.</p>
+                <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('users')">MANAGE USERS</a>
             </div>
+            
+            <!-- Applications Card -->
+            <div class="admin-card">
+                <div class="admin-icon"><i class="fas fa-file-signature"></i></div>
+                <h3 class="admin-title">Applications</h3>
+                <p class="admin-description">Review and process new player and staff applications. Track application status.</p>
+                <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('users')">VIEW APPLICATIONS</a>
+            </div>
+            
+            <!-- Content Management Card -->
+            <div class="admin-card">
+                <div class="admin-icon"><i class="fas fa-folder-open"></i></div>
+                <h3 class="admin-title">Content Management</h3>
+                <p class="admin-description">Approve, edit, or delete all uploaded content including media clips and strategy videos.</p>
+                <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('media')">MANAGE CONTENT</a>
+            </div>
+            
+            <!-- News & Events Card -->
+            <div class="admin-card">
+                <div class="admin-icon"><i class="fas fa-newspaper"></i></div>
+                <h3 class="admin-title">News & Events</h3>
+                <p class="admin-description">Create, edit, and publish news articles and events. Manage the content calendar.</p>
+                <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('news')">MANAGE NEWS/EVENTS</a>
+            </div>
+            
+            <!-- Roster Management Card -->
+            <div class="admin-card">
+                <div class="admin-icon"><i class="fas fa-user-edit"></i></div>
+                <h3 class="admin-title">Roster Management</h3>
+                <p class="admin-description">Edit team roster, update player information, stats, and social links. Add or remove players.</p>
+                <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('roster')">MANAGE ROSTER</a>
+            </div>
+            
+            <!-- Analytics Card -->
+            <div class="admin-card">
+                <div class="admin-icon"><i class="fas fa-chart-line"></i></div>
+                <h3 class="admin-title">Analytics</h3>
+                <p class="admin-description">View detailed analytics on site traffic, user engagement, and team performance metrics.</p>
+                <a href="#" class="btn btn-danger mt-20" onclick="showDashboardSection('team')">VIEW ANALYTICS</a>
+            </div>
+        </div>
+    </div>
+</section>
         </section>
 
         <!-- Contact Section -->
@@ -2380,7 +2439,7 @@
                 </div>
                 
                 <div class="footer-bottom">
-                    <p>© 2025 CAVAL1IGHT Esports. All rights reserved. Powered by Valorant EST.2022</p>
+                    <p>© 2026 CAVAL1IGHT Esports. All rights reserved. Powered by Valorant EST.2022</p>
                 </div>
             </div>
         </footer>
@@ -3873,14 +3932,25 @@ async function initializeChat() {
 // =============================================
 // DASHBOARD FUNCTIONS - CLEAN WORKING VERSION
 // =============================================
-
+// =============================================
+// DASHBOARD FUNCTIONS - REAL-TIME DATABASE CONNECTION
+// =============================================
 function showDashboard(e) {
     e?.preventDefault();
     document.getElementById('main-website').style.display = 'none';
     document.getElementById('dashboard').classList.add('active');
-    refreshDashboardData();
+    
+    // Load ALL dashboard data immediately
+    loadDashboardStats();
+    loadUsers();
+    loadRosterData();
+    loadMediaData();    // 👈 This function handles totalViews internally
+    loadEventsData();
+    loadNewsData();
+    loadTeamStats();
+    
+    showToast('Dashboard data refreshed');
 }
-
 function hideDashboard(e) {
     e?.preventDefault();
     document.getElementById('main-website').style.display = 'block';
@@ -3897,248 +3967,448 @@ function showDashboardSection(sectionId) {
         const link = event.target.closest('a');
         if (link) link.classList.add('active');
     }
+    
+    // Reload data for the active section
+    switch(sectionId) {
+        case 'users': loadUsers(); break;
+        case 'roster': loadRosterData(); break;
+        case 'media': loadMediaData(); break;
+        case 'events': loadEventsData(); break;
+        case 'news': loadNewsData(); break;
+        case 'team': loadTeamStats(); break;
+    }
 }
 
-async function refreshDashboardData() {
-    await loadOverviewStats();
-    await loadUsers();
-    await loadRosterData();
-    await loadMediaData();
-    await loadEventsData();
-    await loadNewsData();
-    await loadTeamStats();
-}
-
-// Overview stats
-async function loadOverviewStats() {
+// =============================================
+// OVERVIEW STATS - REAL DATA FROM DATABASE
+// =============================================
+async function loadDashboardStats() {
     try {
-        const { count: users } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-        const { count: roster } = await supabaseClient.from('roster').select('*', { count: 'exact', head: true });
-        const { count: media } = await supabaseClient.from('media').select('*', { count: 'exact', head: true });
-        const { count: events } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
+        console.log('Loading dashboard stats...');
+        
+        const { count: users } = await supabaseClient
+            .from('profiles')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: roster } = await supabaseClient
+            .from('roster')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: media } = await supabaseClient
+            .from('media')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: events } = await supabaseClient
+            .from('events')
+            .select('*', { count: 'exact', head: true });
+        
+        console.log('Stats loaded:', { users, roster, media, events });
         
         document.getElementById('totalUsers').textContent = users || 0;
         document.getElementById('totalRoster').textContent = roster || 0;
         document.getElementById('totalMedia').textContent = media || 0;
         document.getElementById('totalEvents').textContent = events || 0;
+        
     } catch (error) {
-        console.error('Error loading overview:', error);
+        console.error('Error loading stats:', error);
+        showToast('Failed to load stats', true);
     }
 }
 
-// Users
+// =============================================
+// USERS - REAL DATA FROM PROFILES TABLE
+// =============================================
 async function loadUsers() {
     try {
-        const { data } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
+        console.log('Loading users...');
+        
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
         const tbody = document.getElementById('usersTableBody');
         if (!tbody) return;
         
         tbody.innerHTML = '';
+        
         if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No users found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px;">No users found</td></tr>';
             return;
         }
         
         data.forEach(user => {
-            const roleClass = user.role === 'admin' ? 'role-admin' : user.role === 'team' ? 'role-team' : 'role-community';
-            tbody.innerHTML += `<tr>
-                <td>${user.username || 'N/A'}</td>
-                <td>${user.email || 'N/A'}</td>
-                <td><span class="role-badge ${roleClass}">${(user.role || 'community').toUpperCase()}</span></td>
-                <td>${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</td>
-                <td>
-                    <button class="btn btn-danger btn-small" onclick="deleteUser('${user.id}')">🗑️</button>
+            const roleClass = user.role === 'admin' ? 'role-admin' : 
+                             user.role === 'team' ? 'role-team' : 'role-community';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="padding:15px;">${user.username || 'N/A'}</td>
+                <td style="padding:15px;">${user.email || 'N/A'}</td>
+                <td style="padding:15px;"><span class="role-badge ${roleClass}">${(user.role || 'community').toUpperCase()}</span></td>
+                <td style="padding:15px;">${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</td>
+                <td style="padding:15px;">
+                    <button class="btn btn-danger btn-small" onclick="deleteUser('${user.id}')">🗑️ Delete</button>
                 </td>
-            </tr>`;
+            `;
+            tbody.appendChild(row);
         });
+        
     } catch (error) {
         console.error('Error loading users:', error);
+        showToast('Failed to load users', true);
     }
 }
 
 async function deleteUser(userId) {
-    if (!confirm('Delete user?')) return;
+    if (!confirm('⚠️ Are you sure you want to delete this user?')) return;
+    
     try {
-        await supabaseClient.from('profiles').delete().eq('id', userId);
+        const { error } = await supabaseClient
+            .from('profiles')
+            .delete()
+            .eq('id', userId);
+        
+        if (error) throw error;
+        
+        showToast('✅ User deleted successfully');
         loadUsers();
-        loadOverviewStats();
+        loadDashboardStats();
+        
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Error deleting user:', error);
+        showToast('❌ Error: ' + error.message, true);
     }
 }
 
-// Roster
+// =============================================
+// ROSTER - REAL DATA FROM ROSTER TABLE
+// =============================================
 async function loadRosterData() {
     try {
-        const { data } = await supabaseClient.from('roster').select('*').order('display_order');
+        console.log('Loading roster...');
+        
+        const { data, error } = await supabaseClient
+            .from('roster')
+            .select('*')
+            .order('display_order', { ascending: true });
+        
+        if (error) throw error;
+        
         const tbody = document.getElementById('rosterTableBody');
         if (!tbody) return;
         
         tbody.innerHTML = '';
+        
         if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No players found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px;">No players found</td></tr>';
             return;
         }
         
-        data.forEach(p => {
-            tbody.innerHTML += `<tr>
-                <td>${p.name}</td>
-                <td>${p.role}</td>
-                <td>${p.rank}</td>
-                <td>${p.kd || '0.00'}</td>
-                <td>${p.winrate || 0}%</td>
-                <td>${p.acs || 0}</td>
-                <td>${p.main_agent}</td>
-                <td><button class="btn btn-danger btn-small" onclick="deletePlayer(${p.id})">🗑️</button></td>
-            </tr>`;
+        data.forEach(player => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="padding:15px;">${player.name || 'N/A'}</td>
+                <td style="padding:15px;">${player.role || 'N/A'}</td>
+                <td style="padding:15px;">${player.rank || 'N/A'}</td>
+                <td style="padding:15px;">${player.kd || '0.00'}</td>
+                <td style="padding:15px;">${player.winrate || 0}%</td>
+                <td style="padding:15px;">${player.acs || 0}</td>
+                <td style="padding:15px;">${player.main_agent || 'N/A'}</td>
+                <td style="padding:15px;">
+                    <button class="btn btn-danger btn-small" onclick="deletePlayer(${player.id})">🗑️ Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
         });
+        
     } catch (error) {
         console.error('Error loading roster:', error);
+        showToast('Failed to load roster', true);
     }
 }
 
-async function deletePlayer(id) {
-    if (!confirm('Delete player?')) return;
+async function deletePlayer(playerId) {
+    if (!confirm('⚠️ Delete this player?')) return;
+    
     try {
-        await supabaseClient.from('roster').delete().eq('id', id);
+        const { error } = await supabaseClient
+            .from('roster')
+            .delete()
+            .eq('id', playerId);
+        
+        if (error) throw error;
+        
+        showToast('✅ Player deleted');
         loadRosterData();
-        loadOverviewStats();
+        loadDashboardStats();
+        
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Error deleting player:', error);
+        showToast('❌ Error: ' + error.message, true);
     }
 }
 
-// Media
+// =============================================
+// MEDIA - REAL DATA FROM MEDIA TABLE + STORAGE
+// =============================================
+
 async function loadMediaData() {
     try {
-        const { data } = await supabaseClient.from('media').select('*').order('created_at', { ascending: false });
+        console.log('Loading media...');
+        
+        const { data, error } = await supabaseClient
+            .from('media')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
         const tbody = document.getElementById('mediaTableBody');
         if (!tbody) return;
         
         tbody.innerHTML = '';
+        
         if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No media found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;">No media found</td></tr>';
             return;
         }
         
-        data.forEach(m => {
-            tbody.innerHTML += `<tr>
-                <td>${m.title}</td>
-                <td>${m.category}</td>
-                <td>${m.uploader}</td>
-                <td>${m.created_at ? new Date(m.created_at).toLocaleDateString() : 'N/A'}</td>
-                <td>${m.views || 0}</td>
-                <td><button class="btn btn-danger btn-small" onclick="deleteMedia('${m.id}')">🗑️</button></td>
-            </tr>`;
+        // Calculate total views
+        const totalViews = data.reduce((sum, item) => sum + (item.views || 0), 0);
+        
+        // Only try to update if element exists
+        const totalViewsElement = document.getElementById('totalViews');
+        if (totalViewsElement) {
+            totalViewsElement.textContent = totalViews;
+        }
+        
+        data.forEach(media => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="padding:15px;">${media.title || 'N/A'}</td>
+                <td style="padding:15px;">${media.category || 'N/A'}</td>
+                <td style="padding:15px;">${media.uploader || 'N/A'}</td>
+                <td style="padding:15px;">${media.created_at ? new Date(media.created_at).toLocaleDateString() : 'N/A'}</td>
+                <td style="padding:15px;">${media.views || 0}</td>
+                <td style="padding:15px;">
+                    <button class="btn btn-danger btn-small" onclick="deleteMedia('${media.id}')">🗑️ Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
         });
+        
     } catch (error) {
         console.error('Error loading media:', error);
+        showToast('Failed to load media', true);
     }
 }
-
-async function deleteMedia(id) {
-    if (!confirm('Delete media?')) return;
-    try {
-        await supabaseClient.from('media').delete().eq('id', id);
-        loadMediaData();
-        loadOverviewStats();
-    } catch (error) {
-        alert('Error: ' + error.message);
-    }
-}
-
-// Events
+// =============================================
+// EVENTS - REAL DATA FROM EVENTS TABLE
+// =============================================
 async function loadEventsData() {
     try {
-        const { data } = await supabaseClient.from('events').select('*').order('event_date');
+        console.log('Loading events...');
+        
+        const { data, error } = await supabaseClient
+            .from('events')
+            .select('*')
+            .order('event_date', { ascending: true });
+        
+        if (error) throw error;
+        
         const tbody = document.getElementById('eventsTableBody');
         if (!tbody) return;
         
         tbody.innerHTML = '';
+        
         if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No events found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;">No events found</td></tr>';
             return;
         }
         
-        data.forEach(e => {
-            tbody.innerHTML += `<tr>
-                <td>${e.title}</td>
-                <td>${e.event_date ? new Date(e.event_date).toLocaleString() : 'N/A'}</td>
-                <td>${e.event_type}</td>
-                <td>${e.location}</td>
-                <td>${e.status}</td>
-                <td><button class="btn btn-danger btn-small" onclick="deleteEvent('${e.id}')">🗑️</button></td>
-            </tr>`;
+        data.forEach(event => {
+            const statusColor = event.status === 'upcoming' ? '#4CAF50' : 
+                               event.status === 'ongoing' ? '#FF9800' : '#888';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="padding:15px;">${event.title || 'N/A'}</td>
+                <td style="padding:15px;">${event.event_date ? new Date(event.event_date).toLocaleString() : 'N/A'}</td>
+                <td style="padding:15px;">${event.event_type || 'N/A'}</td>
+                <td style="padding:15px;">${event.location || 'N/A'}</td>
+                <td style="padding:15px;"><span style="color: ${statusColor};">${event.status || 'N/A'}</span></td>
+                <td style="padding:15px;">
+                    <button class="btn btn-danger btn-small" onclick="deleteEvent('${event.id}')">🗑️ Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
         });
+        
     } catch (error) {
         console.error('Error loading events:', error);
+        showToast('Failed to load events', true);
     }
 }
 
-async function deleteEvent(id) {
-    if (!confirm('Delete event?')) return;
+async function deleteEvent(eventId) {
+    if (!confirm('⚠️ Delete this event?')) return;
+    
     try {
-        await supabaseClient.from('events').delete().eq('id', id);
+        const { error } = await supabaseClient
+            .from('events')
+            .delete()
+            .eq('id', eventId);
+        
+        if (error) throw error;
+        
+        showToast('✅ Event deleted');
         loadEventsData();
-        loadOverviewStats();
+        loadDashboardStats();
+        
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Error deleting event:', error);
+        showToast('❌ Error: ' + error.message, true);
     }
 }
 
-// News
+// =============================================
+// NEWS - REAL DATA FROM NEWS TABLE
+// =============================================
 async function loadNewsData() {
     try {
-        const { data } = await supabaseClient.from('news').select('*').order('published_at', { ascending: false });
+        console.log('Loading news...');
+        
+        const { data, error } = await supabaseClient
+            .from('news')
+            .select('*')
+            .order('published_at', { ascending: false });
+        
+        if (error) throw error;
+        
         const tbody = document.getElementById('newsTableBody');
         if (!tbody) return;
         
         tbody.innerHTML = '';
+        
         if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No news found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;">No news found</td></tr>';
             return;
         }
         
-        data.forEach(n => {
-            tbody.innerHTML += `<tr>
-                <td>${n.title}</td>
-                <td>${n.category}</td>
-                <td>Admin</td>
-                <td>${n.published_at ? new Date(n.published_at).toLocaleDateString() : 'N/A'}</td>
-                <td>${n.views || 0}</td>
-                <td><button class="btn btn-danger btn-small" onclick="deleteNews('${n.id}')">🗑️</button></td>
-            </tr>`;
+        data.forEach(news => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="padding:15px;">${news.title || 'N/A'}</td>
+                <td style="padding:15px;">${news.category || 'N/A'}</td>
+                <td style="padding:15px;">Admin</td>
+                <td style="padding:15px;">${news.published_at ? new Date(news.published_at).toLocaleDateString() : 'N/A'}</td>
+                <td style="padding:15px;">${news.views || 0}</td>
+                <td style="padding:15px;">
+                    <button class="btn btn-danger btn-small" onclick="deleteNews('${news.id}')">🗑️ Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
         });
+        
     } catch (error) {
         console.error('Error loading news:', error);
+        showToast('Failed to load news', true);
     }
 }
 
-async function deleteNews(id) {
-    if (!confirm('Delete news?')) return;
+async function deleteNews(newsId) {
+    if (!confirm('⚠️ Delete this news?')) return;
+    
     try {
-        await supabaseClient.from('news').delete().eq('id', id);
+        const { error } = await supabaseClient
+            .from('news')
+            .delete()
+            .eq('id', newsId);
+        
+        if (error) throw error;
+        
+        showToast('✅ News deleted');
         loadNewsData();
-        loadOverviewStats();
+        loadDashboardStats();
+        
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Error deleting news:', error);
+        showToast('❌ Error: ' + error.message, true);
     }
 }
 
-// Team stats
+// =============================================
+// TEAM STATS - REAL DATA FROM PORTAL TABLES
+// =============================================
 async function loadTeamStats() {
     try {
-        const { count: scrims } = await supabaseClient.from('scrim_results').select('*', { count: 'exact', head: true });
-        const { count: strategies } = await supabaseClient.from('strategy_videos').select('*', { count: 'exact', head: true });
-        const { count: chat } = await supabaseClient.from('team_chat_messages').select('*', { count: 'exact', head: true });
+        console.log('Loading team stats...');
+        
+        const { count: scrims } = await supabaseClient
+            .from('scrim_results')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: strategies } = await supabaseClient
+            .from('strategy_videos')
+            .select('*', { count: 'exact', head: true });
+        
+        const { count: chat } = await supabaseClient
+            .from('team_chat_messages')
+            .select('*', { count: 'exact', head: true });
         
         document.getElementById('teamScrims').textContent = scrims || 0;
         document.getElementById('teamStrategies').textContent = strategies || 0;
         document.getElementById('teamChat').textContent = chat || 0;
+        
     } catch (error) {
         console.error('Error loading team stats:', error);
     }
 }
+
+// =============================================
+// REAL-TIME UPDATES - Refresh data every 30 seconds
+// =============================================
+let refreshInterval;
+
+function startDashboardRefresh() {
+    if (refreshInterval) clearInterval(refreshInterval);
+    refreshInterval = setInterval(() => {
+        if (document.getElementById('dashboard').classList.contains('active')) {
+            console.log('Auto-refreshing dashboard data...');
+            loadDashboardStats();
+            
+            // Refresh current section
+            const activeSection = document.querySelector('.dashboard-section.active')?.id;
+            if (activeSection) {
+                const sectionId = activeSection.replace('-section', '');
+                switch(sectionId) {
+                    case 'users': loadUsers(); break;
+                    case 'roster': loadRosterData(); break;
+                    case 'media': loadMediaData(); break;
+                    case 'events': loadEventsData(); break;
+                    case 'news': loadNewsData(); break;
+                }
+            }
+        }
+    }, 30000); // Refresh every 30 seconds
+}
+
+// Stop refresh when dashboard is hidden
+const originalHideDashboard = hideDashboard;
+hideDashboard = function(e) {
+    if (refreshInterval) clearInterval(refreshInterval);
+    originalHideDashboard(e);
+};
+
+// Start refresh when dashboard is shown
+const originalShowDashboard = showDashboard;
+showDashboard = function(e) {
+    originalShowDashboard(e);
+    startDashboardRefresh();
+};
         // =============================================
         // CONTACT FORM
         // =============================================
@@ -4243,158 +4513,12 @@ async function loadTeamStats() {
                 if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
-
+window.onerror = function(msg, url, line) {
+    alert('JavaScript Error at line ' + line + ': ' + msg);
+    console.error('ERROR:', msg, 'at line', line);
+    return true;
+};
     </script>
 
-    <!-- SQL Schema for Supabase (run this in your SQL editor) -->
-    <!--
-    CREATE TABLE profiles (
-      id uuid references auth.users primary key,
-      username text unique not null,
-      email text unique not null,
-      role text check (role in ('community','team','admin')),
-      avatar_url text,
-      discord_username text,
-      created_at timestamptz default now(),
-      updated_at timestamptz default now()
-    );
-
-    CREATE TABLE roster (
-      id bigint generated always as identity primary key,
-      name text not null,
-      role text not null,
-      rank text not null,
-      kd real,
-      winrate int,
-      acs int,
-      main_agent text not null,
-      secondary_agent text,
-      discord_username text,
-      instagram_url text,
-      twitch_url text,
-      tracker_url text,
-      profile_image text,
-      display_order int default 0,
-      is_active boolean default true,
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE stats (
-      id int primary key default 1,
-      headshot int,
-      wins int,
-      mentality int
-    );
-
-    CREATE TABLE matches (
-      id bigint generated always as identity primary key,
-      opponent text not null,
-      result text not null,
-      score text not null,
-      date date not null,
-      tournament text,
-      vod_url text
-    );
-
-    CREATE TABLE media (
-      id bigint generated always as identity primary key,
-      title text not null,
-      description text,
-      category text check (category in ('highlights','tournaments','community','strategy')),
-      storage_path text not null,
-      thumbnail_path text,
-      views int default 0,
-      likes int default 0,
-      duration text,
-      uploader text,
-      user_id uuid references profiles(id),
-      status text default 'approved' check (status in ('pending','approved','rejected')),
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE scrim_results (
-      id bigint generated always as identity primary key,
-      team1_name text not null,
-      team2_name text not null,
-      team1_score int not null,
-      team2_score int not null,
-      map text not null,
-      vod_url text,
-      notes text,
-      uploaded_by uuid references profiles(id),
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE strategy_videos (
-      id bigint generated always as identity primary key,
-      title text not null,
-      description text,
-      map text,
-      strategy_type text check (strategy_type in ('attack','defense','setup','execute')),
-      video_url text not null,
-      uploaded_by uuid references profiles(id),
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE training_plans (
-      id bigint generated always as identity primary key,
-      title text not null,
-      description text,
-      schedule text,
-      exercises text[],
-      created_by uuid references profiles(id),
-      is_active boolean default true,
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE team_chat_messages (
-      id bigint generated always as identity primary key,
-      user_id uuid references profiles(id),
-      message text not null,
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE team_posts (
-      id bigint generated always as identity primary key,
-      title text not null,
-      content text not null,
-      author_id uuid references profiles(id),
-      is_private boolean default true,
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE upcoming_matches (
-      id bigint generated always as identity primary key,
-      opponent text not null,
-      match_datetime timestamptz not null,
-      tournament text not null,
-      format text check (format in ('bo1','bo3','bo5')),
-      added_by uuid references profiles(id),
-      created_at timestamptz default now()
-    );
-
-    CREATE TABLE contacts (
-      id bigint generated always as identity primary key,
-      name text not null,
-      email text not null,
-      subject text,
-      message text not null,
-      created_at timestamptz default now()
-    );
-
-    -- Enable Row Level Security and add policies as needed
-    ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE roster ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE stats ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE matches ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE media ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE scrim_results ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE strategy_videos ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE training_plans ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE team_chat_messages ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE team_posts ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE upcoming_matches ENABLE ROW LEVEL SECURITY;
-    ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
-    -->
 </body>
 </html>
