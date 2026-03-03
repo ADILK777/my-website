@@ -3870,6 +3870,9 @@ async function initializeChat() {
 // =============================================
 // DASHBOARD FUNCTIONS - REAL CRUD OPERATIONS
 // =============================================
+// =============================================
+// DASHBOARD FUNCTIONS - CLEAN WORKING VERSION
+// =============================================
 
 function showDashboard(e) {
     e?.preventDefault();
@@ -3886,165 +3889,255 @@ function hideDashboard(e) {
 
 function showDashboardSection(sectionId) {
     document.querySelectorAll('.dashboard-section').forEach(s => s.classList.remove('active'));
-    document.getElementById(sectionId + '-section').classList.add('active');
+    const section = document.getElementById(sectionId + '-section');
+    if (section) section.classList.add('active');
+    
     document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event && event.target) {
+        const link = event.target.closest('a');
+        if (link) link.classList.add('active');
+    }
 }
 
 async function refreshDashboardData() {
     await loadOverviewStats();
     await loadUsers();
-    await loadRoster();
-    await loadMedia();
-    await loadEvents();
-    await loadNews();
+    await loadRosterData();
+    await loadMediaData();
+    await loadEventsData();
+    await loadNewsData();
     await loadTeamStats();
 }
 
 // Overview stats
 async function loadOverviewStats() {
-    const { count: users } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-    const { count: roster } = await supabaseClient.from('roster').select('*', { count: 'exact', head: true });
-    const { count: media } = await supabaseClient.from('media').select('*', { count: 'exact', head: true });
-    const { count: events } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
-    
-    document.getElementById('totalUsers').textContent = users || 0;
-    document.getElementById('totalRoster').textContent = roster || 0;
-    document.getElementById('totalMedia').textContent = media || 0;
-    document.getElementById('totalEvents').textContent = events || 0;
+    try {
+        const { count: users } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+        const { count: roster } = await supabaseClient.from('roster').select('*', { count: 'exact', head: true });
+        const { count: media } = await supabaseClient.from('media').select('*', { count: 'exact', head: true });
+        const { count: events } = await supabaseClient.from('events').select('*', { count: 'exact', head: true });
+        
+        document.getElementById('totalUsers').textContent = users || 0;
+        document.getElementById('totalRoster').textContent = roster || 0;
+        document.getElementById('totalMedia').textContent = media || 0;
+        document.getElementById('totalEvents').textContent = events || 0;
+    } catch (error) {
+        console.error('Error loading overview:', error);
+    }
 }
 
 // Users
 async function loadUsers() {
-    const { data } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
-    const tbody = document.getElementById('usersTableBody');
-    tbody.innerHTML = '';
-    data?.forEach(user => {
-        tbody.innerHTML += `<tr>
-            <td>${user.username}</td>
-            <td>${user.email}</td>
-            <td><span class="role-badge ${user.role}">${user.role}</span></td>
-            <td>${new Date(user.created_at).toLocaleDateString()}</td>
-            <td>
-                <button class="btn btn-danger btn-small" onclick="deleteUser('${user.id}')">🗑️</button>
-            </td>
-        </tr>`;
-    });
+    try {
+        const { data } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
+        const tbody = document.getElementById('usersTableBody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No users found</td></tr>';
+            return;
+        }
+        
+        data.forEach(user => {
+            const roleClass = user.role === 'admin' ? 'role-admin' : user.role === 'team' ? 'role-team' : 'role-community';
+            tbody.innerHTML += `<tr>
+                <td>${user.username || 'N/A'}</td>
+                <td>${user.email || 'N/A'}</td>
+                <td><span class="role-badge ${roleClass}">${(user.role || 'community').toUpperCase()}</span></td>
+                <td>${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</td>
+                <td>
+                    <button class="btn btn-danger btn-small" onclick="deleteUser('${user.id}')">🗑️</button>
+                </td>
+            </tr>`;
+        });
+    } catch (error) {
+        console.error('Error loading users:', error);
+    }
 }
 
 async function deleteUser(userId) {
     if (!confirm('Delete user?')) return;
-    await supabaseClient.from('profiles').delete().eq('id', userId);
-    loadUsers();
-    loadOverviewStats();
+    try {
+        await supabaseClient.from('profiles').delete().eq('id', userId);
+        loadUsers();
+        loadOverviewStats();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
 }
 
 // Roster
-async function loadRoster() {
-    const { data } = await supabaseClient.from('roster').select('*').order('display_order');
-    const tbody = document.getElementById('rosterTableBody');
-    tbody.innerHTML = '';
-    data?.forEach(p => {
-        tbody.innerHTML += `<tr>
-            <td>${p.name}</td>
-            <td>${p.role}</td>
-            <td>${p.rank}</td>
-            <td>${p.kd || '0.00'}</td>
-            <td>${p.winrate || 0}%</td>
-            <td>${p.acs || 0}</td>
-            <td>${p.main_agent}</td>
-            <td><button class="btn btn-danger btn-small" onclick="deletePlayer(${p.id})">🗑️</button></td>
-        </tr>`;
-    });
+async function loadRosterData() {
+    try {
+        const { data } = await supabaseClient.from('roster').select('*').order('display_order');
+        const tbody = document.getElementById('rosterTableBody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No players found</td></tr>';
+            return;
+        }
+        
+        data.forEach(p => {
+            tbody.innerHTML += `<tr>
+                <td>${p.name}</td>
+                <td>${p.role}</td>
+                <td>${p.rank}</td>
+                <td>${p.kd || '0.00'}</td>
+                <td>${p.winrate || 0}%</td>
+                <td>${p.acs || 0}</td>
+                <td>${p.main_agent}</td>
+                <td><button class="btn btn-danger btn-small" onclick="deletePlayer(${p.id})">🗑️</button></td>
+            </tr>`;
+        });
+    } catch (error) {
+        console.error('Error loading roster:', error);
+    }
 }
 
 async function deletePlayer(id) {
     if (!confirm('Delete player?')) return;
-    await supabaseClient.from('roster').delete().eq('id', id);
-    loadRoster();
-    loadOverviewStats();
+    try {
+        await supabaseClient.from('roster').delete().eq('id', id);
+        loadRosterData();
+        loadOverviewStats();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
 }
 
 // Media
-async function loadMedia() {
-    const { data } = await supabaseClient.from('media').select('*').order('created_at', { ascending: false });
-    const tbody = document.getElementById('mediaTableBody');
-    tbody.innerHTML = '';
-    data?.forEach(m => {
-        tbody.innerHTML += `<tr>
-            <td>${m.title}</td>
-            <td>${m.category}</td>
-            <td>${m.uploader}</td>
-            <td>${new Date(m.created_at).toLocaleDateString()}</td>
-            <td>${m.views || 0}</td>
-            <td><button class="btn btn-danger btn-small" onclick="deleteMedia('${m.id}')">🗑️</button></td>
-        </tr>`;
-    });
+async function loadMediaData() {
+    try {
+        const { data } = await supabaseClient.from('media').select('*').order('created_at', { ascending: false });
+        const tbody = document.getElementById('mediaTableBody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No media found</td></tr>';
+            return;
+        }
+        
+        data.forEach(m => {
+            tbody.innerHTML += `<tr>
+                <td>${m.title}</td>
+                <td>${m.category}</td>
+                <td>${m.uploader}</td>
+                <td>${m.created_at ? new Date(m.created_at).toLocaleDateString() : 'N/A'}</td>
+                <td>${m.views || 0}</td>
+                <td><button class="btn btn-danger btn-small" onclick="deleteMedia('${m.id}')">🗑️</button></td>
+            </tr>`;
+        });
+    } catch (error) {
+        console.error('Error loading media:', error);
+    }
 }
 
 async function deleteMedia(id) {
     if (!confirm('Delete media?')) return;
-    await supabaseClient.from('media').delete().eq('id', id);
-    loadMedia();
-    loadOverviewStats();
+    try {
+        await supabaseClient.from('media').delete().eq('id', id);
+        loadMediaData();
+        loadOverviewStats();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
 }
 
 // Events
-async function loadEvents() {
-    const { data } = await supabaseClient.from('events').select('*').order('event_date');
-    const tbody = document.getElementById('eventsTableBody');
-    tbody.innerHTML = '';
-    data?.forEach(e => {
-        tbody.innerHTML += `<tr>
-            <td>${e.title}</td>
-            <td>${new Date(e.event_date).toLocaleString()}</td>
-            <td>${e.event_type}</td>
-            <td>${e.location}</td>
-            <td>${e.status}</td>
-            <td><button class="btn btn-danger btn-small" onclick="deleteEvent('${e.id}')">🗑️</button></td>
-        </tr>`;
-    });
+async function loadEventsData() {
+    try {
+        const { data } = await supabaseClient.from('events').select('*').order('event_date');
+        const tbody = document.getElementById('eventsTableBody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No events found</td></tr>';
+            return;
+        }
+        
+        data.forEach(e => {
+            tbody.innerHTML += `<tr>
+                <td>${e.title}</td>
+                <td>${e.event_date ? new Date(e.event_date).toLocaleString() : 'N/A'}</td>
+                <td>${e.event_type}</td>
+                <td>${e.location}</td>
+                <td>${e.status}</td>
+                <td><button class="btn btn-danger btn-small" onclick="deleteEvent('${e.id}')">🗑️</button></td>
+            </tr>`;
+        });
+    } catch (error) {
+        console.error('Error loading events:', error);
+    }
 }
 
 async function deleteEvent(id) {
     if (!confirm('Delete event?')) return;
-    await supabaseClient.from('events').delete().eq('id', id);
-    loadEvents();
-    loadOverviewStats();
+    try {
+        await supabaseClient.from('events').delete().eq('id', id);
+        loadEventsData();
+        loadOverviewStats();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
 }
 
 // News
-async function loadNews() {
-    const { data } = await supabaseClient.from('news').select('*').order('published_at', { ascending: false });
-    const tbody = document.getElementById('newsTableBody');
-    tbody.innerHTML = '';
-    data?.forEach(n => {
-        tbody.innerHTML += `<tr>
-            <td>${n.title}</td>
-            <td>${n.category}</td>
-            <td>Admin</td>
-            <td>${n.published_at ? new Date(n.published_at).toLocaleDateString() : 'N/A'}</td>
-            <td>${n.views || 0}</td>
-            <td><button class="btn btn-danger btn-small" onclick="deleteNews('${n.id}')">🗑️</button></td>
-        </tr>`;
-    });
+async function loadNewsData() {
+    try {
+        const { data } = await supabaseClient.from('news').select('*').order('published_at', { ascending: false });
+        const tbody = document.getElementById('newsTableBody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No news found</td></tr>';
+            return;
+        }
+        
+        data.forEach(n => {
+            tbody.innerHTML += `<tr>
+                <td>${n.title}</td>
+                <td>${n.category}</td>
+                <td>Admin</td>
+                <td>${n.published_at ? new Date(n.published_at).toLocaleDateString() : 'N/A'}</td>
+                <td>${n.views || 0}</td>
+                <td><button class="btn btn-danger btn-small" onclick="deleteNews('${n.id}')">🗑️</button></td>
+            </tr>`;
+        });
+    } catch (error) {
+        console.error('Error loading news:', error);
+    }
 }
 
 async function deleteNews(id) {
     if (!confirm('Delete news?')) return;
-    await supabaseClient.from('news').delete().eq('id', id);
-    loadNews();
-    loadOverviewStats();
+    try {
+        await supabaseClient.from('news').delete().eq('id', id);
+        loadNewsData();
+        loadOverviewStats();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
 }
 
 // Team stats
 async function loadTeamStats() {
-    const { count: scrims } = await supabaseClient.from('scrim_results').select('*', { count: 'exact', head: true });
-    const { count: strategies } = await supabaseClient.from('strategy_videos').select('*', { count: 'exact', head: true });
-    const { count: chat } = await supabaseClient.from('team_chat_messages').select('*', { count: 'exact', head: true });
-    document.getElementById('teamScrims').textContent = scrims || 0;
-    document.getElementById('teamStrategies').textContent = strategies || 0;
-    document.getElementById('teamChat').textContent = chat || 0;
+    try {
+        const { count: scrims } = await supabaseClient.from('scrim_results').select('*', { count: 'exact', head: true });
+        const { count: strategies } = await supabaseClient.from('strategy_videos').select('*', { count: 'exact', head: true });
+        const { count: chat } = await supabaseClient.from('team_chat_messages').select('*', { count: 'exact', head: true });
+        
+        document.getElementById('teamScrims').textContent = scrims || 0;
+        document.getElementById('teamStrategies').textContent = strategies || 0;
+        document.getElementById('teamChat').textContent = chat || 0;
+    } catch (error) {
+        console.error('Error loading team stats:', error);
+    }
 }
         // =============================================
         // CONTACT FORM
@@ -4151,20 +4244,6 @@ async function loadTeamStats() {
             });
         });
 
-        // Placeholder functions for admin actions
-        window.saveUser = function() { showToast('User saved (demo)'); closeModal('userModal'); };
-        window.savePlayer = function() { showToast('Player saved (demo)'); closeModal('rosterModal'); };
-        window.saveSettings = function() { showToast('Settings saved (demo)'); };
-        window.saveMediaEdit = function() { showToast('Media updated (demo)'); closeModal('editMediaModal'); };
-        window.saveEventEdit = function() { showToast('Event updated (demo)'); closeModal('editEventModal'); };
-        window.saveNewsEdit = function() { showToast('News updated (demo)'); closeModal('editNewsModal'); };
-        window.createEvent = function() { showToast('Event created (demo)'); closeModal('createEventModal'); };
-        window.createNews = function() { showToast('News created (demo)'); closeModal('createNewsModal'); };
-        window.editUser = function(id) { showToast('Edit user ' + id); };
-        window.deleteUser = function(id) { if(confirm('Delete user?')) showToast('User deleted'); };
-        window.editMedia = function(id) { openModal('editMediaModal'); };
-        window.deleteMedia = function(id) { if(confirm('Delete media?')) showToast('Media deleted'); };
-        window.confirmDelete = function() { if(deleteCallback) deleteCallback(); closeModal('deleteModal'); };
     </script>
 
     <!-- SQL Schema for Supabase (run this in your SQL editor) -->
