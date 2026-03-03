@@ -1648,6 +1648,132 @@
         .w-100 {
             width: 100%;
         }
+        /* Enhanced Chat Styling */
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.chat-message {
+    animation: fadeIn 0.3s ease;
+    background: #222;
+    border-left: 3px solid #ff003c;
+    padding: 12px 15px;
+    border-radius: 8px;
+    max-width: 80%;
+    align-self: flex-start;
+}
+
+/* Your messages on the right (optional) */
+.chat-message.own-message {
+    align-self: flex-end;
+    border-left-color: #4CAF50;
+    background: #2a2a2a;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.message-author {
+    font-weight: bold;
+    color: #ff003c;
+}
+
+.message-author.role-team {
+    color: #4CAF50;
+}
+
+.message-author.role-admin {
+    color: #ff003c;
+}
+
+.message-time {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.message-content {
+    color: #fff;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+/* Typing indicator (optional) */
+.typing-indicator {
+    color: #888;
+    font-style: italic;
+    padding: 10px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 12px 15px;
+    background: #222;
+    border: 1px solid #ff003c;
+    border-radius: 25px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.chat-input:focus {
+    outline: none;
+    box-shadow: 0 0 15px #ff003c;
+}
+
+.chat-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-chat-send {
+    padding: 12px 25px;
+    border-radius: 25px;
+    background: #ff003c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-chat-send:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ff003c;
+}
+
+.btn-chat-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
     </style>
 </head>
 <body>
@@ -2037,18 +2163,22 @@
                     <div id="trainingPlansList"></div>
                 </div>
 
-                <!-- Team Chat Tab (Real-time) -->
-                <div id="chat-tab" class="portal-content">
-                    <div class="team-chat-container">
-                        <div class="chat-messages" id="teamChatMessages">
-                            <!-- Messages will be loaded dynamically -->
-                        </div>
-                        <div class="chat-input-container">
-                            <input type="text" id="teamChatInput" class="chat-input" placeholder="Type your message...">
-                            <button class="btn btn-primary" onclick="sendTeamMessage()">SEND</button>
-                        </div>
-                    </div>
-                </div>
+              <!-- Team Chat Tab - UPDATED REAL-TIME VERSION -->
+<div id="chat-tab" class="portal-content">
+    <div class="team-chat-container">
+        <div class="chat-messages" id="teamChatMessages">
+            <!-- Messages appear here instantly -->
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="teamChatInput" class="chat-input" 
+                   placeholder="Type your message..." 
+                   onkeypress="if(event.key==='Enter') sendTeamMessage()">
+            <button class="btn btn-primary" onclick="sendTeamMessage()">
+                <i class="fas fa-paper-plane"></i> SEND
+            </button>
+        </div>
+    </div>
+</div>
 
                 <!-- Team Posts Tab -->
                 <div id="posts-tab" class="portal-content">
@@ -3718,95 +3848,210 @@ async function loginUser() {
         }
 
         // Team Chat (real-time)
-        async function loadTeamChat() {
-            const { data, error } = await supabaseClient
-                .from('team_chat_messages')
-                .select('*, profiles(username)')
-                .order('created_at', { ascending: true });
-            const container = document.getElementById('teamChatMessages');
-            if (!container) return;
-            container.innerHTML = '';
-            (data || []).forEach(msg => {
-                container.innerHTML += `<div class="chat-message">
-                    <div class="message-header">
-                        <span class="message-author">${msg.profiles?.username || 'Unknown'}</span>
-                        <span class="message-time">${new Date(msg.created_at).toLocaleTimeString()}</span>
-                    </div>
-                    <div class="message-content">${msg.message}</div>
-                </div>`;
-            });
-            container.scrollTop = container.scrollHeight;
+// =============================================
+// REAL-TIME TEAM CHAT - COMPLETE FIX
+// =============================================
+
+// Load chat messages
+async function loadTeamChat() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('team_chat_messages')
+            .select(`
+                id,
+                message,
+                created_at,
+                user_id,
+                profiles:user_id (
+                    username,
+                    role
+                )
+            `)
+            .order('created_at', { ascending: true })
+            .limit(100);  // Load last 100 messages
+
+        if (error) {
+            console.error('Error loading chat:', error);
+            return;
         }
 
-        async function sendTeamMessage() {
-            if (!currentUser || (currentRole !== 'team' && currentRole !== 'admin')) {
-                showToast('Team members only', true);
-                return;
-            }
-            const input = document.getElementById('teamChatInput');
-            const msg = input.value.trim();
-            if (!msg) return;
-            const { error } = await supabaseClient.from('team_chat_messages').insert([{
+        const container = document.getElementById('teamChatMessages');
+        if (!container) return;
+
+        container.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div style="text-align:center; color:#888; padding:20px;">No messages yet. Start the conversation!</div>';
+            return;
+        }
+
+        data.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            messageDiv.id = `msg-${msg.id}`;
+            
+            const username = msg.profiles?.username || 'Unknown';
+            const time = new Date(msg.created_at).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            // Add role-based styling
+            const roleClass = msg.profiles?.role === 'admin' ? 'role-admin' : 
+                             msg.profiles?.role === 'team' ? 'role-team' : '';
+            
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="message-author ${roleClass}">${username}</span>
+                    <span class="message-time">${time}</span>
+                </div>
+                <div class="message-content">${escapeHtml(msg.message)}</div>
+            `;
+            
+            container.appendChild(messageDiv);
+        });
+
+        // Scroll to bottom
+        container.scrollTop = container.scrollHeight;
+        
+    } catch (err) {
+        console.error('Chat load error:', err);
+    }
+}
+
+// Send a new message
+async function sendTeamMessage() {
+    if (!currentUser) {
+        showToast('Please login first', true);
+        openModal('loginModal');
+        return;
+    }
+
+    if (currentRole !== 'team' && currentRole !== 'admin') {
+        showToast('Only team members can chat', true);
+        return;
+    }
+
+    const input = document.getElementById('teamChatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+
+    // Disable input while sending
+    input.disabled = true;
+    
+    try {
+        const { error } = await supabaseClient
+            .from('team_chat_messages')
+            .insert([{
                 user_id: currentUser.id,
-                message: msg,
-                created_at: new Date()
+                message: message,
+                created_at: new Date().toISOString()
             }]);
-            if (!error) {
-                input.value = '';
-                loadTeamChat();
-            }
+
+        if (error) {
+            console.error('Send error:', error);
+            showToast('Error sending message: ' + error.message, true);
+        } else {
+            input.value = '';  // Clear input on success
+            // No need to reload – real-time subscription will add it
         }
+        
+    } catch (err) {
+        console.error('Send error:', err);
+        showToast('Error sending message', true);
+    } finally {
+        input.disabled = false;
+        input.focus();
+    }
+}
 
-        // Real-time subscription for team chat
-        supabaseClient
-            .channel('team-chat')
-            .on('postgres_changes', 
-                { event: 'INSERT', schema: 'public', table: 'team_chat_messages' },
-                () => loadTeamChat()
-            )
-            .subscribe();
+// REAL-TIME SUBSCRIPTION - This is the magic!
+function setupRealtimeChat() {
+    const subscription = supabaseClient
+        .channel('team-chat-realtime')
+        .on('postgres_changes', 
+            { 
+                event: 'INSERT', 
+                schema: 'public', 
+                table: 'team_chat_messages' 
+            }, 
+            async (payload) => {
+                console.log('New message received:', payload);
+                
+                // Fetch the complete message with profile info
+                const { data, error } = await supabaseClient
+                    .from('team_chat_messages')
+                    .select(`
+                        id,
+                        message,
+                        created_at,
+                        user_id,
+                        profiles:user_id (
+                            username,
+                            role
+                        )
+                    `)
+                    .eq('id', payload.new.id)
+                    .single();
+                
+                if (error) {
+                    console.error('Error fetching new message:', error);
+                    return;
+                }
 
-        // Team Posts
-        async function createTeamPost() {
-            if (!currentUser || (currentRole !== 'team' && currentRole !== 'admin')) {
-                showToast('Team members only', true);
-                return;
-            }
-            const title = document.getElementById('teamPostTitle').value;
-            const content = document.getElementById('teamPostContent').value;
-            const isPrivate = document.getElementById('teamPostPrivate').checked;
-            if (!title || !content) {
-                showToast('Please fill all fields', true);
-                return;
-            }
-            const { error } = await supabaseClient.from('team_posts').insert([{
-                title, content, is_private: isPrivate,
-                author_id: currentUser.id, created_at: new Date()
-            }]);
-            if (error) {
-                showToast('Error: ' + error.message, true);
-                return;
-            }
-            showToast('Post created');
-            loadTeamPosts();
-        }
+                // Add message to UI
+                const container = document.getElementById('teamChatMessages');
+                if (!container) return;
 
-        async function loadTeamPosts() {
-            const { data, error } = await supabaseClient.from('team_posts').select('*, profiles(username)').order('created_at', { ascending: false });
-            const list = document.getElementById('teamPostsList');
-            if (!list) return;
-            list.innerHTML = '';
-            (data || []).forEach(p => {
-                list.innerHTML += `<div class="team-post-card">
-                    <h4 style="color:white;">${p.title}</h4>
-                    <p style="color:#888;">${p.content}</p>
-                    <div style="color:#aaa;">
-                        By: ${p.profiles?.username} · ${new Date(p.created_at).toLocaleDateString()}
-                        ${p.is_private ? ' · <i class="fas fa-lock"></i> Private' : ''}
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message';
+                messageDiv.id = `msg-${data.id}`;
+                
+                const username = data.profiles?.username || 'Unknown';
+                const time = new Date(data.created_at).toLocaleTimeString([], { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const roleClass = data.profiles?.role === 'admin' ? 'role-admin' : 
+                                 data.profiles?.role === 'team' ? 'role-team' : '';
+                
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <span class="message-author ${roleClass}">${username}</span>
+                        <span class="message-time">${time}</span>
                     </div>
-                </div>`;
-            });
-        }
+                    <div class="message-content">${escapeHtml(data.message)}</div>
+                `;
+                
+                container.appendChild(messageDiv);
+                
+                // Auto-scroll to bottom
+                container.scrollTop = container.scrollHeight;
+            }
+        )
+        .subscribe();
+
+    return subscription;
+}
+
+// Helper function to prevent XSS
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// Add this to your load function
+async function initializeChat() {
+    await loadTeamChat();
+    setupRealtimeChat();
+}
 
         // Upcoming Matches
         async function addUpcomingMatch() {
@@ -3983,21 +4228,24 @@ async function loginUser() {
         // =============================================
         // INITIALIZATION
         // =============================================
-        window.addEventListener('load', async () => {
-            document.getElementById('preloader').style.display = 'none';
-            await loadSession();
-            await seedData();
-            await loadRoster();
-            await loadStats();
-            await loadMatches();
-            await loadMedia();
-            await loadScrimResults();
-            await loadStrategyVideos();
-            await loadTrainingPlans();
-            await loadTeamChat();
-            await loadTeamPosts();
-            await loadUpcomingMatches();
-        });
+       window.addEventListener('load', async () => {
+    document.getElementById('preloader').style.display = 'none';
+    await loadSession();
+    await seedData();
+    await loadRoster();
+    await loadStats();
+    await loadMatches();
+    await loadMedia();
+    await loadScrimResults();
+    await loadStrategyVideos();
+    await loadTrainingPlans();
+    
+    // ✅ ADD THIS LINE FOR REAL-TIME CHAT
+    await initializeChat();
+    
+    await loadTeamPosts();
+    await loadUpcomingMatches();
+});
 
         // Mobile menu toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
